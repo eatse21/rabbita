@@ -1,60 +1,35 @@
 ///|
-enum Node[Msg] {
+enum Node {
   Node(
     String,
     namespace_uri~ : String?,
-    attrs~ : Array[Attribute[Msg]],
-    children~ : Array[Node[Msg]],
+    attrs~ : Array[Attribute],
+    children~ : Array[Node],
     // Store the event listener used in real DOM
     listeners~ : Array[(String, @dom.Listener)]
   )
-  ExternalNode(
-    @dom.Node,
-    Ref[Array[Attribute[Msg]]?],
-    width~ : Int,
-    height~ : Int
-  )
+  ExternalNode(@dom.Node, Ref[Array[Attribute]?], width~ : Int, height~ : Int)
   Text(String)
   Nothing
 }
 
 ///|
-/// Convert msg type of Node.
-/// 
-/// This is a expensive operation and should be used rarely.
-pub fn[A, B] Node::map(self : Node[A], f : (A) -> B) -> Node[B] {
-  match self {
-    Node(tag, attrs~, children~, listeners~, namespace_uri~) => {
-      let attrs = attrs.map(_.map(f))
-      let children = children.map(_.map(f))
-      Node(tag, attrs~, children~, listeners~, namespace_uri~)
-    }
-    ExternalNode(node, attrs, width~, height~) => {
-      let attrs = attrs.map(_.map(_.map(_.map(f))))
-      ExternalNode(node, attrs, width~, height~)
-    }
-    Text(value) => Text(value)
-    Nothing => Nothing
-  }
-}
-
-///|
 /// Create a DOM node 
-pub fn[Msg] node(
+pub fn node(
   tag : String,
-  attrs : Array[Attribute[Msg]],
-  children : Array[Node[Msg]],
-) -> Node[Msg] {
+  attrs : Array[Attribute],
+  children : Array[Node],
+) -> Node {
   Node(tag, attrs~, children~, listeners=[], namespace_uri=None)
 }
 
 ///|
-pub fn[Msg] node_ns(
+pub fn node_ns(
   namespace_uri : String,
   qualified_name : String,
-  attrs : Array[Attribute[Msg]],
-  children : Array[Node[Msg]],
-) -> Node[Msg] {
+  attrs : Array[Attribute],
+  children : Array[Node],
+) -> Node {
   Node(
     qualified_name,
     attrs~,
@@ -73,43 +48,43 @@ const NORMAL_LINK_TAG = "a"
 ///|
 /// Create a link node.
 /// The `escape` parameter is used to create a link that will not trigger the `url_request` message.
-pub fn[Msg] link(
-  attrs : Array[Attribute[Msg]],
-  children : Array[Node[Msg]],
+pub fn link(
+  attrs : Array[Attribute],
+  children : Array[Node],
   escape? : Bool = false,
-) -> Node[Msg] {
+) -> Node {
   let tag = if escape { ESCAPED_LINK_TAG } else { NORMAL_LINK_TAG }
   node(tag, attrs, children)
 }
 
 ///|
-pub fn[Msg] external(
+pub fn external(
   node : @dom.Node,
-  attrs : Ref[Array[Attribute[Msg]]?],
+  attrs : Ref[Array[Attribute]?],
   width~ : Int,
   height~ : Int,
-) -> Node[Msg] {
+) -> Node {
   ExternalNode(node, attrs, width~, height~)
 }
 
 ///|
 /// Create a plain text
-pub fn[Msg] text(value : String) -> Node[Msg] {
+pub fn text(value : String) -> Node {
   Text(value)
 }
 
 ///|
 /// Create a dummy node
-pub fn[Msg] nothing() -> Node[Msg] {
+pub fn nothing() -> Node {
   Nothing
 }
 
 ///|
-struct Attribute[Msg](String, AttrValue[Msg])
+struct Attribute(String, AttrValue)
 
 ///|
-priv enum AttrValue[Msg] {
-  AttrEvent(Handler[Msg])
+priv enum AttrValue {
+  AttrEvent(Handler)
   AttrStyle(String)
   AttrString(String)
   // NOTE: Property is used to set the property of the element, this is different 
@@ -124,14 +99,14 @@ priv enum AttrValue[Msg] {
 }
 
 ///|
-pub(all) enum Handler[Msg] {
-  Normal(Msg)
-  HandleEvent((@dom.Event) -> Msg)
-  Custom(Msg, stop_propagation~ : Bool, prevent_default~ : Bool)
+pub(all) enum Handler {
+  Normal(@cmd.Message)
+  HandleEvent((@dom.Event) -> @cmd.Message)
+  Custom(@cmd.Message, stop_propagation~ : Bool, prevent_default~ : Bool)
 }
 
 ///|
-fn[Msg] is_same_type(x : Node[Msg], y : Node[Msg]) -> Bool {
+fn is_same_type(x : Node, y : Node) -> Bool {
   match (x, y) {
     (Node(_), Node(_)) => true
     (Text(_), Text(_)) => true
@@ -157,62 +132,38 @@ fn[Msg] is_same_type(x : Node[Msg], y : Node[Msg]) -> Bool {
 // }
 
 ///|
-pub fn[A, B] Handler::map(self : Handler[A], f : (A) -> B) -> Handler[B] {
-  match self {
-    Normal(msg) => Normal(f(msg))
-    HandleEvent(g) => HandleEvent(event => event |> g |> f)
-    Custom(msg, stop_propagation~, prevent_default~) =>
-      Custom(f(msg), stop_propagation~, prevent_default~)
-  }
-}
-
-///|
-pub fn[A, B] Attribute::map(self : Attribute[A], f : (A) -> B) -> Attribute[B] {
-  let value = match self.1 {
-    AttrEvent(handler) => AttrEvent(handler.map(f))
-    AttrStyle(value) => AttrStyle(value)
-    AttrString(value) => AttrString(value)
-    AttrProperty(value) => AttrProperty(value)
-  }
-  Attribute(self.0, value)
-}
-
-///|
 /// Get the inner tuple from Attribute
-fn[Msg] Attribute::inner(self : Attribute[Msg]) -> (String, AttrValue[Msg]) {
+fn Attribute::inner(self : Attribute) -> (String, AttrValue) {
   (self.0, self.1)
 }
 
 ///|
 /// Create an custom event handler
-pub fn[Msg] on(event : String, handler : Handler[Msg]) -> Attribute[Msg] {
+pub fn on(event : String, handler : Handler) -> Attribute {
   Attribute(event, AttrEvent(handler))
 }
 
 ///|
 /// Create an attribute
-pub fn[Msg] attribute(key : String, value : String) -> Attribute[Msg] {
+pub fn attribute(key : String, value : String) -> Attribute {
   Attribute(key, AttrString(value))
 }
 
 ///|
 /// Create an property
-pub fn[Msg] property(key : String, value : @variant.Variant) -> Attribute[Msg] {
+pub fn property(key : String, value : @variant.Variant) -> Attribute {
   Attribute(key, AttrProperty(value))
 }
 
 ///|
 /// Create an style attribute
-pub fn[Msg] style(key : String, value : String) -> Attribute[Msg] {
+pub fn style(key : String, value : String) -> Attribute {
   Attribute(key, AttrStyle(value))
 }
 
 ///|
 /// Convert virtual DOM to real DOM
-fn[Msg, Model, View] Node::to_node(
-  self : Node[Msg],
-  sandbox : Sandbox[Msg, Model, View],
-) -> @dom.Node {
+fn Node::to_node(self : Node, sandbox : Sandbox) -> @dom.Node {
   // NOTE:
   // In Elm, the sandbox is a spacial type and handled in the runtime. But in Moonbit,
   // the sandbox is just a normal type and handled in the user code. Because any operation
@@ -221,15 +172,23 @@ fn[Msg, Model, View] Node::to_node(
   // 
   // This function require a sandbox value, and use closure to eliminate the type parameter.
   fn attach_attrs(
-    attrs : Array[Attribute[Msg]],
+    attrs : Array[Attribute],
     element : @dom.Element,
     generated_listeners : Array[(String, @dom.Listener)],
   ) {
     attrs.each(x => match x {
       Attribute(event, AttrEvent(handler)) => {
         let listener = match handler {
-          Normal(msg) => _ => sandbox.update(msg)
-          HandleEvent(f) => event => sandbox.update(f(event))
+          Normal(msg) =>
+            _ => {
+              sandbox.pending(Message(() => msg))
+              sandbox.schedule()
+            }
+          HandleEvent(f) =>
+            event => {
+              sandbox.pending(Message(() => f(event)))
+              sandbox.schedule()
+            }
           Custom(msg, stop_propagation~, prevent_default~) =>
             fn(event : @dom.Event) { // TODO: remove this annotation will cause type error, why?
               if stop_propagation {
@@ -238,7 +197,8 @@ fn[Msg, Model, View] Node::to_node(
               if prevent_default {
                 event.prevent_default()
               }
-              sandbox.update(msg)
+              sandbox.pending(Message(() => msg))
+              sandbox.schedule()
             }
         }
         element.add_event_listener(event, listener)
@@ -263,7 +223,7 @@ fn[Msg, Model, View] Node::to_node(
       // handle the click event.
       // 
       // If the user hold the meta key or ctrl key, let the browser handle the click event.
-      let element = match (namespace_uri, sandbox.get_on_url_request(), tag) {
+      let element = match (namespace_uri, sandbox.on_url_request, tag) {
         (Some(ns), _, _) => {
           let element = @dom.document().create_element_ns(ns, tag)
           attach_attrs(attrs, element, listeners)
@@ -290,7 +250,7 @@ fn[Msg, Model, View] Node::to_node(
               } else {
                 External(href)
               }
-              sandbox.update(url_request(request))
+              url_request(request)
             }
           })
           element
@@ -346,14 +306,14 @@ pub fn variant_to_js_value(value : @variant.Variant) -> @js.Value {
 }
 
 ///|
-pub fn[Msg, Model, View] Node::patch(
-  self : Node[Msg],
-  old : Node[Msg],
-  sandbox : Sandbox[Msg, Model, View],
+pub fn Node::patch(
+  self : Node,
+  old : Node,
+  sandbox : Sandbox,
   mount~ : String,
 ) -> Unit {
   let patches = diff(old, self)
-  fn aux(patches : Patch[Msg], current : @dom.Node) -> Unit {
+  fn aux(patches : Patch, current : @dom.Node) -> Unit {
     match patches {
       Drop(index, length) =>
         for i in 0..<length {
@@ -396,8 +356,18 @@ pub fn[Msg, Model, View] Node::patch(
                   element.as_event_target().remove_event_listener(key, listener)
                 EventAdd(key, handler) => {
                   let listener = match handler {
-                    Normal(msg) => _ => sandbox.update(msg)
-                    HandleEvent(f) => event => sandbox.update(f(event))
+                    Normal(msg) =>
+                      _ => {
+                        let m = @cmd.Message(() => msg)
+                        sandbox.pending(m)
+                        sandbox.schedule()
+                      }
+                    HandleEvent(f) =>
+                      event => {
+                        let m = @cmd.Message(() => f(event))
+                        sandbox.pending(m)
+                        sandbox.schedule()
+                      }
                     Custom(msg, stop_propagation~, prevent_default~) =>
                       fn(event : @dom.Event) {
                         if stop_propagation {
@@ -406,7 +376,8 @@ pub fn[Msg, Model, View] Node::patch(
                         if prevent_default {
                           event.prevent_default()
                         }
-                        sandbox.update(msg)
+                        let m = @cmd.Message(() => msg)
+                        sandbox..pending(m)..schedule()
                       }
                   }
                   element.add_event_listener(key, listener)
@@ -431,7 +402,7 @@ pub fn[Msg, Model, View] Node::patch(
 }
 
 ///|
-priv enum AttrsUpdate[Msg] {
+priv enum AttrsUpdate {
   AttrRemove(String)
   AttrAdd(String, String)
   StyleAdd(String, String)
@@ -439,32 +410,32 @@ priv enum AttrsUpdate[Msg] {
   PropertyAdd(String, @variant.Variant)
   PropertyRemove(String)
   EventRemove(String, @dom.Listener)
-  EventAdd(String, Handler[Msg])
+  EventAdd(String, Handler)
 }
 
 ///|
-enum Patch[Msg] {
+enum Patch {
   Drop(Int, Int)
   Remove(Int)
-  Replace(Int, Node[Msg])
-  InsertBefore(Int, Node[Msg])
-  Append(Array[Node[Msg]])
-  Update(Update[Msg])
+  Replace(Int, Node)
+  InsertBefore(Int, Node)
+  Append(Array[Node])
+  Update(Update)
 }
 
 ///|
 test {
   // TODO: this is used to suppress unused warnings. Remove this later.
-  ignore((Patch::Remove(_) : (Int) -> Patch[Unit]))
-  ignore((Patch::InsertBefore(_, _) : (Int, Node[Unit]) -> Patch[Unit]))
+  ignore((Patch::Remove(_) : (Int) -> Patch))
+  ignore((Patch::InsertBefore(_, _) : (Int, Node) -> Patch))
 }
 
 ///|
-priv enum Update[Msg] {
+priv enum Update {
   UpdateNode(
     Int,
-    Array[AttrsUpdate[Msg]],
-    Array[Patch[Msg]],
+    Array[AttrsUpdate],
+    Array[Patch],
     Array[(String, @dom.Listener)]
   )
   UpdateText(Int, String)
@@ -472,7 +443,7 @@ priv enum Update[Msg] {
 
 ///|
 /// Now the root node must be a Node
-pub fn[Msg] diff(root_old : Node[Msg], root_new : Node[Msg]) -> Patch[Msg] {
+pub fn diff(root_old : Node, root_new : Node) -> Patch {
   guard root_old is Node(_, attrs=attrs_old, listeners~, ..)
   guard root_new is Node(_, attrs=attrs_new, ..)
   Update(
@@ -486,7 +457,7 @@ pub fn[Msg] diff(root_old : Node[Msg], root_new : Node[Msg]) -> Patch[Msg] {
 }
 
 ///|
-pub fn[Msg] do_diff(old : Node[Msg], new : Node[Msg]) -> Array[Patch[Msg]] {
+pub fn do_diff(old : Node, new : Node) -> Array[Patch] {
   let children_old = match old {
     Node(_, children~, ..) => children
     _ => abort("old is not a node or fragment")
@@ -507,13 +478,13 @@ pub fn[Msg] do_diff(old : Node[Msg], new : Node[Msg]) -> Array[Patch[Msg]] {
 // Now we think the events is different although they never changed.
 
 ///|
-fn[Msg] attrs_diff(
-  old : Array[Attribute[Msg]],
-  new : Array[Attribute[Msg]],
+fn attrs_diff(
+  old : Array[Attribute],
+  new : Array[Attribute],
   // We think the event is different although they never changed.
   // The listeners is used to remove the event listener when the attribute is removed.
   listeners : Array[(String, @dom.Listener)],
-) -> Array[AttrsUpdate[Msg]] {
+) -> Array[AttrsUpdate] {
   let old_map = Map::from_iter(old.iter().map(x => x.inner()))
   let new_map = Map::from_iter(new.iter().map(x => x.inner()))
   let result = []
@@ -578,14 +549,11 @@ fn[Msg] attrs_diff(
 }
 
 ///|
-pub fn[Msg] diff_without_key(
-  old : Array[Node[Msg]],
-  new : Array[Node[Msg]],
-) -> Array[Patch[Msg]] {
+pub fn diff_without_key(old : Array[Node], new : Array[Node]) -> Array[Patch] {
   fn aux(
-    xs : ArrayView[Node[Msg]],
-    ys : ArrayView[Node[Msg]],
-    patches : Array[Patch[Msg]],
+    xs : ArrayView[Node],
+    ys : ArrayView[Node],
+    patches : Array[Patch],
     index : Int,
   ) -> Unit {
     match (xs, ys) {

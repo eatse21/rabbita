@@ -51,13 +51,13 @@ extern "js" fn js_request(
   #| }
 
 ///|
-fn[Msg, Model] request(
+fn[Model] request(
   url : String,
   http_method : String,
-  expect~ : Expecting[Msg, Model],
+  expect~ : Expecting[@cmd.Message, Model],
   body~ : Body,
-) -> @cmd.Cmd[Msg] {
-  let launch = fn(events : @cmd.Events[Msg]) {
+) -> @cmd.Cmd {
+  let launch = fn(events : @cmd.Events) {
     let has_body = match body {
       Empty => false
       _ => true
@@ -101,38 +101,38 @@ fn[Msg, Model] request(
 
 ///|
 /// Create a command to send a GET request.
-pub fn[Msg, Model] get(
+pub fn[Model] get(
   url : String,
-  expect~ : Expecting[Msg, Model],
-) -> @cmd.Cmd[Msg] {
+  expect~ : Expecting[@cmd.Message, Model],
+) -> @cmd.Cmd {
   request(url, "GET", expect~, body=Empty)
 }
 
 ///|
 /// Create a command to send a PUT request.
-pub fn[Msg, Model] delete(
+pub fn[Model] delete(
   url : String,
-  expect~ : Expecting[Msg, Model],
-) -> @cmd.Cmd[Msg] {
+  expect~ : Expecting[@cmd.Message, Model],
+) -> @cmd.Cmd {
   request(url, "DELETE", expect~, body=Empty)
 }
 
 ///|
 /// Create a command to send a POST request.
-pub fn[Msg, Model] post(
+pub fn[Model] post(
   url : String,
   body : Body,
-  expect~ : Expecting[Msg, Model],
-) -> @cmd.Cmd[Msg] {
+  expect~ : Expecting[@cmd.Message, Model],
+) -> @cmd.Cmd {
   request(url, "POST", body~, expect~)
 }
 
 ///|
 /// Create a command to send a PATCH request.
-pub fn[Msg, Model] patch(
+pub fn[Model] patch(
   url : String,
   body : Body,
-  expect~ : Expecting[Msg, Model],
-) -> @cmd.Cmd[Msg] {
+  expect~ : Expecting[@cmd.Message, Model],
+) -> @cmd.Cmd {
   request(url, "PATCH", body~, expect~)
 }

@@ -6,30 +6,35 @@ import(
 )
 
 // Values
-pub fn[A, E : Error, M] attempt((Result[A, E]) -> M, async () -> A raise E) -> Cmd[M]
+pub fn[A, E : Error] attempt((Result[A, E]) -> Message, async () -> A raise E) -> Cmd
 
-pub fn[M] batch(Array[Cmd[M]]) -> Cmd[M]
+pub fn batch(Array[Cmd]) -> Cmd
 
-pub fn[M] none() -> Cmd[M]
+pub fn none() -> Cmd
 
-pub fn[A, M] perform((A) -> M, async () -> A noraise) -> Cmd[M]
+pub fn[A] perform((A) -> Message, async () -> A noraise) -> Cmd
 
-pub fn[M] task(M) -> Cmd[M]
+pub fn task(Message) -> Cmd
 
 // Errors
 
 // Types and methods
 #alias(Command)
-pub(all) struct Cmd[M]((Events[M]) -> Unit)
+pub(all) struct Cmd((Events) -> Unit)
 #deprecated
-pub fn[M] Cmd::inner(Self[M]) -> (Events[M]) -> Unit
-pub fn[A, B] Cmd::map(Self[A], (A) -> B) -> Self[B]
+pub fn Cmd::inner(Self) -> (Events) -> Unit
 
-type Events[M]
-pub fn[M] Events::new((@url.Url) -> Unit, (@url.UrlRequest) -> Unit, (M) -> Unit) -> Self[M]
-pub fn[M] Events::trigger_update(Self[M], M) -> Unit
-pub fn[M] Events::trigger_url_changed(Self[M], @url.Url) -> Unit
-pub fn[M] Events::trigger_url_request(Self[M], @url.UrlRequest) -> Unit
+type Events
+pub fn Events::new((@url.Url) -> Unit, (@url.UrlRequest) -> Unit, (Message) -> Unit) -> Self
+pub fn Events::trigger_update(Self, Message) -> Unit
+pub fn Events::trigger_url_changed(Self, @url.Url) -> Unit
+pub fn Events::trigger_url_request(Self, @url.UrlRequest) -> Unit
+
+pub(all) enum Message {
+  Message(() -> Message)
+  Batch(Array[Message])
+  Empty
+}
 
 // Type aliases
 

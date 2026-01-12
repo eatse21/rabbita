@@ -8,29 +8,30 @@ import(
 )
 
 // Values
-pub fn[Model, Msg] application(initialize~ : (@url.Url) -> (@cmd.Cmd[Msg], Model), update~ : (Msg, Model) -> (@cmd.Cmd[Msg], Model), view~ : (Model) -> @html.Html[Msg], url_changed? : (@url.Url) -> Msg, url_request? : (@url.UrlRequest) -> Msg, mount? : String) -> Unit
+pub fn[A, E : Error] attempt((Result[A, E]) -> @cmd.Message, async () -> A raise E) -> @cmd.Cmd
 
-pub fn[A, E : Error, M] attempt((Result[A, E]) -> M, async () -> A raise E) -> @cmd.Cmd[M]
+pub fn batch(Array[@cmd.Cmd]) -> @cmd.Cmd
 
-pub fn[M] batch(Array[@cmd.Cmd[M]]) -> @cmd.Cmd[M]
+pub fn[Msg, Model] component(model~ : Model, update~ : (Component[Msg], Msg, Model) -> (@cmd.Cmd, Model), view~ : (Component[Msg], Model) -> @html.Html) -> Component[Msg]
 
-pub fn[Model, Message] new(model~ : Model, update~ : (Message, Model) -> (@cmd.Cmd[Message], Model), view~ : (Model) -> @html.Html[Message], mount? : String) -> App[Message, Model]
+pub fn[Msg] new(Component[Msg], mount? : String) -> App
 
-pub fn[Model, Msg] new_with_route(initialize~ : (@url.Url) -> (@cmd.Cmd[Msg], Model), update~ : (Msg, Model) -> (@cmd.Cmd[Msg], Model), view~ : (Model) -> @html.Html[Msg], url_changed? : (@url.Url) -> Msg, url_request? : (@url.UrlRequest) -> Msg, mount? : String) -> App[Msg, Model]
+pub fn none() -> @cmd.Cmd
 
-pub fn[M] none() -> @cmd.Cmd[M]
+pub fn[A] perform((A) -> @cmd.Message, async () -> A noraise) -> @cmd.Cmd
 
-pub fn[A, M] perform((A) -> M, async () -> A noraise) -> @cmd.Cmd[M]
-
-pub fn[Model, Message] startup(model~ : Model, update~ : (Message, Model) -> (@cmd.Cmd[Message], Model), view~ : (Model) -> @html.Html[Message], mount? : String) -> Unit
-
-pub fn[M] task(M) -> @cmd.Cmd[M]
+pub fn task(@cmd.Message) -> @cmd.Cmd
 
 // Errors
 
 // Types and methods
-type App[Msg, Model]
-pub fn[Msg, Model] App::dispatch(Self[Msg, Model], Msg) -> Unit
+type App
+pub fn App::startup(Self) -> Unit
+pub fn App::with_route(Self, url_changed? : (@url.Url) -> @cmd.Message, url_request? : (@url.UrlRequest) -> @cmd.Message) -> Unit
+
+type Component[Msg]
+pub fn[Msg] Component::message(Self[Msg], Msg) -> @cmd.Message
+pub fn[Msg] Component::view(Self[Msg]) -> @html.Html
 
 // Type aliases
 pub using @cmd {type Cmd}

@@ -1,25 +1,28 @@
 ///|
-struct Model[Msg] {
+using @cmd {type Message}
+
+///|
+struct Model {
   element : @dom.HTMLCanvasElement
-  wrapper : @html.T[Msg]
+  wrapper : @html.Html
 }
 
 ///|
-pub fn[Msg] Model::context2d(self : Model[Msg]) -> Context2D {
+pub fn Model::context2d(self : Model) -> Context2D {
   self.element.get_context("2d").to0().unwrap()
 }
 
 ///|
-pub fn[Msg] new(
+pub fn new(
   width~ : Double,
   height~ : Double,
-  click? : (@html.Mouse) -> Msg,
-  mousemove? : (@html.Mouse) -> Msg,
-  mousedown? : (@html.Mouse) -> Msg,
-  mouseup? : (@html.Mouse) -> Msg,
-  mouseenter? : (@html.Mouse) -> Msg,
-  mouseleave? : (@html.Mouse) -> Msg,
-) -> Model[Msg] {
+  click? : (@html.Mouse) -> Message,
+  mousemove? : (@html.Mouse) -> Message,
+  mousedown? : (@html.Mouse) -> Message,
+  mouseup? : (@html.Mouse) -> Message,
+  mouseenter? : (@html.Mouse) -> Message,
+  mouseleave? : (@html.Mouse) -> Message,
+) -> Model {
   let canvas = @dom.document().create_element("canvas")
   let attributes = {
     let attrs = [
@@ -52,6 +55,6 @@ pub fn[Msg] new(
 }
 
 ///|
-pub fn[Msg] Model::to_html(self : Model[Msg]) -> @html.T[Msg] {
+pub fn Model::to_html(self : Model) -> @html.Html {
   self.wrapper
 }

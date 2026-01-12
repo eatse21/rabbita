@@ -10,7 +10,11 @@ pub(all) enum Item {
 /// 
 /// - `copied` is triggered if the copy operation is successful.
 /// - `failed` is triggered with the error message if the copy operation fails.
-pub fn[M] copy(item : Item, copied? : M, failed? : (String) -> M) -> Cmd[M] {
+pub fn copy(
+  item : Item,
+  copied? : @cmd.Message,
+  failed? : (String) -> @cmd.Message,
+) -> Cmd {
   dispatcher => @js.async_run(() => try {
     guard item is Text(text)  //TODO: support other formats
     @dom.window().navigator().clipboard().write_text(text).wait() |> ignore
@@ -33,7 +37,10 @@ pub fn[M] copy(item : Item, copied? : M, failed? : (String) -> M) -> Cmd[M] {
 /// # Message
 /// - `pasted` is triggered with the pasted item if the paste operation is successful.
 /// - `failed` is triggered with the error message if the paste operation fails.
-pub fn[M] paste(pasted~ : (Item) -> M, failed? : (String) -> M) -> Cmd[M] {
+pub fn paste(
+  pasted~ : (Item) -> @cmd.Message,
+  failed? : (String) -> @cmd.Message,
+) -> Cmd {
   dispatcher => @js.async_run(() => try {
     // TODO: support other formats
     let str : String = @dom.window().navigator().clipboard().read_text().wait()

@@ -2,154 +2,155 @@
 package "Yoorkin/rabbit-tea/html"
 
 import(
+  "Yoorkin/rabbit-tea/cmd"
   "Yoorkin/rabbit-tea/dom"
   "Yoorkin/rabbit-tea/internal/vdom"
   "Yoorkin/rabbit-tea/variant"
 )
 
 // Values
-pub fn[M] a(style? : Array[String], id? : String, class? : String, href~ : String, target? : Target, Array[Html[M]], escape? : Bool) -> Html[M]
+pub fn a(style? : Array[String], id? : String, class? : String, href~ : String, target? : Target, Array[Html], escape? : Bool) -> Html
 
-pub fn[Msg] attribute(String, String) -> Attribute[Msg]
+pub fn attribute(String, String) -> Attribute
 
-pub fn[M] b(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn b(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] blockquote(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn blockquote(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] br(style? : Array[String], id? : String, class? : String) -> Html[M]
+pub fn br(style? : Array[String], id? : String, class? : String) -> Html
 
-pub fn[M] button(style? : Array[String], id? : String, class? : String, click? : M, Array[Html[M]]) -> Html[M]
+pub fn button(style? : Array[String], id? : String, class? : String, click? : @cmd.Message, Array[Html]) -> Html
 
-pub fn[M] caption(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn caption(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] code(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn code(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] col(style? : Array[String], id? : String, span? : Int, class? : String, Array[Html[M]]) -> Html[M]
+pub fn col(style? : Array[String], id? : String, span? : Int, class? : String, Array[Html]) -> Html
 
-pub fn[M] colgroup(style? : Array[String], id? : String, span? : Int, class? : String, Array[Html[M]]) -> Html[M]
+pub fn colgroup(style? : Array[String], id? : String, span? : Int, class? : String, Array[Html]) -> Html
 
-pub fn[M] dd(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn dd(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] dialog(style? : Array[String], id? : String, class? : String, open? : Bool, close? : (String) -> M, cancel? : M, Array[Html[M]]) -> Html[M]
+pub fn dialog(style? : Array[String], id? : String, class? : String, open? : Bool, close? : (String) -> @cmd.Message, cancel? : @cmd.Message, Array[Html]) -> Html
 
-pub fn[M] div(style? : Array[String], id? : String, class? : String, click? : M, Array[Html[M]]) -> Html[M]
+pub fn div(style? : Array[String], id? : String, class? : String, click? : @cmd.Message, Array[Html]) -> Html
 
-pub fn[M] dl(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn dl(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] dt(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn dt(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] em(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn em(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[Msg] external(@dom.Node, Ref[Array[Attribute[Msg]]?], width~ : Int, height~ : Int) -> Html[Msg]
+pub fn external(@dom.Node, Ref[Array[Attribute]?], width~ : Int, height~ : Int) -> Html
 
-pub fn[M] form(style? : Array[String], id? : String, class? : String, action? : String, name? : String, Array[Html[M]]) -> Html[M]
+pub fn form(style? : Array[String], id? : String, class? : String, action? : String, name? : String, Array[Html]) -> Html
 
-pub fn[M] h1(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn h1(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] h2(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn h2(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] h3(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn h3(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] h4(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn h4(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] h5(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn h5(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] h6(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn h6(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] hr(style? : Array[String], id? : String, class? : String, children? : Array[Html[M]]) -> Html[M]
+pub fn hr(style? : Array[String], id? : String, class? : String, children? : Array[Html]) -> Html
 
-pub fn[Msg] href(String) -> Attribute[Msg]
+pub fn href(String) -> Attribute
 
-pub fn[M] i(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn i(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] iframe(style? : Array[String], id? : String, class? : String, src? : String, title? : String, width? : Int, height? : Int) -> Html[M]
+pub fn iframe(style? : Array[String], id? : String, class? : String, src? : String, title? : String, width? : Int, height? : Int) -> Html
 
-pub fn[M] img(style? : Array[String], id? : String, class? : String, src? : String, alt? : String, title? : String, width? : Int, height? : Int, border? : Int, Array[Html[M]]) -> Html[M]
+pub fn img(style? : Array[String], id? : String, class? : String, src? : String, alt? : String, title? : String, width? : Int, height? : Int, border? : Int, Array[Html]) -> Html
 
-pub fn[M] input(input_type? : InputType, name? : String, value? : String, checked? : Bool, read_only? : Bool, multiple? : Bool, accept? : String, placeholder? : String, auto_complete? : AutoComplete, style? : Array[String], max? : Int, min? : Int, step? : Int, maxlength? : Int, minlength? : Int, pattern? : String, size? : Int, width? : Int, height? : Int, id? : String, class? : String, children? : Array[Html[M]], change? : (String) -> M, input? : (String) -> M) -> Html[M]
+pub fn input(input_type? : InputType, name? : String, value? : String, checked? : Bool, read_only? : Bool, multiple? : Bool, accept? : String, placeholder? : String, auto_complete? : AutoComplete, style? : Array[String], max? : Int, min? : Int, step? : Int, maxlength? : Int, minlength? : Int, pattern? : String, size? : Int, width? : Int, height? : Int, id? : String, class? : String, children? : Array[Html], change? : (String) -> @cmd.Message, input? : (String) -> @cmd.Message) -> Html
 
-pub fn[M] label(style? : Array[String], id? : String, class? : String, for_? : String, Array[Html[M]]) -> Html[M]
+pub fn label(style? : Array[String], id? : String, class? : String, for_? : String, Array[Html]) -> Html
 
-pub fn[M] li(style? : Array[String], value? : Int, id? : String, class? : String, click? : M, Array[Html[M]]) -> Html[M]
+pub fn li(style? : Array[String], value? : Int, id? : String, class? : String, click? : @cmd.Message, Array[Html]) -> Html
 
-pub fn[Msg] node(String, Array[Attribute[Msg]], Array[Html[Msg]]) -> Html[Msg]
+pub fn node(String, Array[Attribute], Array[Html]) -> Html
 
-pub fn[M] nothing() -> Html[M]
+pub fn nothing() -> Html
 
-pub fn[M] ol(style? : Array[String], reversed? : Bool, start? : Int, id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn ol(style? : Array[String], reversed? : Bool, start? : Int, id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[Msg] on_change((String) -> Msg) -> Attribute[Msg]
+pub fn on_change((String) -> @cmd.Message) -> Attribute
 
-pub fn[Msg] on_click((Mouse) -> Msg) -> Attribute[Msg]
+pub fn on_click((Mouse) -> @cmd.Message) -> Attribute
 
-pub fn[Msg] on_double_click((Mouse) -> Msg) -> Attribute[Msg]
+pub fn on_double_click((Mouse) -> @cmd.Message) -> Attribute
 
-pub fn[Msg] on_input((String) -> Msg) -> Attribute[Msg]
+pub fn on_input((String) -> @cmd.Message) -> Attribute
 
-pub fn[Msg] on_mouse_down((Mouse) -> Msg) -> Attribute[Msg]
+pub fn on_mouse_down((Mouse) -> @cmd.Message) -> Attribute
 
-pub fn[Msg] on_mouse_enter((Mouse) -> Msg) -> Attribute[Msg]
+pub fn on_mouse_enter((Mouse) -> @cmd.Message) -> Attribute
 
-pub fn[Msg] on_mouse_leave((Mouse) -> Msg) -> Attribute[Msg]
+pub fn on_mouse_leave((Mouse) -> @cmd.Message) -> Attribute
 
-pub fn[Msg] on_mouse_move((Mouse) -> Msg) -> Attribute[Msg]
+pub fn on_mouse_move((Mouse) -> @cmd.Message) -> Attribute
 
-pub fn[Msg] on_mouse_out((Mouse) -> Msg) -> Attribute[Msg]
+pub fn on_mouse_out((Mouse) -> @cmd.Message) -> Attribute
 
-pub fn[Msg] on_mouse_over((Mouse) -> Msg) -> Attribute[Msg]
+pub fn on_mouse_over((Mouse) -> @cmd.Message) -> Attribute
 
-pub fn[Msg] on_mouse_up((Mouse) -> Msg) -> Attribute[Msg]
+pub fn on_mouse_up((Mouse) -> @cmd.Message) -> Attribute
 
-pub fn[M] on_scroll((Scroll) -> M) -> Attribute[M]
+pub fn on_scroll((Scroll) -> @cmd.Message) -> Attribute
 
-pub fn[M] option(style? : Array[String], id? : String, class? : String, disabled? : Bool, value? : String, selected? : Bool, Array[Html[M]]) -> Html[M]
+pub fn option(style? : Array[String], id? : String, class? : String, disabled? : Bool, value? : String, selected? : Bool, Array[Html]) -> Html
 
-pub fn[M] p(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn p(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] pre(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn pre(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] property(String, @variant.Variant) -> Attribute[M]
+pub fn property(String, @variant.Variant) -> Attribute
 
-pub fn[M] section(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn section(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] select(style? : Array[String], id? : String, class? : String, disabled? : Bool, name? : String, change? : (String) -> M, Array[Html[M]]) -> Html[M]
+pub fn select(style? : Array[String], id? : String, class? : String, disabled? : Bool, name? : String, change? : (String) -> @cmd.Message, Array[Html]) -> Html
 
-pub fn[M] span(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn span(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] strong(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn strong(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[Msg] style(String, String) -> Attribute[Msg]
+pub fn style(String, String) -> Attribute
 
-pub fn[M] sub(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn sub(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] sup(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn sup(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] table(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn table(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[Msg] target(Target) -> Attribute[Msg]
+pub fn target(Target) -> Attribute
 
-pub fn[M] tbody(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn tbody(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] td(style? : Array[String], id? : String, colspan? : Int, rowspan? : Int, headers? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn td(style? : Array[String], id? : String, colspan? : Int, rowspan? : Int, headers? : String, class? : String, Array[Html]) -> Html
 
-pub fn[Msg] text(String) -> Html[Msg]
+pub fn text(String) -> Html
 
-pub fn[M] tfoot(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn tfoot(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] th(style? : Array[String], id? : String, abbr? : String, colspan? : Int, rowspan? : Int, headers? : String, scope? : Scope, class? : String, Array[Html[M]]) -> Html[M]
+pub fn th(style? : Array[String], id? : String, abbr? : String, colspan? : Int, rowspan? : Int, headers? : String, scope? : Scope, class? : String, Array[Html]) -> Html
 
-pub fn[M] thead(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn thead(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] tr(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn tr(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] u(style? : Array[String], id? : String, class? : String, Array[Html[M]]) -> Html[M]
+pub fn u(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn[M] ul(style? : Array[String], id? : String, class? : String, click? : M, Array[Html[M]]) -> Html[M]
+pub fn ul(style? : Array[String], id? : String, class? : String, click? : @cmd.Message, Array[Html]) -> Html
 
 // Errors
 
 // Types and methods
-type Attribute[Msg]
+type Attribute
 
 pub(all) enum AutoComplete {
   On
@@ -157,11 +158,10 @@ pub(all) enum AutoComplete {
 }
 
 #alias(T)
-pub(all) struct Html[Msg](@vdom.Node[Msg])
+pub(all) struct Html(@vdom.Node)
 #deprecated
-pub fn[Msg] Html::inner(Self[Msg]) -> @vdom.Node[Msg]
-pub fn[A, B] Html::map(Self[A], (A) -> B) -> Self[B]
-pub fn[Msg] Html::to_virtual_dom(Self[Msg]) -> @vdom.Node[Msg]
+pub fn Html::inner(Self) -> @vdom.Node
+pub fn Html::to_virtual_dom(Self) -> @vdom.Node
 
 pub(all) enum InputType {
   Button

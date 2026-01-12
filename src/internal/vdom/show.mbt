@@ -1,5 +1,5 @@
 ///|
-impl[Msg] Show for AttrsUpdate[Msg] with to_string(self : AttrsUpdate[Msg]) -> String {
+impl Show for AttrsUpdate with to_string(self : AttrsUpdate) -> String {
   match self {
     AttrRemove(key) => "AttrRemove(\{key})"
     AttrAdd(key, value) => "AttrAdd(\{key}, \{value})"
@@ -13,12 +13,12 @@ impl[Msg] Show for AttrsUpdate[Msg] with to_string(self : AttrsUpdate[Msg]) -> S
 }
 
 ///|
-impl[Msg] Show for AttrsUpdate[Msg] with output(self, buf) {
+impl Show for AttrsUpdate with output(self, buf) {
   buf.write_string(self.to_string())
 }
 
 ///|
-impl[Msg] Show for AttrValue[Msg] with to_string(self) {
+impl Show for AttrValue with to_string(self) {
   match self {
     AttrEvent(_) => "AttrEvent"
     AttrStyle(value) => "AttrStyle(\{value})"
@@ -28,12 +28,12 @@ impl[Msg] Show for AttrValue[Msg] with to_string(self) {
 }
 
 ///|
-impl[Msg] Show for AttrValue[Msg] with output(self, buf) {
+impl Show for AttrValue with output(self, buf) {
   buf.write_string(self.to_string())
 }
 
 ///|
-impl[Msg] Show for Node[Msg] with to_string(self) {
+impl Show for Node with to_string(self) {
   match self {
     Node(tag, attrs~, children~, listeners~, namespace_uri~) =>
       "Node(\{tag}, \{attrs}, \{children}, Listeners(\{listeners.length()}), \{namespace_uri})"
@@ -45,12 +45,12 @@ impl[Msg] Show for Node[Msg] with to_string(self) {
 }
 
 ///|
-impl[Msg] Show for Node[Msg] with output(self, buf) {
+impl Show for Node with output(self, buf) {
   buf.write_string(self.to_string())
 }
 
 ///|
-impl[Msg] Show for Patch[Msg] with to_string(self) {
+impl Show for Patch with to_string(self) {
   match self {
     Drop(index, length) => "Drop(\{index}, \{length})"
     Remove(index) => "Remove(\{index})"
@@ -62,12 +62,12 @@ impl[Msg] Show for Patch[Msg] with to_string(self) {
 }
 
 ///|
-impl[Msg] Show for Patch[Msg] with output(self, buf) {
+impl Show for Patch with output(self, buf) {
   buf.write_string(self.to_string())
 }
 
 ///|
-impl[Msg] Show for Update[Msg] with to_string(self) {
+impl Show for Update with to_string(self) {
   match self {
     UpdateNode(index, attrs, children, listeners) =>
       "UpdateNode(\{index}, \{attrs}, \{children}, Listeners(\{listeners.length()}))"
@@ -76,16 +76,16 @@ impl[Msg] Show for Update[Msg] with to_string(self) {
 }
 
 ///|
-impl[Msg] Show for Update[Msg] with output(self, buf) {
+impl Show for Update with output(self, buf) {
   buf.write_string(self.to_string())
 }
 
 ///|
-impl[Msg] Show for Attribute[Msg] with to_string(self) {
+impl Show for Attribute with to_string(self) {
   "Attribute(\{self.0}, \{self.1})"
 }
 
 ///|
-impl[Msg] Show for Attribute[Msg] with output(self, buf) {
+impl Show for Attribute with output(self, buf) {
   buf.write_string(self.to_string())
 }

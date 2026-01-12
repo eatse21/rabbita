@@ -6,11 +6,11 @@ import(
 )
 
 // Values
-pub fn[M] close(String, return_value? : String) -> @cmd.Cmd[M]
+pub fn close(String, return_value? : String) -> @cmd.Cmd
 
-pub fn[M] request_close(String, return_value? : String) -> @cmd.Cmd[M]
+pub fn request_close(String, return_value? : String) -> @cmd.Cmd
 
-pub fn[M] show(String, modal? : Bool) -> @cmd.Cmd[M]
+pub fn show(String, modal? : Bool) -> @cmd.Cmd
 
 // Errors
 

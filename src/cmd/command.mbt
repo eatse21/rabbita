@@ -1,39 +1,46 @@
 ///|
+pub(all) enum Message {
+  Message(() -> Message)
+  Batch(Array[Message])
+  Empty
+}
+
+///|
 /// Store the events that can be triggered by the command.
-struct Events[M] {
+struct Events {
   on_url_changed : (@url.Url) -> Unit
   on_url_request : (@url.UrlRequest) -> Unit
-  on_update : (M) -> Unit
+  on_update : (Message) -> Unit
 }
 
 ///|
 /// Used by the runtime.
-pub fn[M] Events::new(
+pub fn Events::new(
   on_url_changed : (@url.Url) -> Unit,
   on_url_request : (@url.UrlRequest) -> Unit,
-  on_update : (M) -> Unit,
-) -> Events[M] {
+  on_update : (Message) -> Unit,
+) -> Events {
   { on_url_changed, on_url_request, on_update }
 }
 
 ///|
 /// Trigger the update function with `url_changed` message config by the user.
-pub fn[M] Events::trigger_url_changed(self : Events[M], url : @url.Url) -> Unit {
+pub fn Events::trigger_url_changed(self : Events, url : @url.Url) -> Unit {
   (self.on_url_changed)(url)
 }
 
 ///|
 /// Trigger the update function with `url_request` message config by the user.
-pub fn[M] Events::trigger_url_request(
-  self : Events[M],
+pub fn Events::trigger_url_request(
+  self : Events,
   url : @url.UrlRequest,
 ) -> Unit {
   (self.on_url_request)(url)
 }
 
 ///|
-/// Trigger the update function with message `msg`.
-pub fn[M] Events::trigger_update(self : Events[M], msg : M) -> Unit {
+/// Trigger the update function with message.
+pub fn Events::trigger_update(self : Events, msg : Message) -> Unit {
   (self.on_update)(msg)
 }
 
@@ -54,37 +61,23 @@ pub fn[M] Events::trigger_update(self : Events[M], msg : M) -> Unit {
 /// extern "js" fn set_timeout(f : () -> Unit, ms : Int) = "(f,ms) => setTimeout(f, ms)"
 /// ```
 #alias(Command)
-pub(all) struct Cmd[M]((Events[M]) -> Unit)
-
-///|
-/// Map the messages in the command to another type.
-pub fn[A, B] Cmd::map(self : Cmd[A], f : (A) -> B) -> Cmd[B] {
-  Cmd(events => {
-    let predef = {
-      on_url_changed: events.on_url_changed,
-      on_url_request: events.on_url_request,
-      on_update: msg => (events.on_update)(f(msg)),
-    }
-    let Cmd(f) = self
-    f(predef)
-  })
-}
+pub(all) struct Cmd((Events) -> Unit)
 
 ///|
 /// Create a command that does nothing.
-pub fn[M] none() -> Cmd[M] {
+pub fn none() -> Cmd {
   Cmd(ignore)
 }
 
 ///|
 /// Create a command that runs multiple commands.
-pub fn[M] batch(xs : Array[Cmd[M]]) -> Cmd[M] {
+pub fn batch(xs : Array[Cmd]) -> Cmd {
   Cmd(events => xs.each(cmd => (cmd.0)(events)))
 }
 
 ///|
 /// Create a command that trigger another update for the given message.
-pub fn[M] task(message : M) -> Cmd[M] {
+pub fn task(message : Message) -> Cmd {
   Cmd(events => events.trigger_update(message))
 }
 
@@ -93,7 +86,7 @@ pub fn[M] task(message : M) -> Cmd[M] {
 /// 
 /// The async function `f` will be called, and the result will be wrapped in a 
 /// message `msg`, then trigger another update with this message.
-pub fn[A, M] perform(msg : (A) -> M, f : async () -> A noraise) -> Cmd[M] {
+pub fn[A] perform(msg : (A) -> Message, f : async () -> A noraise) -> Cmd {
   Cmd(events => @js.async_run(() => events.trigger_update(msg(f()))))
 }
 
@@ -102,10 +95,10 @@ pub fn[A, M] perform(msg : (A) -> M, f : async () -> A noraise) -> Cmd[M] {
 /// 
 /// This is similar to `perform`, but it converts the returned value 
 /// or thrown error into a `Result`.
-pub fn[A, E : Error, M] attempt(
-  msg : (Result[A, E]) -> M,
+pub fn[A, E : Error] attempt(
+  msg : (Result[A, E]) -> Message,
   f : async () -> A raise E,
-) -> Cmd[M] {
+) -> Cmd {
   Cmd(events => @js.async_run(() => {
     let msg = try f() catch {
       e => msg(Err(e))

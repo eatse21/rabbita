@@ -1,97 +1,90 @@
 ///|
-struct Sandbox[Msg, Model, View] {
-  mut model : Model
-  update : (Msg, Model) -> (@cmd.Cmd[Msg], Model)
-  view : (Model) -> View
-  after_update : (View) -> Unit
-  on_url_changed : ((@url.Url) -> Msg)?
-  on_url_request : ((@url.UrlRequest) -> Msg)?
-  mut predefined : @cmd.Events[Msg]?
+using @url {type Url, type UrlRequest}
+
+///|
+struct Sandbox {
+  queue : @queue.Queue[@cmd.Message]
+  /// This function will do the following step:
+  ///
+  /// 1. view(model) -> newView  
+  ///      compute new vdom from model
+  ///
+  /// 2. diff(oldView, newView) -> patch
+  ///      generate patches by comparing to old vdom
+  ///
+  /// 3. mount(patch)
+  ///      apply patches to real DOM
+  render : () -> Unit
+  mut on_url_changed : ((Url) -> Unit)?
+  mut on_url_request : ((UrlRequest) -> Unit)?
 }
 
 ///|
-// used by vdom
-pub fn[Msg, Model, View] Sandbox::get_predefined_events(
-  self : Sandbox[Msg, Model, View],
-) -> @cmd.Events[Msg] {
-  self.predefined.unwrap()
+pub fn Sandbox::set_on_url_changed(self : Self, f : ((Url) -> Unit)?) -> Unit {
+  self.on_url_changed = f
 }
 
 ///|
-// used by vdom
-pub fn[Msg, Model, View] Sandbox::get_on_url_changed(
-  self : Sandbox[Msg, Model, View],
-) -> ((@url.Url) -> Msg)? {
-  self.on_url_changed
-}
-
-///|
-pub fn[Msg, Model, View] Sandbox::get_on_url_request(
-  self : Sandbox[Msg, Model, View],
-) -> ((@url.UrlRequest) -> Msg)? {
-  self.on_url_request
-}
-
-///|
-/// Update the model and launch commands.
-pub fn[Msg, Model, View] Sandbox::update(
-  self : Sandbox[Msg, Model, View],
-  message : Msg,
+pub fn Sandbox::set_on_url_request(
+  self : Self,
+  f : ((UrlRequest) -> Unit)?,
 ) -> Unit {
-  let (cmd, model) = (self.update)(message, self.model)
-  self.model = model
-  let view = (self.view)(self.model)
-  (self.after_update)(view)
-  // TODO: 
-  // The command may trigger another message immediately, causing the VDOM to be generated twice.
-  // We need to optimize this.
-  self.launch(cmd)
+  self.on_url_request = f
 }
 
 ///|
-/// Refresh the view.
-/// This function will call the view function and patch the result to the DOM.
-pub fn[Msg, Model, View] Sandbox::refresh(
-  self : Sandbox[Msg, Model, View],
-) -> Unit {
-  let view = (self.view)(self.model)
-  (self.after_update)(view)
-}
-
-///|
-pub fn[Model, Msg, View] Sandbox::new(
-  model : Model,
-  update : (Msg, Model) -> (@cmd.Cmd[Msg], Model),
-  view : (Model) -> View,
-  after_update~ : (View) -> Unit,
-  url_changed? : (@url.Url) -> Msg,
-  url_request? : (@url.UrlRequest) -> Msg,
-) -> Sandbox[Msg, Model, View] {
-  let sandbox = {
-    model,
-    update,
-    view,
-    after_update,
-    on_url_changed: url_changed,
-    on_url_request: url_request,
-    predefined: None,
-  }
-  let on_url_changed = match url_changed {
-    Some(f) => url => sandbox.update(f(url))
-    None => ignore
-  }
-  let on_url_request = match url_request {
-    Some(f) => url => sandbox.update(f(url))
-    None => ignore
-  }
+pub fn Sandbox::new(
+  render : () -> Unit,
+  on_url_changed? : (Url) -> Unit,
+  on_url_request? : (UrlRequest) -> Unit,
+) -> Sandbox {
   @dom.window()
   .to_event_target()
   .add_event_listener("popstate", _ => {
     guard (try? @url.parse(@dom.window().current_url())) is Ok(url)
-    on_url_changed(url)
+    match on_url_changed {
+      Some(f) => f(url)
+      None => ()
+    }
   })
-  sandbox.predefined = Some(
-    @cmd.Events::new(on_url_changed, on_url_request, sandbox.update(_)),
+  { render, queue: @queue.Queue::new(), on_url_changed, on_url_request }
+}
+
+///|
+/// Push a pending message to message queue.
+pub fn Sandbox::pending(self : Self, m : @cmd.Message) -> Unit {
+  self.queue.push(m)
+}
+
+///|
+/// Schedules a drawing frame to be rendered on the next animation frame.
+/// 
+/// This function orchestrates the rendering pipeline by:
+/// 1. Processing all pending messages in the message queue
+/// 2. Updating all relevant models based on these messages
+/// 3. Triggering the rendering process once the queue is fully drained
+pub fn Sandbox::schedule(self : Self) -> Unit {
+  while self.queue.pop() is Some(msg) {
+    match msg {
+      Batch(xs) => xs.each(x => self.queue.push(x))
+      Message(f) => self.queue.push(f())
+      Empty => ()
+    }
+  }
+  (self.render)()
+}
+///|
+/// Launch commands. It may trigger the update function.
+pub fn Sandbox::launch(self : Self, cmd : @cmd.Cmd) -> Unit {
+  let f = cmd.0
+  let mut predefined = None
+  let on_url_changed = self.on_url_changed.unwrap_or(ignore)
+  let on_url_request = self.on_url_request.unwrap_or(ignore)
+  predefined = Some(
+    @cmd.Events::new(on_url_changed, on_url_request, x => {
+      self.pending(x)
+      self.schedule()
+    }),
   )
-  sandbox
+  f(predefined.unwrap())
 }
