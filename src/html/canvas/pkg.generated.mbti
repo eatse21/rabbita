@@ -4,10 +4,11 @@ package "Yoorkin/rabbit-tea/html/canvas"
 import(
   "Yoorkin/rabbit-tea/dom"
   "Yoorkin/rabbit-tea/html"
+  "Yoorkin/rabbit-tea/internal/vdom"
 )
 
 // Values
-pub fn[Msg] new(width~ : Double, height~ : Double, click? : (@html.Mouse) -> Msg, mousemove? : (@html.Mouse) -> Msg, mousedown? : (@html.Mouse) -> Msg, mouseup? : (@html.Mouse) -> Msg, mouseenter? : (@html.Mouse) -> Msg, mouseleave? : (@html.Mouse) -> Msg) -> Model[Msg]
+pub fn new(width~ : Double, height~ : Double, click? : (@html.Mouse) -> @vdom.Cmd, mousemove? : (@html.Mouse) -> @vdom.Cmd, mousedown? : (@html.Mouse) -> @vdom.Cmd, mouseup? : (@html.Mouse) -> @vdom.Cmd, mouseenter? : (@html.Mouse) -> @vdom.Cmd, mouseleave? : (@html.Mouse) -> @vdom.Cmd) -> Model
 
 // Errors
 
@@ -34,9 +35,9 @@ pub fn Context2D::set_stroke_style(Self, Color) -> Unit
 pub fn Context2D::stroke(Self) -> Unit
 pub fn Context2D::to_unsafe_js(Self) -> @dom.CanvasRenderingContext2D
 
-type Model[Msg]
-pub fn[Msg] Model::context2d(Self[Msg]) -> Context2D
-pub fn[Msg] Model::to_html(Self[Msg]) -> @html.Html[Msg]
+type Model
+pub fn Model::context2d(Self) -> Context2D
+pub fn Model::to_html(Self) -> @html.Html
 
 // Type aliases
 

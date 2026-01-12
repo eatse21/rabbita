@@ -1,4 +1,7 @@
 ///|
+using @cmd {type Cmd}
+
+///|
 struct Mouse(@dom.MouseEvent)
 
 ///|
@@ -41,92 +44,83 @@ pub fn Scroll::height(self : Self) -> Int {
 }
 
 ///|
-fn[Msg] on_mouse(event : String, msg : (Mouse) -> Msg) -> Attribute[Msg] {
-  @vdom.on(event, HandleEvent(event => msg(event.to_mouse_event().unwrap())))
+fn on_mouse(event : String, msg : (Mouse) -> Cmd) -> Attribute {
+  Handler(event, (event, scheduler) => scheduler.add(
+    msg(event.to_mouse_event().unwrap()),
+  ))
 }
 
 ///|
-pub fn[Msg] on_click(msg : (Mouse) -> Msg) -> Attribute[Msg] {
+pub fn on_click(msg : (Mouse) -> Cmd) -> Attribute {
   on_mouse("click", msg)
 }
 
 ///|
-pub fn[Msg] on_input(msg : (String) -> Msg) -> Attribute[Msg] {
-  @vdom.on(
-    "input",
-    HandleEvent(event => {
-      let value : String = event
-        .target()
-        .to_html_input_element()
-        .unwrap()
-        .value()
-      msg(value)
-    }),
-  )
+pub fn on_input(msg : (String) -> Cmd) -> Attribute {
+  Handler("input", (event, scheduler) => {
+    let value : String = event.target().to_html_input_element().unwrap().value()
+    scheduler.add(msg(value))
+  })
 }
 
 ///|
-pub fn[Msg] on_change(msg : (String) -> Msg) -> Attribute[Msg] {
-  @vdom.on(
-    "change",
-    HandleEvent(event => {
-      let target = event.target()
-      let value = if target.to_html_input_element() is Some(x) {
-        x.value()
-      } else if target.to_html_select_element() is Some(x) {
-        x.value()
-      } else {
-        panic() // TODO: check for other HTMLElement types
-      }
-      msg(value)
-    }),
-  )
+pub fn on_change(msg : (String) -> Cmd) -> Attribute {
+  Handler("change", (event, scheduler) => {
+    let target = event.target()
+    let value = if target.to_html_input_element() is Some(x) {
+      x.value()
+    } else if target.to_html_select_element() is Some(x) {
+      x.value()
+    } else {
+      panic() // TODO: check for other HTMLElement types
+    }
+    scheduler.add(msg(value))
+  })
 }
 
 ///|
-pub fn[Msg] on_double_click(msg : (Mouse) -> Msg) -> Attribute[Msg] {
+pub fn on_double_click(msg : (Mouse) -> Cmd) -> Attribute {
   on_mouse("dblclick", msg)
 }
 
 ///|
-pub fn[Msg] on_mouse_down(msg : (Mouse) -> Msg) -> Attribute[Msg] {
+pub fn on_mouse_down(msg : (Mouse) -> Cmd) -> Attribute {
   on_mouse("mousedown", msg)
 }
 
 ///|
-pub fn[Msg] on_mouse_up(msg : (Mouse) -> Msg) -> Attribute[Msg] {
+pub fn on_mouse_up(msg : (Mouse) -> Cmd) -> Attribute {
   on_mouse("mouseup", msg)
 }
 
 ///|
-pub fn[Msg] on_mouse_move(msg : (Mouse) -> Msg) -> Attribute[Msg] {
+pub fn on_mouse_move(msg : (Mouse) -> Cmd) -> Attribute {
   on_mouse("mousemove", msg)
 }
 
 ///|
-pub fn[Msg] on_mouse_enter(msg : (Mouse) -> Msg) -> Attribute[Msg] {
+pub fn on_mouse_enter(msg : (Mouse) -> Cmd) -> Attribute {
   on_mouse("mouseenter", msg)
 }
 
 ///|
-pub fn[Msg] on_mouse_over(msg : (Mouse) -> Msg) -> Attribute[Msg] {
+pub fn on_mouse_over(msg : (Mouse) -> Cmd) -> Attribute {
   on_mouse("mouseover", msg)
 }
 
 ///|
-pub fn[Msg] on_mouse_leave(msg : (Mouse) -> Msg) -> Attribute[Msg] {
+pub fn on_mouse_leave(msg : (Mouse) -> Cmd) -> Attribute {
   on_mouse("mouseleave", msg)
 }
 
 ///|
-pub fn[Msg] on_mouse_out(msg : (Mouse) -> Msg) -> Attribute[Msg] {
+pub fn on_mouse_out(msg : (Mouse) -> Cmd) -> Attribute {
   on_mouse("mouseout", msg)
 }
 
 ///|
-pub fn[M] on_scroll(msg : (Scroll) -> M) -> Attribute[M] {
-  @vdom.on(
-    "scroll",
-    HandleEvent(event => msg(event.target().to_element().unwrap())),
-  )
+pub fn on_scroll(msg : (Scroll) -> Cmd) -> Attribute {
+  Handler("scroll", (event, scheduler) => scheduler.add(
+    msg(event.target().to_element().unwrap()),
+  ))
 }

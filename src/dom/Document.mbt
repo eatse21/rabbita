@@ -36,6 +36,12 @@ pub extern "js" fn Document::create_text_node(
 ) -> Element = "(doc,str) => doc.createTextNode(str)"
 
 ///|
+pub extern "js" fn Document::create_comment(
+  self : Self,
+  str : String,
+) -> Comment = "(doc,str) => doc.createComment(str)"
+
+///|
 pub extern "js" fn Document::create_document_fragment(
   self : Self,
 ) -> DocumentFragment = "(doc) => doc.createDocumentFragment()"

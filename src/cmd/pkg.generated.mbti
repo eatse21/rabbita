@@ -2,36 +2,26 @@
 package "Yoorkin/rabbit-tea/cmd"
 
 import(
-  "Yoorkin/rabbit-tea/url"
+  "Yoorkin/rabbit-tea/internal/vdom"
 )
 
 // Values
-pub fn[A, E : Error, M] attempt((Result[A, E]) -> M, async () -> A raise E) -> Cmd[M]
+pub fn[A, E : Error] attempt((Result[A, E]) -> @vdom.Cmd, async () -> A raise E) -> @vdom.Cmd
 
-pub fn[M] batch(Array[Cmd[M]]) -> Cmd[M]
+pub fn batch(Array[@vdom.Cmd]) -> @vdom.Cmd
 
-pub fn[M] none() -> Cmd[M]
+pub fn none() -> @vdom.Cmd
 
-pub fn[A, M] perform((A) -> M, async () -> A noraise) -> Cmd[M]
-
-pub fn[M] task(M) -> Cmd[M]
+pub fn[A] perform((A) -> @vdom.Cmd, async () -> A noraise) -> @vdom.Cmd
 
 // Errors
 
 // Types and methods
-#alias(Command)
-pub(all) struct Cmd[M]((Events[M]) -> Unit)
-#deprecated
-pub fn[M] Cmd::inner(Self[M]) -> (Events[M]) -> Unit
-pub fn[A, B] Cmd::map(Self[A], (A) -> B) -> Self[B]
-
-type Events[M]
-pub fn[M] Events::new((@url.Url) -> Unit, (@url.UrlRequest) -> Unit, (M) -> Unit) -> Self[M]
-pub fn[M] Events::trigger_update(Self[M], M) -> Unit
-pub fn[M] Events::trigger_url_changed(Self[M], @url.Url) -> Unit
-pub fn[M] Events::trigger_url_request(Self[M], @url.UrlRequest) -> Unit
 
 // Type aliases
+pub using @vdom {type Cmd}
+
+pub using @vdom {trait Scheduler}
 
 // Traits
 

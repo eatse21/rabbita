@@ -22,6 +22,7 @@ pub trait IsEventTarget: @js.Cast {
   to_html_media_element(Self) -> HTMLMediaElement? = _
   to_html_video_element(Self) -> HTMLVideoElement? = _
   to_text(Self) -> Text? = _
+  to_comment(Self) -> Comment? = _
   to_svg_element(Self) -> SVGElement? = _
   to_svg_graphics_element(Self) -> SVGGraphicsElement? = _
   to_svg_image_element(Self) -> SVGImageElement? = _
@@ -125,6 +126,11 @@ impl IsEventTarget with to_text(s) {
 }
 
 ///|
+impl IsEventTarget with to_comment(s) {
+  s |> js_identity |> ffi_to_comment |> _.to_option()
+}
+
+///|
 impl IsEventTarget with to_svg_element(s) {
   s |> js_identity |> ffi_to_svg_element |> _.to_option()
 }
@@ -199,6 +205,10 @@ extern "js" fn ffi_to_element(x : @js.Value) -> @js.Nullable[Element] =
 ///|
 extern "js" fn ffi_to_text(x : @js.Value) -> @js.Nullable[Text] =
   #| (x) => x.nodeType===3 ? x : null
+
+///|
+extern "js" fn ffi_to_comment(x : @js.Value) -> @js.Nullable[Comment] =
+  #| (x) => x.nodeType===8 ? x : null
 
 ///|
 extern "js" fn ffi_to_html_element(x : @js.Value) -> @js.Nullable[HTMLElement] =

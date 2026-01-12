@@ -2,38 +2,38 @@
 package "Yoorkin/rabbit-tea"
 
 import(
-  "Yoorkin/rabbit-tea/cmd"
   "Yoorkin/rabbit-tea/html"
+  "Yoorkin/rabbit-tea/internal/vdom"
   "Yoorkin/rabbit-tea/url"
 )
 
 // Values
-pub fn[Model, Msg] application(initialize~ : (@url.Url) -> (@cmd.Cmd[Msg], Model), update~ : (Msg, Model) -> (@cmd.Cmd[Msg], Model), view~ : (Model) -> @html.Html[Msg], url_changed? : (@url.Url) -> Msg, url_request? : (@url.UrlRequest) -> Msg, mount? : String) -> Unit
+pub fn[A, E : Error] attempt((Result[A, E]) -> @vdom.Cmd, async () -> A raise E) -> @vdom.Cmd
 
-pub fn[A, E : Error, M] attempt((Result[A, E]) -> M, async () -> A raise E) -> @cmd.Cmd[M]
+pub fn batch(Array[@vdom.Cmd]) -> @vdom.Cmd
 
-pub fn[M] batch(Array[@cmd.Cmd[M]]) -> @cmd.Cmd[M]
+pub fn new(&@vdom.Cell) -> App
 
-pub fn[Model, Message] new(model~ : Model, update~ : (Message, Model) -> (@cmd.Cmd[Message], Model), view~ : (Model) -> @html.Html[Message], mount? : String) -> App[Message, Model]
+pub fn none() -> @vdom.Cmd
 
-pub fn[Model, Msg] new_with_route(initialize~ : (@url.Url) -> (@cmd.Cmd[Msg], Model), update~ : (Msg, Model) -> (@cmd.Cmd[Msg], Model), view~ : (Model) -> @html.Html[Msg], url_changed? : (@url.Url) -> Msg, url_request? : (@url.UrlRequest) -> Msg, mount? : String) -> App[Msg, Model]
-
-pub fn[M] none() -> @cmd.Cmd[M]
-
-pub fn[A, M] perform((A) -> M, async () -> A noraise) -> @cmd.Cmd[M]
-
-pub fn[Model, Message] startup(model~ : Model, update~ : (Message, Model) -> (@cmd.Cmd[Message], Model), view~ : (Model) -> @html.Html[Message], mount? : String) -> Unit
-
-pub fn[M] task(M) -> @cmd.Cmd[M]
+pub fn[A] perform((A) -> @vdom.Cmd, async () -> A noraise) -> @vdom.Cmd
 
 // Errors
 
 // Types and methods
-type App[Msg, Model]
-pub fn[Msg, Model] App::dispatch(Self[Msg, Model], Msg) -> Unit
+type App
+pub fn App::mount(Self, String) -> Unit
+pub fn App::with_route(Self, url_changed? : (@url.Url) -> @vdom.Cmd, url_request? : (@url.UrlRequest) -> @vdom.Cmd) -> Unit
+
+type Dispatcher[Msg]
+pub fn[Msg] Dispatcher::message(Self[Msg], Msg) -> @vdom.Cmd
+
+type TEA[Model, Msg]
+pub fn[Model, Msg] TEA::new(model~ : Model, update~ : (Dispatcher[Msg], Msg, Model) -> (@vdom.Cmd, Model), view~ : (Dispatcher[Msg], Model) -> @html.Html) -> Self[Model, Msg]
+pub impl[Model, Msg] @vdom.Cell for TEA[Model, Msg]
 
 // Type aliases
-pub using @cmd {type Cmd}
+pub using @vdom {type Cmd}
 
 // Traits
 

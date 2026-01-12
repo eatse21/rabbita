@@ -216,6 +216,7 @@ pub fn DataTransferItemList::op_get(Self, Int) -> Unit
 pub fn DataTransferItemList::remove(Self, Int) -> Unit
 
 type Document
+pub fn Document::create_comment(Self, String) -> Comment
 pub fn Document::create_document_fragment(Self) -> DocumentFragment
 pub fn Document::create_element(Self, String) -> Element
 pub fn Document::create_element_ns(Self, String, String, on_namespace_error? : (DOMException) -> Element, on_invalid_character_error? : (DOMException) -> Element) -> Element
@@ -231,6 +232,9 @@ pub fn Document::to_node(Self) -> Node
 
 type DocumentFragment
 pub fn DocumentFragment::to_node(Self) -> Node
+pub impl IsEventTarget for DocumentFragment
+pub impl IsNode for DocumentFragment
+pub impl @js.Cast for DocumentFragment
 
 type DragEvent
 pub fn DragEvent::get_data_transfer(Self) -> DataTransfer
@@ -467,6 +471,12 @@ type SVGStringList
 
 type StylePropertyMap
 
+type Comment
+pub fn Comment::to_node(Self) -> Node
+pub impl IsEventTarget for Comment
+pub impl IsNode for Comment
+pub impl @js.Cast for Comment
+
 type Text
 pub fn Text::to_node(Self) -> Node
 
@@ -590,6 +600,7 @@ pub trait IsEventTarget : @js.Cast {
   to_html_media_element(Self) -> HTMLMediaElement?
   to_html_video_element(Self) -> HTMLVideoElement?
   to_text(Self) -> Text?
+  to_comment(Self) -> Comment?
   to_svg_element(Self) -> SVGElement?
   to_svg_graphics_element(Self) -> SVGGraphicsElement?
   to_svg_image_element(Self) -> SVGImageElement?
@@ -764,6 +775,7 @@ pub trait IsNode : IsEventTarget {
   insert_before(Self, Node, Node) -> Unit
   get_child(Self, Int) -> Node
   get_child_count(Self) -> Int
+  is_same_node(Self, Node) -> Bool
 }
 
 pub trait IsSVGElement : IsElement {
@@ -797,4 +809,3 @@ pub trait IsSVGGraphicsElement : IsSVGElement {
 pub trait IsUIEvent : IsEvent {
   as_ui_event(Self) -> UIEvent
 }
-

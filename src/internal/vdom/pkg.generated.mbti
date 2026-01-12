@@ -2,71 +2,101 @@
 package "Yoorkin/rabbit-tea/internal/vdom"
 
 import(
-  "Yoorkin/rabbit-tea/cmd"
   "Yoorkin/rabbit-tea/dom"
   "Yoorkin/rabbit-tea/url"
   "Yoorkin/rabbit-tea/variant"
   "moonbit-community/js-ffi/js"
+  "moonbitlang/core/queue"
 )
 
 // Values
-pub fn[Msg] attribute(String, String) -> Attribute[Msg]
+pub fn attribute(String, String) -> Attribute
 
-pub fn[Msg] diff(Node[Msg], Node[Msg]) -> Patch[Msg]
+pub fn diff(Node, Node) -> Patch
 
-pub fn[Msg] diff_without_key(Array[Node[Msg]], Array[Node[Msg]]) -> Array[Patch[Msg]]
+pub fn diff_without_key(Array[Node], Array[Node]) -> Array[Patch]
 
-pub fn[Msg] do_diff(Node[Msg], Node[Msg]) -> Array[Patch[Msg]]
+pub fn do_diff(Node, Node) -> Array[Patch]
 
-pub fn[Msg] external(@dom.Node, Ref[Array[Attribute[Msg]]?], width~ : Int, height~ : Int) -> Node[Msg]
+pub fn external(@dom.Node, Ref[Array[Attribute]?], width~ : Int, height~ : Int) -> Node
 
-pub fn[Msg] link(Array[Attribute[Msg]], Array[Node[Msg]], escape? : Bool) -> Node[Msg]
+pub fn link(Array[Attribute], Array[Node], escape? : Bool) -> Node
 
-pub fn[Msg] node(String, Array[Attribute[Msg]], Array[Node[Msg]]) -> Node[Msg]
+pub fn node(String, Array[Attribute], Array[Node]) -> Node
 
-pub fn[Msg] node_ns(String, String, Array[Attribute[Msg]], Array[Node[Msg]]) -> Node[Msg]
+pub fn node_ns(String, String, Array[Attribute], Array[Node]) -> Node
 
-pub fn[Msg] nothing() -> Node[Msg]
+pub fn nothing() -> Node
 
-pub fn[Msg] on(String, Handler[Msg]) -> Attribute[Msg]
+pub fn on(String, Handler) -> Attribute
 
-pub fn[Msg] property(String, @variant.Variant) -> Attribute[Msg]
+pub fn property(String, @variant.Variant) -> Attribute
 
-pub fn[Msg] style(String, String) -> Attribute[Msg]
+pub fn style(String, String) -> Attribute
 
-pub fn[Msg] text(String) -> Node[Msg]
+pub fn text(String) -> Node
 
 pub fn variant_to_js_value(@variant.Variant) -> @js.Value
 
 // Errors
 
 // Types and methods
-type Attribute[Msg]
-pub fn[A, B] Attribute::map(Self[A], (A) -> B) -> Self[B]
+type Attribute
 
-pub(all) enum Handler[Msg] {
-  Normal(Msg)
-  HandleEvent((@dom.Event) -> Msg)
-  Custom(Msg, stop_propagation~ : Bool, prevent_default~ : Bool)
+pub(all) enum Cmd {
+  Effect((&Scheduler) -> Unit)
+  Message(Id, () -> Unit)
+  Batch(Array[Cmd])
+  Empty
 }
-pub fn[A, B] Handler::map(Self[A], (A) -> B) -> Self[B]
 
-type Node[Msg]
-pub fn[A, B] Node::map(Self[A], (A) -> B) -> Self[B]
-pub fn[Msg, Model, View] Node::patch(Self[Msg], Self[Msg], Sandbox[Msg, Model, View], mount~ : String) -> Unit
+pub(all) enum Handler {
+  Normal(Cmd)
+  HandleEvent((@dom.Event) -> Cmd)
+  Custom(Cmd, stop_propagation~ : Bool, prevent_default~ : Bool)
+}
 
-type Patch[Msg]
+type Id
+pub fn Id::new() -> Self
+pub impl Compare for Id
+pub impl Eq for Id
+pub impl Hash for Id
 
-type Sandbox[Msg, Model, View]
-pub fn[Msg, Model, View] Sandbox::get_on_url_changed(Self[Msg, Model, View]) -> ((@url.Url) -> Msg)?
-pub fn[Msg, Model, View] Sandbox::get_on_url_request(Self[Msg, Model, View]) -> ((@url.UrlRequest) -> Msg)?
-pub fn[Msg, Model, View] Sandbox::get_predefined_events(Self[Msg, Model, View]) -> @cmd.Events[Msg]
-pub fn[M, Model, View] Sandbox::launch(Self[M, Model, View], @cmd.Cmd[M]) -> Unit
-pub fn[Model, Msg, View] Sandbox::new(Model, (Msg, Model) -> (@cmd.Cmd[Msg], Model), (Model) -> View, after_update~ : (View) -> Unit, url_changed? : (@url.Url) -> Msg, url_request? : (@url.UrlRequest) -> Msg) -> Self[Msg, Model, View]
-pub fn[Msg, Model, View] Sandbox::refresh(Self[Msg, Model, View]) -> Unit
-pub fn[Msg, Model, View] Sandbox::update(Self[Msg, Model, View], Msg) -> Unit
+type Node
+pub fn Node::patch(Self, Self, Sandbox, mount~ : String) -> Unit
+
+pub(all) struct Nodes {
+  old : Node
+  new : Node
+}
+
+type Patch
+
+pub(all) struct Sandbox {
+  subscriptions : Map[Id, &Cell]
+  queue : @queue.Queue[Id]
+  root : &Cell
+  mut mount : String
+  mut on_url_changed : ((@url.Url) -> Cmd)?
+  mut on_url_request : ((@url.UrlRequest) -> Cmd)?
+}
+pub fn Sandbox::flush(Self) -> Unit
+pub fn Sandbox::new(&Cell) -> Self
+pub impl Scheduler for Sandbox
 
 // Type aliases
 
 // Traits
+pub(open) trait Cell {
+  id(Self) -> Id
+  step(Self, &Scheduler) -> Unit
+  node(Self) -> Node
+  refersh(Self) -> Unit
+}
+
+pub(open) trait Scheduler {
+  add(Self, Cmd) -> Unit
+  add_url_changed(Self, @url.Url) -> Unit
+  add_url_request(Self, @url.UrlRequest) -> Unit
+}
 

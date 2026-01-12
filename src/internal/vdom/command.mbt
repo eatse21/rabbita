@@ -1,9 +1,17 @@
 ///|
-/// Launch commands. It may trigger the update function.
-pub fn[M, Model, View] Sandbox::launch(
-  self : Sandbox[M, Model, View],
-  cmd : @cmd.Cmd[M],
-) -> Unit {
-  let f = cmd.0
-  f(self.predefined.unwrap())
+pub(all) enum Cmd {
+  Effect((&Scheduler) -> Unit)
+  Message(Id, () -> Unit)
+  Batch(Array[Cmd])
+  Empty
+}
+
+///|
+struct Id {
+  mut value : Int?
+} derive(Eq, Hash, Compare, Show)
+
+///|
+pub fn Id::new() -> Id {
+  { value: None }
 }

@@ -2,31 +2,31 @@
 package "Yoorkin/rabbit-tea/nav"
 
 import(
-  "Yoorkin/rabbit-tea/cmd"
+  "Yoorkin/rabbit-tea/internal/vdom"
 )
 
 // Values
-pub fn[M] back() -> @cmd.Cmd[M]
+pub fn back() -> @vdom.Cmd
 
-pub fn[M] forward() -> @cmd.Cmd[M]
+pub fn forward() -> @vdom.Cmd
 
-pub fn[M] load(String) -> @cmd.Cmd[M]
+pub fn load(String) -> @vdom.Cmd
 
-pub fn[M] push_url(String) -> @cmd.Cmd[M]
+pub fn push_url(String) -> @vdom.Cmd
 
-pub fn[M] reload() -> @cmd.Cmd[M]
+pub fn reload() -> @vdom.Cmd
 
-pub fn[M] replace_url(String) -> @cmd.Cmd[M]
+pub fn replace_url(String) -> @vdom.Cmd
 
-pub fn[M] scroll_by_pos(Int, Int) -> @cmd.Cmd[M]
+pub fn scroll_by_pos(Int, Int) -> @vdom.Cmd
 
-pub fn[M] scroll_to(String) -> @cmd.Cmd[M]
+pub fn scroll_to(String) -> @vdom.Cmd
 
-pub fn[M] scroll_to_bottom() -> @cmd.Cmd[M]
+pub fn scroll_to_bottom() -> @vdom.Cmd
 
-pub fn[M] scroll_to_pos(Int, Int) -> @cmd.Cmd[M]
+pub fn scroll_to_pos(Int, Int) -> @vdom.Cmd
 
-pub fn[M] scroll_to_top() -> @cmd.Cmd[M]
+pub fn scroll_to_top() -> @vdom.Cmd
 
 // Errors
 

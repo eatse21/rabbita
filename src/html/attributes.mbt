@@ -1,27 +1,32 @@
 ///|
-struct Attribute[Msg](@vdom.Attribute[Msg])
+enum Attribute {
+  Attribute(String, String)
+  Property(String, @variant.Variant)
+  Style(String, String)
+  Handler(String, (@dom.Event, &@vdom.Scheduler) -> Unit)
+}
 
 ///|
 /// Specify an style
-pub fn[Msg] style(key : String, value : String) -> Attribute[Msg] {
-  @vdom.style(key, value)
+pub fn style(key : String, value : String) -> Attribute {
+  Style(key, value)
 }
 
 ///|
-pub fn[Msg] attribute(key : String, value : String) -> Attribute[Msg] {
-  @vdom.attribute(key, value)
+pub fn attribute(key : String, value : String) -> Attribute {
+  Attribute(key, value)
 }
 
 ///|
-pub fn[M] property(key : String, value : @variant.Variant) -> Attribute[M] {
-  @vdom.property(key, value)
+pub fn property(key : String, value : @variant.Variant) -> Attribute {
+  Property(key, value)
 }
 
 ///|
-pub fn[Msg] href(value : String) -> Attribute[Msg] {
+pub fn href(value : String) -> Attribute {
   // Note: `href` will be the value you specified, but by property, the value 
   // will be resolved to an absolute URL.
-  @vdom.property("href", @variant.String(value))
+  Property("href", String(value))
 }
 
 ///|
@@ -39,6 +44,6 @@ fn Target::to_string(self : Target) -> String {
 }
 
 ///|
-pub fn[Msg] target(value : Target) -> Attribute[Msg] {
-  @vdom.attribute("target", value.to_string())
+pub fn target(value : Target) -> Attribute {
+  Attribute("target", value.to_string())
 }

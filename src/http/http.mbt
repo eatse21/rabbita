@@ -1,4 +1,7 @@
 ///|
+using @vdom {trait Scheduler}
+
+///|
 pub(all) enum Expecting[Msg, Model] {
   Json((Result[Model, String]) -> Msg, (Json) -> Result[Model, String])
   Text((Result[String, String]) -> Msg)
@@ -51,13 +54,13 @@ extern "js" fn js_request(
   #| }
 
 ///|
-fn[Msg, Model] request(
+fn[Model] request(
   url : String,
   http_method : String,
-  expect~ : Expecting[Msg, Model],
+  expect~ : Expecting[@cmd.Cmd, Model],
   body~ : Body,
-) -> @cmd.Cmd[Msg] {
-  let launch = fn(events : @cmd.Events[Msg]) {
+) -> @cmd.Cmd {
+  let launch = fn(scheduler : &Scheduler) {
     let has_body = match body {
       Empty => false
       _ => true
@@ -76,11 +79,9 @@ fn[Msg, Model] request(
             let result = Ok(@json.parse(str)) catch {
               _ => Err("Json parse error")
             }
-            events.trigger_update(f(result.bind(decoder)))
+            scheduler.add(f(result.bind(decoder)))
           },
-          failed=msg => events.trigger_update(
-            f(Err("Http request failed:\{msg}")),
-          ),
+          failed=msg => scheduler.add(f(Err("Http request failed:\{msg}"))),
         )
       Text(f) =>
         js_request(
@@ -89,50 +90,48 @@ fn[Msg, Model] request(
           has_body~,
           body~,
           content_type~,
-          succeed=str => events.trigger_update(f(Ok(str))),
-          failed=msg => events.trigger_update(
-            f(Err("Http request failed:\{msg}")),
-          ),
+          succeed=str => scheduler.add(f(Ok(str))),
+          failed=msg => scheduler.add(f(Err("Http request failed:\{msg}"))),
         )
     }
   }
-  Cmd(launch)
+  Effect(launch)
 }
 
 ///|
 /// Create a command to send a GET request.
-pub fn[Msg, Model] get(
+pub fn[Model] get(
   url : String,
-  expect~ : Expecting[Msg, Model],
-) -> @cmd.Cmd[Msg] {
+  expect~ : Expecting[@cmd.Cmd, Model],
+) -> @cmd.Cmd {
   request(url, "GET", expect~, body=Empty)
 }
 
 ///|
 /// Create a command to send a PUT request.
-pub fn[Msg, Model] delete(
+pub fn[Model] delete(
   url : String,
-  expect~ : Expecting[Msg, Model],
-) -> @cmd.Cmd[Msg] {
+  expect~ : Expecting[@cmd.Cmd, Model],
+) -> @cmd.Cmd {
   request(url, "DELETE", expect~, body=Empty)
 }
 
 ///|
 /// Create a command to send a POST request.
-pub fn[Msg, Model] post(
+pub fn[Model] post(
   url : String,
   body : Body,
-  expect~ : Expecting[Msg, Model],
-) -> @cmd.Cmd[Msg] {
+  expect~ : Expecting[@cmd.Cmd, Model],
+) -> @cmd.Cmd {
   request(url, "POST", body~, expect~)
 }
 
 ///|
 /// Create a command to send a PATCH request.
-pub fn[Msg, Model] patch(
+pub fn[Model] patch(
   url : String,
   body : Body,
-  expect~ : Expecting[Msg, Model],
-) -> @cmd.Cmd[Msg] {
+  expect~ : Expecting[@cmd.Cmd, Model],
+) -> @cmd.Cmd {
   request(url, "PATCH", body~, expect~)
 }

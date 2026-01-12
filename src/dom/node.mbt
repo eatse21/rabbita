@@ -8,17 +8,19 @@ pub trait IsNode: IsEventTarget {
   get_node_type(Self) -> Int = _
   get_node_name(Self) -> String = _
   get_node_value(Self) -> String = _
+  set_node_value(Self, @js.Nullable[String]) -> Unit = _
   get_first_child(Self) -> Node = _
   get_last_child(Self) -> Node = _
-  get_next_sibling(Self) -> Node = _
-  get_previous_sibling(Self) -> Node = _
-  get_parent_node(Self) -> Node = _
+  get_next_sibling(Self) -> @js.Nullable[Node] = _
+  get_previous_sibling(Self) -> @js.Nullable[Node] = _
+  get_parent_node(Self) -> @js.Nullable[Node] = _
   append_child(Self, Node) -> Unit = _
   remove_child(Self, Node) -> Unit = _
   replace_child(Self, Node, Node) -> Unit = _
-  insert_before(Self, Node, Node) -> Unit = _
+  insert_before(Self, Node, @js.Nullable[Node]) -> Unit = _
   get_child(Self, Int) -> Node = _
   get_child_count(Self) -> Int = _
+  is_same_node(Self, Node) -> Bool = _
 }
 
 ///|
@@ -36,6 +38,11 @@ pub impl @js.Cast for Node with from(value) {
 
 ///|
 pub impl IsNode for Node
+
+///|
+impl IsNode with set_node_value(s, v) {
+  ffi_set_node_value(js_identity(s), v)
+}
 
 ///|
 impl IsNode with as_node(s) {
@@ -112,6 +119,11 @@ impl IsNode with get_child_count(s) {
   s |> js_identity |> ffi_count_child
 }
 
+///|
+impl IsNode with is_same_node(s, other) {
+  s |> js_identity |> ffi_is_same_node(other)
+}
+
 // ---------- node API --------------
 
 ///|
@@ -130,13 +142,13 @@ extern "js" fn first_child(x : @js.Value) -> Node = "(x) => x.firstChild"
 extern "js" fn ffi_last_child(x : @js.Value) -> Node = "(x) => x.lastChild"
 
 ///|
-extern "js" fn ffi_next_sibling(x : @js.Value) -> Node = "(x) => x.nextSibling"
+extern "js" fn ffi_next_sibling(x : @js.Value) -> @js.Nullable[Node] = "(x) => x.nextSibling"
 
 ///|
-extern "js" fn ffi_previous_sibling(x : @js.Value) -> Node = "(x) => x.previousSibling"
+extern "js" fn ffi_previous_sibling(x : @js.Value) -> @js.Nullable[Node] = "(x) => x.previousSibling"
 
 ///|
-extern "js" fn ffi_parent_node(x : @js.Value) -> Node = "(x) => x.parentNode"
+extern "js" fn ffi_parent_node(x : @js.Value) -> @js.Nullable[Node] = "(x) => x.parentNode"
 
 ///|
 extern "js" fn ffi_append_child(x : @js.Value, child : Node) = "(p,c) => p.appendChild(c)"
@@ -148,7 +160,11 @@ extern "js" fn ffi_remove_child(x : @js.Value, child : Node) = "(p,c) => p.remov
 extern "js" fn ffi_replace_child(x : @js.Value, new : Node, old : Node) = "(p,n,o) => p.replaceChild(n,o)"
 
 ///|
-extern "js" fn insert_before(x : @js.Value, value : Node, before : Node) = "(p,value,before) => p.insertBefore(value,before)"
+extern "js" fn insert_before(
+  x : @js.Value,
+  value : Node,
+  before : @js.Nullable[Node],
+) = "(p,value,before) => p.insertBefore(value,before)"
 
 // ---------- some specific node API --------------
 // Note: the childNodes property is a NodeList, not an array, so we can't use the Array type.
@@ -163,3 +179,9 @@ extern "js" fn ffi_nth_child(x : @js.Value, index : Int) -> Node =
 
 ///|
 extern "js" fn ffi_count_child(x : @js.Value) -> Int = "(x) => x.childNodes.length"
+
+///|
+extern "js" fn ffi_set_node_value(x : @js.Value, v : @js.Nullable[String]) = "(x,v) => x.nodeValue = v"
+
+///|
+extern "js" fn ffi_is_same_node(x : @js.Value, other : Node) -> Bool = "(x, other) => x === other"
