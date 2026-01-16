@@ -100,9 +100,9 @@ priv enum AttrValue {
 
 ///|
 pub(all) enum Handler {
-  Normal(@cmd.Message)
-  HandleEvent((@dom.Event) -> @cmd.Message)
-  Custom(@cmd.Message, stop_propagation~ : Bool, prevent_default~ : Bool)
+  Normal(@cmd.Effect)
+  HandleEvent((@dom.Event) -> @cmd.Effect)
+  Custom(@cmd.Effect, stop_propagation~ : Bool, prevent_default~ : Bool)
 }
 
 ///|
@@ -181,12 +181,12 @@ fn Node::to_node(self : Node, sandbox : Sandbox) -> @dom.Node {
         let listener = match handler {
           Normal(msg) =>
             _ => {
-              sandbox.pending(Message(() => msg))
+              sandbox.pending(Effect(s => s.pending(msg)))
               sandbox.schedule()
             }
           HandleEvent(f) =>
             event => {
-              sandbox.pending(Message(() => f(event)))
+              sandbox.pending(Effect(s => s.pending(f(event))))
               sandbox.schedule()
             }
           Custom(msg, stop_propagation~, prevent_default~) =>
@@ -197,7 +197,7 @@ fn Node::to_node(self : Node, sandbox : Sandbox) -> @dom.Node {
               if prevent_default {
                 event.prevent_default()
               }
-              sandbox.pending(Message(() => msg))
+              sandbox.pending(Effect(s => s.pending(msg)))
               sandbox.schedule()
             }
         }
@@ -250,7 +250,7 @@ fn Node::to_node(self : Node, sandbox : Sandbox) -> @dom.Node {
               } else {
                 External(href)
               }
-              url_request(request)
+              sandbox.pending(url_request(request))
             }
           })
           element
@@ -358,14 +358,13 @@ pub fn Node::patch(
                   let listener = match handler {
                     Normal(msg) =>
                       _ => {
-                        let m = @cmd.Message(() => msg)
+                        let m = @cmd.Effect(s => s.pending(msg))
                         sandbox.pending(m)
                         sandbox.schedule()
                       }
                     HandleEvent(f) =>
                       event => {
-                        let m = @cmd.Message(() => f(event))
-                        sandbox.pending(m)
+                        sandbox.pending(Effect(s => s.pending(f(event))))
                         sandbox.schedule()
                       }
                     Custom(msg, stop_propagation~, prevent_default~) =>
@@ -376,8 +375,9 @@ pub fn Node::patch(
                         if prevent_default {
                           event.prevent_default()
                         }
-                        let m = @cmd.Message(() => msg)
-                        sandbox..pending(m)..schedule()
+                        sandbox
+                        ..pending(Effect(s => s.pending(msg)))
+                        ..schedule()
                       }
                   }
                   element.add_event_listener(key, listener)

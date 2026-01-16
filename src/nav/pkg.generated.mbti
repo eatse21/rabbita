@@ -6,27 +6,27 @@ import(
 )
 
 // Values
-pub fn back() -> @cmd.Cmd
+pub fn back() -> @cmd.Effect
 
-pub fn forward() -> @cmd.Cmd
+pub fn forward() -> @cmd.Effect
 
-pub fn load(String) -> @cmd.Cmd
+pub fn load(String) -> @cmd.Effect
 
-pub fn push_url(String) -> @cmd.Cmd
+pub fn push_url(String) -> @cmd.Effect
 
-pub fn reload() -> @cmd.Cmd
+pub fn reload() -> @cmd.Effect
 
-pub fn replace_url(String) -> @cmd.Cmd
+pub fn replace_url(String) -> @cmd.Effect
 
-pub fn scroll_by_pos(Int, Int) -> @cmd.Cmd
+pub fn scroll_by_pos(Int, Int) -> @cmd.Effect
 
-pub fn scroll_to(String) -> @cmd.Cmd
+pub fn scroll_to(String) -> @cmd.Effect
 
-pub fn scroll_to_bottom() -> @cmd.Cmd
+pub fn scroll_to_bottom() -> @cmd.Effect
 
-pub fn scroll_to_pos(Int, Int) -> @cmd.Cmd
+pub fn scroll_to_pos(Int, Int) -> @cmd.Effect
 
-pub fn scroll_to_top() -> @cmd.Cmd
+pub fn scroll_to_top() -> @cmd.Effect
 
 // Errors
 

@@ -1,5 +1,5 @@
 ///|
-using @cmd {type Message}
+using @cmd {type Effect}
 
 ///|
 struct Model {
@@ -16,12 +16,12 @@ pub fn Model::context2d(self : Model) -> Context2D {
 pub fn new(
   width~ : Double,
   height~ : Double,
-  click? : (@html.Mouse) -> Message,
-  mousemove? : (@html.Mouse) -> Message,
-  mousedown? : (@html.Mouse) -> Message,
-  mouseup? : (@html.Mouse) -> Message,
-  mouseenter? : (@html.Mouse) -> Message,
-  mouseleave? : (@html.Mouse) -> Message,
+  click? : (@html.Mouse) -> Effect,
+  mousemove? : (@html.Mouse) -> Effect,
+  mousedown? : (@html.Mouse) -> Effect,
+  mouseup? : (@html.Mouse) -> Effect,
+  mouseenter? : (@html.Mouse) -> Effect,
+  mouseleave? : (@html.Mouse) -> Effect,
 ) -> Model {
   let canvas = @dom.document().create_element("canvas")
   let attributes = {

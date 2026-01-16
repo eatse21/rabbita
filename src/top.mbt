@@ -1,8 +1,8 @@
 ///|
-pub using @cmd {type Cmd, type Command}
+pub using @cmd {type Cmd}
 
 ///|
-pub using @cmd {none, batch, task, perform, attempt}
+pub using @cmd {none, batch, perform, attempt}
 
 ///|
 using @html {type Html}
@@ -19,42 +19,50 @@ using @html {type Html}
 /// to get more intuition!
 /// 
 /// To start the application with router, you can use the `application` function.
-pub fn[Msg] new(component : Component[Msg], mount? : String = "app") -> App {
-  @dom.document()
-  .get_element_by_id(mount)
-  .unwrap()
-  .set_inner_html("<div></div>")
+pub fn[Msg] new(component : Component[Msg]) -> App {
   let mut curr_dom = @vdom.node("div", [], [])
   let mut sandbox : @vdom.Sandbox? = None
   fn render() -> Unit {
     let html = component.view()
     let new_dom = html.to_virtual_dom()
-    new_dom.patch(curr_dom, sandbox.unwrap(), mount~)
+    new_dom.patch(
+      curr_dom,
+      sandbox.unwrap(),
+      mount=sandbox.unwrap().mount_element,
+    )
     curr_dom = new_dom
   }
 
-  sandbox = Some(
-    @vdom.Sandbox::new(render, on_url_changed=ignore, on_url_request=ignore),
-  )
+  sandbox = Some(@vdom.Sandbox::new(render))
   App::{ sandbox: sandbox.unwrap() }
 }
 
 ///|
 pub fn App::with_route(
   self : Self,
-  url_changed? : (@url.Url) -> @cmd.Message,
-  url_request? : (@url.UrlRequest) -> @cmd.Message,
+  url_changed? : (@url.Url) -> @cmd.Effect,
+  url_request? : (@url.UrlRequest) -> @cmd.Effect,
 ) -> Unit {
-  self.sandbox.set_on_url_changed(
-    url_changed.map(f => url => self.sandbox..pending(f(url))..schedule()),
-  )
-  self.sandbox.set_on_url_request(
-    url_request.map(f => url => self.sandbox..pending(f(url))..schedule()),
-  )
+  @dom.window()
+  .to_event_target()
+  .add_event_listener("popstate", _ => {
+    guard (try? @url.parse(@dom.window().current_url())) is Ok(url)
+    match url_changed {
+      Some(f) => self.sandbox.pending(f(url))
+      None => ()
+    }
+  })
+  self.sandbox.on_url_changed = url_changed.map(f => url => f(url))
+  self.sandbox.on_url_request = url_request.map(f => url => f(url))
 }
 
 ///|
-pub fn App::startup(self : Self) -> Unit {
+pub fn App::mount(self : Self, element : String) -> Unit {
+  self.sandbox.mount_element = element
+  @dom.document()
+  .get_element_by_id(element)
+  .unwrap()
+  .set_inner_html("<div></div>")
   self.sandbox.schedule()
 }
 

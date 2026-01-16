@@ -1,5 +1,5 @@
 ///|
-using @cmd {type Message}
+using @cmd {type Effect}
 
 ///|
 struct Mouse(@dom.MouseEvent)
@@ -44,17 +44,17 @@ pub fn Scroll::height(self : Self) -> Int {
 }
 
 ///|
-fn on_mouse(event : String, msg : (Mouse) -> Message) -> Attribute {
+fn on_mouse(event : String, msg : (Mouse) -> Effect) -> Attribute {
   @vdom.on(event, HandleEvent(event => msg(event.to_mouse_event().unwrap())))
 }
 
 ///|
-pub fn on_click(msg : (Mouse) -> Message) -> Attribute {
+pub fn on_click(msg : (Mouse) -> Effect) -> Attribute {
   on_mouse("click", msg)
 }
 
 ///|
-pub fn on_input(msg : (String) -> Message) -> Attribute {
+pub fn on_input(msg : (String) -> Effect) -> Attribute {
   @vdom.on(
     "input",
     HandleEvent(event => {
@@ -69,7 +69,7 @@ pub fn on_input(msg : (String) -> Message) -> Attribute {
 }
 
 ///|
-pub fn on_change(msg : (String) -> Message) -> Attribute {
+pub fn on_change(msg : (String) -> Effect) -> Attribute {
   @vdom.on(
     "change",
     HandleEvent(event => {
@@ -87,47 +87,47 @@ pub fn on_change(msg : (String) -> Message) -> Attribute {
 }
 
 ///|
-pub fn on_double_click(msg : (Mouse) -> Message) -> Attribute {
+pub fn on_double_click(msg : (Mouse) -> Effect) -> Attribute {
   on_mouse("dblclick", msg)
 }
 
 ///|
-pub fn on_mouse_down(msg : (Mouse) -> Message) -> Attribute {
+pub fn on_mouse_down(msg : (Mouse) -> Effect) -> Attribute {
   on_mouse("mousedown", msg)
 }
 
 ///|
-pub fn on_mouse_up(msg : (Mouse) -> Message) -> Attribute {
+pub fn on_mouse_up(msg : (Mouse) -> Effect) -> Attribute {
   on_mouse("mouseup", msg)
 }
 
 ///|
-pub fn on_mouse_move(msg : (Mouse) -> Message) -> Attribute {
+pub fn on_mouse_move(msg : (Mouse) -> Effect) -> Attribute {
   on_mouse("mousemove", msg)
 }
 
 ///|
-pub fn on_mouse_enter(msg : (Mouse) -> Message) -> Attribute {
+pub fn on_mouse_enter(msg : (Mouse) -> Effect) -> Attribute {
   on_mouse("mouseenter", msg)
 }
 
 ///|
-pub fn on_mouse_over(msg : (Mouse) -> Message) -> Attribute {
+pub fn on_mouse_over(msg : (Mouse) -> Effect) -> Attribute {
   on_mouse("mouseover", msg)
 }
 
 ///|
-pub fn on_mouse_leave(msg : (Mouse) -> Message) -> Attribute {
+pub fn on_mouse_leave(msg : (Mouse) -> Effect) -> Attribute {
   on_mouse("mouseleave", msg)
 }
 
 ///|
-pub fn on_mouse_out(msg : (Mouse) -> Message) -> Attribute {
+pub fn on_mouse_out(msg : (Mouse) -> Effect) -> Attribute {
   on_mouse("mouseout", msg)
 }
 
 ///|
-pub fn on_scroll(msg : (Scroll) -> Message) -> Attribute {
+pub fn on_scroll(msg : (Scroll) -> Effect) -> Attribute {
   @vdom.on(
     "scroll",
     HandleEvent(event => msg(event.target().to_element().unwrap())),

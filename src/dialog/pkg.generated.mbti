@@ -6,11 +6,11 @@ import(
 )
 
 // Values
-pub fn close(String, return_value? : String) -> @cmd.Cmd
+pub fn close(String, return_value? : String) -> @cmd.Effect
 
-pub fn request_close(String, return_value? : String) -> @cmd.Cmd
+pub fn request_close(String, return_value? : String) -> @cmd.Effect
 
-pub fn show(String, modal? : Bool) -> @cmd.Cmd
+pub fn show(String, modal? : Bool) -> @cmd.Effect
 
 // Errors
 

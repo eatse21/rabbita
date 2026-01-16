@@ -50,7 +50,7 @@ pub fn button(
   style? : Array[String] = [],
   id? : String,
   class? : String,
-  click? : @cmd.Message,
+  click? : @cmd.Effect,
   children : Array[Html],
 ) -> Html {
   let attrs = []
@@ -127,7 +127,7 @@ pub fn div(
   style? : Array[String] = [],
   id? : String,
   class? : String,
-  click? : @cmd.Message,
+  click? : @cmd.Effect,
   children : Array[Html],
 ) -> Html {
   let attrs = []
@@ -332,7 +332,7 @@ pub fn ul(
   style? : Array[String] = [],
   id? : String,
   class? : String,
-  click? : @cmd.Message,
+  click? : @cmd.Effect,
   children : Array[Html],
 ) -> Html {
   let attrs = []
@@ -371,7 +371,7 @@ pub fn li(
   value? : Int,
   id? : String,
   class? : String,
-  click? : @cmd.Message,
+  click? : @cmd.Effect,
   children : Array[Html],
 ) -> Html {
   let attrs = []
@@ -574,8 +574,8 @@ pub fn input(
   id? : String,
   class? : String,
   children? : Array[Html] = [],
-  change? : (String) -> @cmd.Message,
-  input? : (String) -> @cmd.Message,
+  change? : (String) -> @cmd.Effect,
+  input? : (String) -> @cmd.Effect,
 ) -> Html {
   let input_type = match input_type {
     Button => "button"
@@ -672,7 +672,7 @@ pub fn select(
   class? : String,
   disabled? : Bool,
   name? : String,
-  change? : (String) -> @cmd.Message,
+  change? : (String) -> @cmd.Effect,
   children : Array[Html],
 ) -> Html {
   // TODO: support more attribute for select tag
@@ -967,8 +967,8 @@ pub fn dialog(
   id? : String,
   class? : String,
   open? : Bool,
-  close? : (String) -> @cmd.Message,
-  cancel? : @cmd.Message,
+  close? : (String) -> @cmd.Effect,
+  cancel? : @cmd.Effect,
   children : Array[Html],
 ) -> Html {
   let attrs = []

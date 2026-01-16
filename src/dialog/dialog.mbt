@@ -3,7 +3,7 @@
 /// 
 /// The `modal` argument determines whether the dialog is modal or not.
 pub fn show(id : String, modal? : Bool = true) -> Cmd {
-  _ => {
+  Effect(_ => {
     let dialog = @dom.document()
       .get_element_by_id(id)
       .unwrap()
@@ -16,7 +16,7 @@ pub fn show(id : String, modal? : Bool = true) -> Cmd {
     } else {
       dialog.show()
     }
-  }
+  })
 }
 
 ///|
@@ -24,7 +24,7 @@ pub fn show(id : String, modal? : Bool = true) -> Cmd {
 /// 
 /// The `return_value` argument is the value that will be filled in the `close` message.
 pub fn close(id : String, return_value? : String) -> Cmd {
-  _ => {
+  Effect(_ => {
     let dialog = @dom.document()
       .get_element_by_id(id)
       .unwrap()
@@ -33,7 +33,7 @@ pub fn close(id : String, return_value? : String) -> Cmd {
       .to_html_dialog_element()
       .unwrap()
     dialog.close(return_value=@js.Optional::from_option(return_value))
-  }
+  })
 }
 
 ///|
@@ -43,8 +43,8 @@ pub fn close(id : String, return_value? : String) -> Cmd {
 /// `cancel` message.
 /// 
 /// The `return_value` argument is the value that will be filled in the `close` message.
-pub fn request_close(id : String, return_value? : String) -> Cmd {
-  _ => {
+pub fn request_close(id : String, return_value? : String) -> @cmd.Effect {
+  Effect(_ => {
     let dialog = @dom.document()
       .get_element_by_id(id)
       .unwrap()
@@ -53,5 +53,5 @@ pub fn request_close(id : String, return_value? : String) -> Cmd {
       .to_html_dialog_element()
       .unwrap()
     dialog.request_close(return_value=@js.Optional::from_option(return_value))
-  }
+  })
 }

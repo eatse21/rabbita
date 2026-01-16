@@ -6,35 +6,29 @@ import(
 )
 
 // Values
-pub fn[A, E : Error] attempt((Result[A, E]) -> Message, async () -> A raise E) -> Cmd
+pub fn[A, E : Error] attempt((Result[A, E]) -> Effect, async () -> A raise E) -> Effect
 
-pub fn batch(Array[Cmd]) -> Cmd
+pub fn batch(Array[Effect]) -> Effect
 
-pub fn none() -> Cmd
+pub fn none() -> Effect
 
-pub fn[A] perform((A) -> Message, async () -> A noraise) -> Cmd
-
-pub fn task(Message) -> Cmd
+pub fn[A] perform((A) -> Effect, async () -> A noraise) -> Effect
 
 // Errors
 
 // Types and methods
-#alias(Command)
-pub(all) struct Cmd((Events) -> Unit)
-#deprecated
-pub fn Cmd::inner(Self) -> (Events) -> Unit
-
-type Events
-pub fn Events::new((@url.Url) -> Unit, (@url.UrlRequest) -> Unit, (Message) -> Unit) -> Self
-pub fn Events::trigger_update(Self, Message) -> Unit
-pub fn Events::trigger_url_changed(Self, @url.Url) -> Unit
-pub fn Events::trigger_url_request(Self, @url.UrlRequest) -> Unit
-
-pub(all) enum Message {
-  Message(() -> Message)
-  Batch(Array[Message])
+#alias(Cmd)
+pub(all) enum Effect {
+  Effect((Scheduler) -> Unit)
+  Batch(Array[Effect])
   Empty
 }
+
+type Scheduler
+pub fn Scheduler::new((Effect) -> Unit, ((@url.Url) -> Effect)?, ((@url.UrlRequest) -> Effect)?) -> Self
+pub fn Scheduler::pending(Self, Effect) -> Unit
+pub fn Scheduler::pending_url_changed(Self, @url.Url) -> Unit
+pub fn Scheduler::pending_url_request(Self, @url.UrlRequest) -> Unit
 
 // Type aliases
 

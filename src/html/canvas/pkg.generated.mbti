@@ -8,7 +8,7 @@ import(
 )
 
 // Values
-pub fn new(width~ : Double, height~ : Double, click? : (@html.Mouse) -> @cmd.Message, mousemove? : (@html.Mouse) -> @cmd.Message, mousedown? : (@html.Mouse) -> @cmd.Message, mouseup? : (@html.Mouse) -> @cmd.Message, mouseenter? : (@html.Mouse) -> @cmd.Message, mouseleave? : (@html.Mouse) -> @cmd.Message) -> Model
+pub fn new(width~ : Double, height~ : Double, click? : (@html.Mouse) -> @cmd.Effect, mousemove? : (@html.Mouse) -> @cmd.Effect, mousedown? : (@html.Mouse) -> @cmd.Effect, mouseup? : (@html.Mouse) -> @cmd.Effect, mouseenter? : (@html.Mouse) -> @cmd.Effect, mouseleave? : (@html.Mouse) -> @cmd.Effect) -> Model
 
 // Errors
 

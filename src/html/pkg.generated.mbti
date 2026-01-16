@@ -19,7 +19,7 @@ pub fn blockquote(style? : Array[String], id? : String, class? : String, Array[H
 
 pub fn br(style? : Array[String], id? : String, class? : String) -> Html
 
-pub fn button(style? : Array[String], id? : String, class? : String, click? : @cmd.Message, Array[Html]) -> Html
+pub fn button(style? : Array[String], id? : String, class? : String, click? : @cmd.Effect, Array[Html]) -> Html
 
 pub fn caption(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
@@ -31,9 +31,9 @@ pub fn colgroup(style? : Array[String], id? : String, span? : Int, class? : Stri
 
 pub fn dd(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn dialog(style? : Array[String], id? : String, class? : String, open? : Bool, close? : (String) -> @cmd.Message, cancel? : @cmd.Message, Array[Html]) -> Html
+pub fn dialog(style? : Array[String], id? : String, class? : String, open? : Bool, close? : (String) -> @cmd.Effect, cancel? : @cmd.Effect, Array[Html]) -> Html
 
-pub fn div(style? : Array[String], id? : String, class? : String, click? : @cmd.Message, Array[Html]) -> Html
+pub fn div(style? : Array[String], id? : String, class? : String, click? : @cmd.Effect, Array[Html]) -> Html
 
 pub fn dl(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
@@ -67,11 +67,11 @@ pub fn iframe(style? : Array[String], id? : String, class? : String, src? : Stri
 
 pub fn img(style? : Array[String], id? : String, class? : String, src? : String, alt? : String, title? : String, width? : Int, height? : Int, border? : Int, Array[Html]) -> Html
 
-pub fn input(input_type? : InputType, name? : String, value? : String, checked? : Bool, read_only? : Bool, multiple? : Bool, accept? : String, placeholder? : String, auto_complete? : AutoComplete, style? : Array[String], max? : Int, min? : Int, step? : Int, maxlength? : Int, minlength? : Int, pattern? : String, size? : Int, width? : Int, height? : Int, id? : String, class? : String, children? : Array[Html], change? : (String) -> @cmd.Message, input? : (String) -> @cmd.Message) -> Html
+pub fn input(input_type? : InputType, name? : String, value? : String, checked? : Bool, read_only? : Bool, multiple? : Bool, accept? : String, placeholder? : String, auto_complete? : AutoComplete, style? : Array[String], max? : Int, min? : Int, step? : Int, maxlength? : Int, minlength? : Int, pattern? : String, size? : Int, width? : Int, height? : Int, id? : String, class? : String, children? : Array[Html], change? : (String) -> @cmd.Effect, input? : (String) -> @cmd.Effect) -> Html
 
 pub fn label(style? : Array[String], id? : String, class? : String, for_? : String, Array[Html]) -> Html
 
-pub fn li(style? : Array[String], value? : Int, id? : String, class? : String, click? : @cmd.Message, Array[Html]) -> Html
+pub fn li(style? : Array[String], value? : Int, id? : String, class? : String, click? : @cmd.Effect, Array[Html]) -> Html
 
 pub fn node(String, Array[Attribute], Array[Html]) -> Html
 
@@ -79,29 +79,29 @@ pub fn nothing() -> Html
 
 pub fn ol(style? : Array[String], reversed? : Bool, start? : Int, id? : String, class? : String, Array[Html]) -> Html
 
-pub fn on_change((String) -> @cmd.Message) -> Attribute
+pub fn on_change((String) -> @cmd.Effect) -> Attribute
 
-pub fn on_click((Mouse) -> @cmd.Message) -> Attribute
+pub fn on_click((Mouse) -> @cmd.Effect) -> Attribute
 
-pub fn on_double_click((Mouse) -> @cmd.Message) -> Attribute
+pub fn on_double_click((Mouse) -> @cmd.Effect) -> Attribute
 
-pub fn on_input((String) -> @cmd.Message) -> Attribute
+pub fn on_input((String) -> @cmd.Effect) -> Attribute
 
-pub fn on_mouse_down((Mouse) -> @cmd.Message) -> Attribute
+pub fn on_mouse_down((Mouse) -> @cmd.Effect) -> Attribute
 
-pub fn on_mouse_enter((Mouse) -> @cmd.Message) -> Attribute
+pub fn on_mouse_enter((Mouse) -> @cmd.Effect) -> Attribute
 
-pub fn on_mouse_leave((Mouse) -> @cmd.Message) -> Attribute
+pub fn on_mouse_leave((Mouse) -> @cmd.Effect) -> Attribute
 
-pub fn on_mouse_move((Mouse) -> @cmd.Message) -> Attribute
+pub fn on_mouse_move((Mouse) -> @cmd.Effect) -> Attribute
 
-pub fn on_mouse_out((Mouse) -> @cmd.Message) -> Attribute
+pub fn on_mouse_out((Mouse) -> @cmd.Effect) -> Attribute
 
-pub fn on_mouse_over((Mouse) -> @cmd.Message) -> Attribute
+pub fn on_mouse_over((Mouse) -> @cmd.Effect) -> Attribute
 
-pub fn on_mouse_up((Mouse) -> @cmd.Message) -> Attribute
+pub fn on_mouse_up((Mouse) -> @cmd.Effect) -> Attribute
 
-pub fn on_scroll((Scroll) -> @cmd.Message) -> Attribute
+pub fn on_scroll((Scroll) -> @cmd.Effect) -> Attribute
 
 pub fn option(style? : Array[String], id? : String, class? : String, disabled? : Bool, value? : String, selected? : Bool, Array[Html]) -> Html
 
@@ -113,7 +113,7 @@ pub fn property(String, @variant.Variant) -> Attribute
 
 pub fn section(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn select(style? : Array[String], id? : String, class? : String, disabled? : Bool, name? : String, change? : (String) -> @cmd.Message, Array[Html]) -> Html
+pub fn select(style? : Array[String], id? : String, class? : String, disabled? : Bool, name? : String, change? : (String) -> @cmd.Effect, Array[Html]) -> Html
 
 pub fn span(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
@@ -145,7 +145,7 @@ pub fn tr(style? : Array[String], id? : String, class? : String, Array[Html]) ->
 
 pub fn u(style? : Array[String], id? : String, class? : String, Array[Html]) -> Html
 
-pub fn ul(style? : Array[String], id? : String, class? : String, click? : @cmd.Message, Array[Html]) -> Html
+pub fn ul(style? : Array[String], id? : String, class? : String, click? : @cmd.Effect, Array[Html]) -> Html
 
 // Errors
 

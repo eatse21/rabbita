@@ -54,10 +54,10 @@ extern "js" fn js_request(
 fn[Model] request(
   url : String,
   http_method : String,
-  expect~ : Expecting[@cmd.Message, Model],
+  expect~ : Expecting[@cmd.Effect, Model],
   body~ : Body,
 ) -> @cmd.Cmd {
-  let launch = fn(events : @cmd.Events) {
+  let launch = fn(scheduler : @cmd.Scheduler) {
     let has_body = match body {
       Empty => false
       _ => true
@@ -76,11 +76,9 @@ fn[Model] request(
             let result = Ok(@json.parse(str)) catch {
               _ => Err("Json parse error")
             }
-            events.trigger_update(f(result.bind(decoder)))
+            scheduler.pending(f(result.bind(decoder)))
           },
-          failed=msg => events.trigger_update(
-            f(Err("Http request failed:\{msg}")),
-          ),
+          failed=msg => scheduler.pending(f(Err("Http request failed:\{msg}"))),
         )
       Text(f) =>
         js_request(
@@ -89,21 +87,19 @@ fn[Model] request(
           has_body~,
           body~,
           content_type~,
-          succeed=str => events.trigger_update(f(Ok(str))),
-          failed=msg => events.trigger_update(
-            f(Err("Http request failed:\{msg}")),
-          ),
+          succeed=str => scheduler.pending(f(Ok(str))),
+          failed=msg => scheduler.pending(f(Err("Http request failed:\{msg}"))),
         )
     }
   }
-  Cmd(launch)
+  Effect(launch)
 }
 
 ///|
 /// Create a command to send a GET request.
 pub fn[Model] get(
   url : String,
-  expect~ : Expecting[@cmd.Message, Model],
+  expect~ : Expecting[@cmd.Effect, Model],
 ) -> @cmd.Cmd {
   request(url, "GET", expect~, body=Empty)
 }
@@ -112,7 +108,7 @@ pub fn[Model] get(
 /// Create a command to send a PUT request.
 pub fn[Model] delete(
   url : String,
-  expect~ : Expecting[@cmd.Message, Model],
+  expect~ : Expecting[@cmd.Effect, Model],
 ) -> @cmd.Cmd {
   request(url, "DELETE", expect~, body=Empty)
 }
@@ -122,7 +118,7 @@ pub fn[Model] delete(
 pub fn[Model] post(
   url : String,
   body : Body,
-  expect~ : Expecting[@cmd.Message, Model],
+  expect~ : Expecting[@cmd.Effect, Model],
 ) -> @cmd.Cmd {
   request(url, "POST", body~, expect~)
 }
@@ -132,7 +128,7 @@ pub fn[Model] post(
 pub fn[Model] patch(
   url : String,
   body : Body,
-  expect~ : Expecting[@cmd.Message, Model],
+  expect~ : Expecting[@cmd.Effect, Model],
 ) -> @cmd.Cmd {
   request(url, "PATCH", body~, expect~)
 }

@@ -8,33 +8,30 @@ import(
 )
 
 // Values
-pub fn[A, E : Error] attempt((Result[A, E]) -> @cmd.Message, async () -> A raise E) -> @cmd.Cmd
+pub fn[A, E : Error] attempt((Result[A, E]) -> @cmd.Effect, async () -> A raise E) -> @cmd.Effect
 
-pub fn batch(Array[@cmd.Cmd]) -> @cmd.Cmd
+pub fn batch(Array[@cmd.Effect]) -> @cmd.Effect
 
-pub fn[Msg, Model] component(model~ : Model, update~ : (Component[Msg], Msg, Model) -> (@cmd.Cmd, Model), view~ : (Component[Msg], Model) -> @html.Html) -> Component[Msg]
+pub fn[Msg, Model] component(model~ : Model, update~ : (Component[Msg], Msg, Model) -> (@cmd.Effect, Model), view~ : (Component[Msg], Model) -> @html.Html) -> Component[Msg]
 
-pub fn[Msg] new(Component[Msg], mount? : String) -> App
+pub fn[Msg] new(Component[Msg]) -> App
 
-pub fn none() -> @cmd.Cmd
+pub fn none() -> @cmd.Effect
 
-pub fn[A] perform((A) -> @cmd.Message, async () -> A noraise) -> @cmd.Cmd
-
-pub fn task(@cmd.Message) -> @cmd.Cmd
+pub fn[A] perform((A) -> @cmd.Effect, async () -> A noraise) -> @cmd.Effect
 
 // Errors
 
 // Types and methods
 type App
-pub fn App::startup(Self) -> Unit
-pub fn App::with_route(Self, url_changed? : (@url.Url) -> @cmd.Message, url_request? : (@url.UrlRequest) -> @cmd.Message) -> Unit
+pub fn App::mount(Self, String) -> Unit
+pub fn App::with_route(Self, url_changed? : (@url.Url) -> @cmd.Effect, url_request? : (@url.UrlRequest) -> @cmd.Effect) -> Unit
 
 type Component[Msg]
-pub fn[Msg] Component::message(Self[Msg], Msg) -> @cmd.Message
+pub fn[Msg] Component::message(Self[Msg], Msg) -> @cmd.Effect
 pub fn[Msg] Component::view(Self[Msg]) -> @html.Html
 
 // Type aliases
-pub using @cmd {type Cmd}
 
 // Traits
 
