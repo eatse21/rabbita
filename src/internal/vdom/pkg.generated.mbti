@@ -2,7 +2,6 @@
 package "Yoorkin/rabbit-tea/internal/vdom"
 
 import(
-  "Yoorkin/rabbit-tea/cmd"
   "Yoorkin/rabbit-tea/dom"
   "Yoorkin/rabbit-tea/url"
   "Yoorkin/rabbit-tea/variant"
@@ -44,29 +43,60 @@ pub fn variant_to_js_value(@variant.Variant) -> @js.Value
 // Types and methods
 type Attribute
 
-pub(all) enum Handler {
-  Normal(@cmd.Effect)
-  HandleEvent((@dom.Event) -> @cmd.Effect)
-  Custom(@cmd.Effect, stop_propagation~ : Bool, prevent_default~ : Bool)
+pub(all) enum Cmd {
+  Effect((&Scheduler) -> Unit)
+  Message(Id, () -> Unit)
+  Batch(Array[Cmd])
+  Empty
 }
+
+pub(all) enum Handler {
+  Normal(Cmd)
+  HandleEvent((@dom.Event) -> Cmd)
+  Custom(Cmd, stop_propagation~ : Bool, prevent_default~ : Bool)
+}
+
+type Id
+pub fn Id::new() -> Self
+pub impl Compare for Id
+pub impl Eq for Id
+pub impl Hash for Id
 
 type Node
 pub fn Node::patch(Self, Self, Sandbox, mount~ : String) -> Unit
 
+pub(all) struct Nodes {
+  old : Node
+  new : Node
+}
+
 type Patch
 
 pub(all) struct Sandbox {
-  queue : @queue.Queue[@cmd.Effect]
-  mut on_url_changed : ((@url.Url) -> @cmd.Effect)?
-  mut on_url_request : ((@url.UrlRequest) -> @cmd.Effect)?
-  mut mount_element : String
-  // private fields
+  subscriptions : Map[Id, &Cell]
+  queue : @queue.Queue[Id]
+  root : &Cell
+  mut mount : String
+  mut on_url_changed : ((@url.Url) -> Cmd)?
+  mut on_url_request : ((@url.UrlRequest) -> Cmd)?
 }
-pub fn Sandbox::new(() -> Unit) -> Self
-pub fn Sandbox::pending(Self, @cmd.Effect) -> Unit
-pub fn Sandbox::schedule(Self) -> Unit
+pub fn Sandbox::flush(Self) -> Unit
+pub fn Sandbox::new(&Cell) -> Self
+pub impl Scheduler for Sandbox
 
 // Type aliases
 
 // Traits
+pub(open) trait Cell {
+  id(Self) -> Id
+  step(Self, &Scheduler) -> Unit
+  node(Self) -> Node
+  refersh(Self) -> Unit
+}
+
+pub(open) trait Scheduler {
+  add(Self, Cmd) -> Unit
+  add_url_changed(Self, @url.Url) -> Unit
+  add_url_request(Self, @url.UrlRequest) -> Unit
+}
 

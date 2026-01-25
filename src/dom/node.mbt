@@ -8,6 +8,7 @@ pub trait IsNode: IsEventTarget {
   get_node_type(Self) -> Int = _
   get_node_name(Self) -> String = _
   get_node_value(Self) -> String = _
+  set_node_value(Self, @js.Nullable[String]) -> Unit = _
   get_first_child(Self) -> Node = _
   get_last_child(Self) -> Node = _
   get_next_sibling(Self) -> Node = _
@@ -36,6 +37,11 @@ pub impl @js.Cast for Node with from(value) {
 
 ///|
 pub impl IsNode for Node
+
+///|
+impl IsNode with set_node_value(s, v) {
+  ffi_set_node_value(js_identity(s), v)
+}
 
 ///|
 impl IsNode with as_node(s) {
@@ -163,3 +169,6 @@ extern "js" fn ffi_nth_child(x : @js.Value, index : Int) -> Node =
 
 ///|
 extern "js" fn ffi_count_child(x : @js.Value) -> Int = "(x) => x.childNodes.length"
+
+///|
+extern "js" fn ffi_set_node_value(x : @js.Value, v : @js.Nullable[String]) = "(x,v) => x.nodeValue = v"

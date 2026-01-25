@@ -2,31 +2,31 @@
 package "Yoorkin/rabbit-tea/nav"
 
 import(
-  "Yoorkin/rabbit-tea/cmd"
+  "Yoorkin/rabbit-tea/internal/vdom"
 )
 
 // Values
-pub fn back() -> @cmd.Effect
+pub fn back() -> @vdom.Cmd
 
-pub fn forward() -> @cmd.Effect
+pub fn forward() -> @vdom.Cmd
 
-pub fn load(String) -> @cmd.Effect
+pub fn load(String) -> @vdom.Cmd
 
-pub fn push_url(String) -> @cmd.Effect
+pub fn push_url(String) -> @vdom.Cmd
 
-pub fn reload() -> @cmd.Effect
+pub fn reload() -> @vdom.Cmd
 
-pub fn replace_url(String) -> @cmd.Effect
+pub fn replace_url(String) -> @vdom.Cmd
 
-pub fn scroll_by_pos(Int, Int) -> @cmd.Effect
+pub fn scroll_by_pos(Int, Int) -> @vdom.Cmd
 
-pub fn scroll_to(String) -> @cmd.Effect
+pub fn scroll_to(String) -> @vdom.Cmd
 
-pub fn scroll_to_bottom() -> @cmd.Effect
+pub fn scroll_to_bottom() -> @vdom.Cmd
 
-pub fn scroll_to_pos(Int, Int) -> @cmd.Effect
+pub fn scroll_to_pos(Int, Int) -> @vdom.Cmd
 
-pub fn scroll_to_top() -> @cmd.Effect
+pub fn scroll_to_top() -> @vdom.Cmd
 
 // Errors
 

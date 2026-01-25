@@ -3,5 +3,4 @@ import {
   "Yoorkin/rabbit-tea/url",
   "Yoorkin/rabbit-tea/variant",
   "moonbit-community/js-ffi/js",
-  "Yoorkin/rabbit-tea/cmd",
 }

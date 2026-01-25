@@ -1,11 +1,31 @@
 ///|
-#alias(T)
-pub(all) struct Html(@vdom.Node)
+using @vdom {type VNode, type Props}
 
 ///|
-pub fn Html::to_virtual_dom(self : Html) -> @vdom.Node {
-  // Wrap the node with a root node. This node represents the root of the real DOM managed by TEA.
-  node("root", [], [self]).0
+#alias(T)
+pub(all) struct Html(@vdom.VNode)
+
+///|
+pub fn Html::to_virtual_dom(self : Html) -> @vdom.VNode {
+  self.0
+}
+
+///|
+#inline
+fn attributes_to_props(attributes : Array[Attribute]) -> Props {
+  let attrs = {}
+  let props = {}
+  let handlers = {}
+  let styles = {}
+  for x in attributes {
+    match x {
+      Style(k, v) => styles[k] = v
+      Property(k, v) => props[k] = v
+      Attribute(k, v) => attrs[k] = v
+      Handler(k, v) => handlers[k] = v
+    }
+  }
+  Props::new(attrs, props, styles, handlers)
 }
 
 ///|
@@ -14,7 +34,8 @@ pub fn node(
   attributes : Array[Attribute],
   children : Array[Html],
 ) -> Html {
-  @vdom.node(tag, attributes.map(x => x.0), children.map(x => x.0))
+  let props = attributes_to_props(attributes)
+  VNode::elem(tag, props, Array(children.map(x => x.0)))
 }
 
 ///|
@@ -42,7 +63,12 @@ fn common_node(
 ///|
 /// Represents an empty element
 pub fn nothing() -> Html {
-  @vdom.nothing()
+  node("div", [], []) //TODO: use frag instead
+}
+
+///|
+pub fn cell(cell : &@vdom.Cell) -> Html {
+  @vdom.VNode::cell(cell)
 }
 
 ///|
@@ -50,7 +76,7 @@ pub fn button(
   style? : Array[String] = [],
   id? : String,
   class? : String,
-  click? : @cmd.Effect,
+  click? : Cmd,
   children : Array[Html],
 ) -> Html {
   let attrs = []
@@ -127,7 +153,7 @@ pub fn div(
   style? : Array[String] = [],
   id? : String,
   class? : String,
-  click? : @cmd.Effect,
+  click? : Cmd,
   children : Array[Html],
 ) -> Html {
   let attrs = []
@@ -224,20 +250,21 @@ pub fn a(
   children : Array[Html],
   escape? : Bool = false,
 ) -> Html {
-  let attrs = [
-    @vdom.attribute("href", href),
-    @vdom.attribute("target", target.to_string()),
-  ]
+  let attrs = [Attribute("href", href), Attribute("target", target.to_string())]
   if style.length() > 0 {
-    attrs.push(@vdom.attribute("style", style.join(";")))
+    attrs.push(Attribute("style", style.join(";")))
   }
   if class is Some(class) {
-    attrs.push(@vdom.attribute("class", class))
+    attrs.push(Attribute("class", class))
   }
   if id is Some(id) {
-    attrs.push(@vdom.attribute("id", id))
+    attrs.push(Attribute("id", id))
   }
-  @vdom.link(attrs, children.map(x => x.0), escape~)
+  @vdom.vlink(
+    attributes_to_props(attrs),
+    Array(children.map(x => x.0)),
+    escape~,
+  )
 }
 
 ///|
@@ -322,7 +349,7 @@ pub fn sup(
 
 ///|
 pub fn text(str : String) -> Html {
-  @vdom.text(str)
+  VNode::text(str)
 }
 
 // ---- lists ----
@@ -332,7 +359,7 @@ pub fn ul(
   style? : Array[String] = [],
   id? : String,
   class? : String,
-  click? : @cmd.Effect,
+  click? : Cmd,
   children : Array[Html],
 ) -> Html {
   let attrs = []
@@ -371,7 +398,7 @@ pub fn li(
   value? : Int,
   id? : String,
   class? : String,
-  click? : @cmd.Effect,
+  click? : Cmd,
   children : Array[Html],
 ) -> Html {
   let attrs = []
@@ -574,8 +601,8 @@ pub fn input(
   id? : String,
   class? : String,
   children? : Array[Html] = [],
-  change? : (String) -> @cmd.Effect,
-  input? : (String) -> @cmd.Effect,
+  change? : (String) -> Cmd,
+  input? : (String) -> Cmd,
 ) -> Html {
   let input_type = match input_type {
     Button => "button"
@@ -672,7 +699,7 @@ pub fn select(
   class? : String,
   disabled? : Bool,
   name? : String,
-  change? : (String) -> @cmd.Effect,
+  change? : (String) -> Cmd,
   children : Array[Html],
 ) -> Html {
   // TODO: support more attribute for select tag
@@ -730,16 +757,16 @@ pub fn option(
   node("option", attrs, children)
 }
 
-///|
-pub fn external(
-  node : @dom.Node,
-  attrs : Ref[Array[Attribute]?],
-  width~ : Int,
-  height~ : Int,
-) -> Html {
-  let attrs = attrs.map(_.map(_.map(x => x.0)))
-  @vdom.external(node, attrs, width~, height~)
-}
+// ///|
+// pub fn external(
+//   node : @dom.Node,
+//   attrs : Ref[Array[Attribute]?],
+//   width~ : Int,
+//   height~ : Int,
+// ) -> Html {
+//   let attrs = attrs.map(_.map(_.map(x => x.0)))
+//   @vdom.external(node, attrs, width~, height~)
+// }
 
 // table
 
@@ -967,8 +994,8 @@ pub fn dialog(
   id? : String,
   class? : String,
   open? : Bool,
-  close? : (String) -> @cmd.Effect,
-  cancel? : @cmd.Effect,
+  close? : (String) -> Cmd,
+  cancel? : Cmd,
   children : Array[Html],
 ) -> Html {
   let attrs = []
@@ -977,33 +1004,18 @@ pub fn dialog(
   }
   if close is Some(close) {
     attrs.push(
-      @vdom.on(
-        "close",
-        HandleEvent(event => {
-          let html_element = event
-            .target()
-            .to_node()
-            .unwrap()
-            .to_element()
-            .unwrap()
-            .to_html_element()
-            .unwrap()
-            .to_html_dialog_element()
-            .unwrap()
-          close(html_element.return_value())
-        }),
-      ),
+      Handler("close", (event, scheduler) => {
+        let html_element = event.target().to_html_dialog_element().unwrap()
+        scheduler.add(close(html_element.return_value()))
+      }),
     )
   }
   if cancel is Some(cancel) {
     attrs.push(
-      @vdom.on(
-        "cancel",
-        HandleEvent(event => {
-          event.prevent_default()
-          cancel
-        }),
-      ),
+      Handler("cancel", (event, scheduler) => {
+        event.prevent_default()
+        scheduler.add(cancel)
+      }),
     )
   }
   common_node("dialog", attrs, style~, id?, class?, children)

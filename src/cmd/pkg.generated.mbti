@@ -2,35 +2,26 @@
 package "Yoorkin/rabbit-tea/cmd"
 
 import(
-  "Yoorkin/rabbit-tea/url"
+  "Yoorkin/rabbit-tea/internal/vdom"
 )
 
 // Values
-pub fn[A, E : Error] attempt((Result[A, E]) -> Effect, async () -> A raise E) -> Effect
+pub fn[A, E : Error] attempt((Result[A, E]) -> @vdom.Cmd, async () -> A raise E) -> @vdom.Cmd
 
-pub fn batch(Array[Effect]) -> Effect
+pub fn batch(Array[@vdom.Cmd]) -> @vdom.Cmd
 
-pub fn none() -> Effect
+pub fn none() -> @vdom.Cmd
 
-pub fn[A] perform((A) -> Effect, async () -> A noraise) -> Effect
+pub fn[A] perform((A) -> @vdom.Cmd, async () -> A noraise) -> @vdom.Cmd
 
 // Errors
 
 // Types and methods
-#alias(Cmd)
-pub(all) enum Effect {
-  Effect((Scheduler) -> Unit)
-  Batch(Array[Effect])
-  Empty
-}
-
-type Scheduler
-pub fn Scheduler::new((Effect) -> Unit, ((@url.Url) -> Effect)?, ((@url.UrlRequest) -> Effect)?) -> Self
-pub fn Scheduler::pending(Self, Effect) -> Unit
-pub fn Scheduler::pending_url_changed(Self, @url.Url) -> Unit
-pub fn Scheduler::pending_url_request(Self, @url.UrlRequest) -> Unit
 
 // Type aliases
+pub using @vdom {type Cmd}
+
+pub using @vdom {trait Scheduler}
 
 // Traits
 

@@ -6,7 +6,7 @@ enum Node {
     attrs~ : Array[Attribute],
     children~ : Array[Node],
     // Store the event listener used in real DOM
-    listeners~ : Array[(String, @dom.Listener)]
+    listeners~ : Array[(String, @dom.Listener)],
   )
   ExternalNode(@dom.Node, Ref[Array[Attribute]?], width~ : Int, height~ : Int)
   Text(String)
@@ -100,9 +100,9 @@ priv enum AttrValue {
 
 ///|
 pub(all) enum Handler {
-  Normal(@cmd.Effect)
-  HandleEvent((@dom.Event) -> @cmd.Effect)
-  Custom(@cmd.Effect, stop_propagation~ : Bool, prevent_default~ : Bool)
+  Normal(Cmd)
+  HandleEvent((@dom.Event) -> Cmd)
+  Custom(Cmd, stop_propagation~ : Bool, prevent_default~ : Bool)
 }
 
 ///|
@@ -181,13 +181,13 @@ fn Node::to_node(self : Node, sandbox : Sandbox) -> @dom.Node {
         let listener = match handler {
           Normal(msg) =>
             _ => {
-              sandbox.pending(Effect(s => s.pending(msg)))
-              sandbox.schedule()
+              sandbox.add(Effect(s => s.add(msg)))
+              sandbox.flush()
             }
           HandleEvent(f) =>
             event => {
-              sandbox.pending(Effect(s => s.pending(f(event))))
-              sandbox.schedule()
+              sandbox.add(Effect(s => s.add(f(event))))
+              sandbox.flush()
             }
           Custom(msg, stop_propagation~, prevent_default~) =>
             fn(event : @dom.Event) { // TODO: remove this annotation will cause type error, why?
@@ -197,8 +197,8 @@ fn Node::to_node(self : Node, sandbox : Sandbox) -> @dom.Node {
               if prevent_default {
                 event.prevent_default()
               }
-              sandbox.pending(Effect(s => s.pending(msg)))
-              sandbox.schedule()
+              sandbox.add(Effect(s => s.add(msg)))
+              sandbox.flush()
             }
         }
         element.add_event_listener(event, listener)
@@ -250,7 +250,7 @@ fn Node::to_node(self : Node, sandbox : Sandbox) -> @dom.Node {
               } else {
                 External(href)
               }
-              sandbox.pending(url_request(request))
+              sandbox.add(url_request(request))
             }
           })
           element
@@ -358,14 +358,14 @@ pub fn Node::patch(
                   let listener = match handler {
                     Normal(msg) =>
                       _ => {
-                        let m = @cmd.Effect(s => s.pending(msg))
-                        sandbox.pending(m)
-                        sandbox.schedule()
+                        let m = Effect(s => s.add(msg))
+                        sandbox.add(m)
+                        sandbox.flush()
                       }
                     HandleEvent(f) =>
                       event => {
-                        sandbox.pending(Effect(s => s.pending(f(event))))
-                        sandbox.schedule()
+                        sandbox.add(Effect(s => s.add(f(event))))
+                        sandbox.flush()
                       }
                     Custom(msg, stop_propagation~, prevent_default~) =>
                       fn(event : @dom.Event) {
@@ -375,9 +375,7 @@ pub fn Node::patch(
                         if prevent_default {
                           event.prevent_default()
                         }
-                        sandbox
-                        ..pending(Effect(s => s.pending(msg)))
-                        ..schedule()
+                        sandbox..add(Effect(s => s.add(msg)))..flush()
                       }
                   }
                   element.add_event_listener(key, listener)

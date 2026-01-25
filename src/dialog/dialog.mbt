@@ -43,7 +43,7 @@ pub fn close(id : String, return_value? : String) -> Cmd {
 /// `cancel` message.
 /// 
 /// The `return_value` argument is the value that will be filled in the `close` message.
-pub fn request_close(id : String, return_value? : String) -> @cmd.Effect {
+pub fn request_close(id : String, return_value? : String) -> Cmd {
   Effect(_ => {
     let dialog = @dom.document()
       .get_element_by_id(id)

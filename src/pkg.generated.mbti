@@ -2,36 +2,38 @@
 package "Yoorkin/rabbit-tea"
 
 import(
-  "Yoorkin/rabbit-tea/cmd"
   "Yoorkin/rabbit-tea/html"
+  "Yoorkin/rabbit-tea/internal/vdom"
   "Yoorkin/rabbit-tea/url"
 )
 
 // Values
-pub fn[A, E : Error] attempt((Result[A, E]) -> @cmd.Effect, async () -> A raise E) -> @cmd.Effect
+pub fn[A, E : Error] attempt((Result[A, E]) -> @vdom.Cmd, async () -> A raise E) -> @vdom.Cmd
 
-pub fn batch(Array[@cmd.Effect]) -> @cmd.Effect
+pub fn batch(Array[@vdom.Cmd]) -> @vdom.Cmd
 
-pub fn[Msg, Model] component(model~ : Model, update~ : (Component[Msg], Msg, Model) -> (@cmd.Effect, Model), view~ : (Component[Msg], Model) -> @html.Html) -> Component[Msg]
+pub fn new(&@vdom.Cell) -> App
 
-pub fn[Msg] new(Component[Msg]) -> App
+pub fn none() -> @vdom.Cmd
 
-pub fn none() -> @cmd.Effect
-
-pub fn[A] perform((A) -> @cmd.Effect, async () -> A noraise) -> @cmd.Effect
+pub fn[A] perform((A) -> @vdom.Cmd, async () -> A noraise) -> @vdom.Cmd
 
 // Errors
 
 // Types and methods
 type App
 pub fn App::mount(Self, String) -> Unit
-pub fn App::with_route(Self, url_changed? : (@url.Url) -> @cmd.Effect, url_request? : (@url.UrlRequest) -> @cmd.Effect) -> Unit
+pub fn App::with_route(Self, url_changed? : (@url.Url) -> @vdom.Cmd, url_request? : (@url.UrlRequest) -> @vdom.Cmd) -> Unit
 
-type Component[Msg]
-pub fn[Msg] Component::message(Self[Msg], Msg) -> @cmd.Effect
-pub fn[Msg] Component::view(Self[Msg]) -> @html.Html
+type Dispatcher[Msg]
+pub fn[Msg] Dispatcher::message(Self[Msg], Msg) -> @vdom.Cmd
+
+type TEA[Model, Msg]
+pub fn[Model, Msg] TEA::new(model~ : Model, update~ : (Dispatcher[Msg], Msg, Model) -> (@vdom.Cmd, Model), view~ : (Dispatcher[Msg], Model) -> @html.Html) -> Self[Model, Msg]
+pub impl[Model, Msg] @vdom.Cell for TEA[Model, Msg]
 
 // Type aliases
+pub using @vdom {type Cmd}
 
 // Traits
 

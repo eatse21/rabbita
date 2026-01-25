@@ -19,36 +19,23 @@ using @html {type Html}
 /// to get more intuition!
 /// 
 /// To start the application with router, you can use the `application` function.
-pub fn[Msg] new(component : Component[Msg]) -> App {
-  let mut curr_dom = @vdom.node("div", [], [])
-  let mut sandbox : @vdom.Sandbox? = None
-  fn render() -> Unit {
-    let html = component.view()
-    let new_dom = html.to_virtual_dom()
-    new_dom.patch(
-      curr_dom,
-      sandbox.unwrap(),
-      mount=sandbox.unwrap().mount_element,
-    )
-    curr_dom = new_dom
-  }
-
-  sandbox = Some(@vdom.Sandbox::new(render))
-  App::{ sandbox: sandbox.unwrap() }
+pub fn new(root : &@vdom.Cell) -> App {
+  let sandbox = @vdom.Sandbox::new(root)
+  App::{ sandbox, }
 }
 
 ///|
 pub fn App::with_route(
   self : Self,
-  url_changed? : (@url.Url) -> @cmd.Effect,
-  url_request? : (@url.UrlRequest) -> @cmd.Effect,
+  url_changed? : (@url.Url) -> @cmd.Cmd,
+  url_request? : (@url.UrlRequest) -> @cmd.Cmd,
 ) -> Unit {
   @dom.window()
   .to_event_target()
   .add_event_listener("popstate", _ => {
     guard (try? @url.parse(@dom.window().current_url())) is Ok(url)
     match url_changed {
-      Some(f) => self.sandbox.pending(f(url))
+      Some(f) => self.sandbox.add(f(url))
       None => ()
     }
   })
@@ -58,12 +45,12 @@ pub fn App::with_route(
 
 ///|
 pub fn App::mount(self : Self, element : String) -> Unit {
-  self.sandbox.mount_element = element
+  self.sandbox.mount = element
   @dom.document()
   .get_element_by_id(element)
   .unwrap()
   .set_inner_html("<div></div>")
-  self.sandbox.schedule()
+  self.sandbox.flush()
 }
 
 ///|

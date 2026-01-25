@@ -2,13 +2,13 @@
 package "Yoorkin/rabbit-tea/html/canvas"
 
 import(
-  "Yoorkin/rabbit-tea/cmd"
   "Yoorkin/rabbit-tea/dom"
   "Yoorkin/rabbit-tea/html"
+  "Yoorkin/rabbit-tea/internal/vdom"
 )
 
 // Values
-pub fn new(width~ : Double, height~ : Double, click? : (@html.Mouse) -> @cmd.Effect, mousemove? : (@html.Mouse) -> @cmd.Effect, mousedown? : (@html.Mouse) -> @cmd.Effect, mouseup? : (@html.Mouse) -> @cmd.Effect, mouseenter? : (@html.Mouse) -> @cmd.Effect, mouseleave? : (@html.Mouse) -> @cmd.Effect) -> Model
+pub fn new(width~ : Double, height~ : Double, click? : (@html.Mouse) -> @vdom.Cmd, mousemove? : (@html.Mouse) -> @vdom.Cmd, mousedown? : (@html.Mouse) -> @vdom.Cmd, mouseup? : (@html.Mouse) -> @vdom.Cmd, mouseenter? : (@html.Mouse) -> @vdom.Cmd, mouseleave? : (@html.Mouse) -> @vdom.Cmd) -> Model
 
 // Errors
 

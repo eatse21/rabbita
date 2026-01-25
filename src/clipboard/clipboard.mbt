@@ -12,20 +12,20 @@ pub(all) enum Item {
 /// - `failed` is triggered with the error message if the copy operation fails.
 pub fn copy(
   item : Item,
-  copied? : @cmd.Effect,
-  failed? : (String) -> @cmd.Effect,
-) -> @cmd.Effect {
+  copied? : Cmd,
+  failed? : (String) -> Cmd,
+) -> Cmd {
   Effect(scheduler => @js.async_run(() => try {
     guard item is Text(text)  //TODO: support other formats
     @dom.window().navigator().clipboard().write_text(text).wait() |> ignore
     match copied {
-      Some(msg) => scheduler.pending(msg)
+      Some(msg) => scheduler.add(msg)
       None => ()
     }
   } catch {
     e =>
       match failed {
-        Some(to_msg) => scheduler.pending(to_msg(e.to_string()))
+        Some(to_msg) => scheduler.add(to_msg(e.to_string()))
         None => ()
       }
   }))
@@ -38,18 +38,18 @@ pub fn copy(
 /// - `pasted` is triggered with the pasted item if the paste operation is successful.
 /// - `failed` is triggered with the error message if the paste operation fails.
 pub fn paste(
-  pasted~ : (Item) -> @cmd.Effect,
-  failed? : (String) -> @cmd.Effect,
+  pasted~ : (Item) -> Cmd,
+  failed? : (String) -> Cmd,
 ) -> Cmd {
   Effect(scheduler => @js.async_run(() => try {
     // TODO: support other formats
     let str : String = @dom.window().navigator().clipboard().read_text().wait()
       |> @js.Value::cast()
-    scheduler.pending(pasted(Text(str)))
+    scheduler.add(pasted(Text(str)))
   } catch {
     e =>
       match failed {
-        Some(to_msg) => scheduler.pending(to_msg(e.to_string()))
+        Some(to_msg) => scheduler.add(to_msg(e.to_string()))
         None => ()
       }
   }))

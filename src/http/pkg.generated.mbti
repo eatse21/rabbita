@@ -2,17 +2,17 @@
 package "Yoorkin/rabbit-tea/http"
 
 import(
-  "Yoorkin/rabbit-tea/cmd"
+  "Yoorkin/rabbit-tea/internal/vdom"
 )
 
 // Values
-pub fn[Model] delete(String, expect~ : Expecting[@cmd.Effect, Model]) -> @cmd.Effect
+pub fn[Model] delete(String, expect~ : Expecting[@vdom.Cmd, Model]) -> @vdom.Cmd
 
-pub fn[Model] get(String, expect~ : Expecting[@cmd.Effect, Model]) -> @cmd.Effect
+pub fn[Model] get(String, expect~ : Expecting[@vdom.Cmd, Model]) -> @vdom.Cmd
 
-pub fn[Model] patch(String, Body, expect~ : Expecting[@cmd.Effect, Model]) -> @cmd.Effect
+pub fn[Model] patch(String, Body, expect~ : Expecting[@vdom.Cmd, Model]) -> @vdom.Cmd
 
-pub fn[Model] post(String, Body, expect~ : Expecting[@cmd.Effect, Model]) -> @cmd.Effect
+pub fn[Model] post(String, Body, expect~ : Expecting[@vdom.Cmd, Model]) -> @vdom.Cmd
 
 // Errors
 
