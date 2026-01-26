@@ -55,7 +55,24 @@ pub fn Sandbox::flush(self : Self) -> Unit {
     }
   }
   let root_element = @dom.document().get_element_by_id(self.mount).unwrap() // TODO: handle error
-  let dom_patcher = DomPatcher::new(root_element, self)
+  let capture_link = fn(event : @dom.Event) {
+    let mouse_event = event.to_mouse_event().unwrap()
+    if not(mouse_event.get_meta_key() || mouse_event.get_ctrl_key()) {
+      event.prevent_default()
+      let href = event.target().to_element().unwrap().get_property("href")
+      let curr = try! @url.parse(@dom.window().current_url())
+      let next = try! @url.parse(href)
+      let request = if curr.protocol == next.protocol &&
+        curr.host == next.host &&
+        curr.port == next.port {
+        @url.Internal(next)
+      } else {
+        External(href)
+      }
+      self.add_url_request(request)
+    }
+  }
+  let dom_patcher = DomPatcher::new(root_element, self, capture_link)
   if self.is_initial {
     self.is_initial = false
     self.root.refersh()

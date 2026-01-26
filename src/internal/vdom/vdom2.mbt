@@ -13,6 +13,9 @@ pub enum VNode {
 }
 
 ///|
+const CAPTURED_LINK_TAG : String = "RABBITA_CAPTURED_LINK"
+
+///|
 pub fn VNode::elem(
   tag : String,
   props : Props,
@@ -25,6 +28,16 @@ pub fn VNode::elem(
 ///|
 pub fn VNode::text(s : String) -> VNode {
   Text(s, node=None)
+}
+
+///|
+pub fn VNode::link(
+  props : Props,
+  children : Children,
+  escape? : Bool = false,
+) -> VNode {
+  let tag = if escape { "a" } else { CAPTURED_LINK_TAG }
+  VNode::elem(tag, props, children)
 }
 
 ///|

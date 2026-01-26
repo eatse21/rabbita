@@ -321,7 +321,7 @@ pub fn[C : IsChildren] a(
   if id is Some(id) {
     attrs.push(Attribute("id", id))
   }
-  @vdom.vlink(attributes_to_props(attrs), children.to_children(), escape~)
+  @vdom.VNode::link(attributes_to_props(attrs), children.to_children(), escape~)
 }
 
 ///|

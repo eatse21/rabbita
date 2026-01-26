@@ -33,11 +33,16 @@ enum Current {
 priv struct DomPatcher {
   stack : Array[Current]
   scheduler : &Scheduler
+  captured_link_listener : @dom.Listener
 }
 
 ///|
-fn DomPatcher::new(root : @dom.Element, scheduler : &Scheduler) -> DomPatcher {
-  { stack: [Elem(root)], scheduler }
+fn DomPatcher::new(
+  root : @dom.Element,
+  scheduler : &Scheduler,
+  captured_link_listener : @dom.Listener,
+) -> DomPatcher {
+  { stack: [Elem(root)], scheduler, captured_link_listener }
 }
 
 ///|
@@ -258,13 +263,22 @@ fn DomPatcher::create_node(self : Self, vnode : VNode) -> @dom.Node {
       fragment.as_node()
     }
     Elem(tag, props, childs, namespace_uri=_, ..) as v => {
-      let element = @dom.document().create_element(tag)
+      let element = @dom.document().create_element(
+        if tag == CAPTURED_LINK_TAG {
+          "a"
+        } else {
+          tag
+        },
+      )
       let { slots, handlers, attrs, props, styles } = props
       for e, h in handlers {
         let slot = @ref.new(h)
         let scheduler = self.scheduler
         element.add_event_listener(e, x => (slot.val)(x, scheduler))
         slots[e] = slot
+      }
+      if tag == CAPTURED_LINK_TAG {
+        element.add_event_listener("click", self.captured_link_listener)
       }
       for n, val in attrs {
         element.set_attribute(n, val)
