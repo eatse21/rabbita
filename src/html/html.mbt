@@ -72,6 +72,11 @@ pub fn cell(cell : &@vdom.Cell) -> Html {
 }
 
 ///|
+pub fn fragment(children : Array[Html]) -> Html {
+  @vdom.VNode::fragment(children.map(x => x.0))
+}
+
+///|
 pub fn button(
   style? : Array[String] = [],
   id? : String,

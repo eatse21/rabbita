@@ -775,6 +775,7 @@ pub trait IsNode : IsEventTarget {
   insert_before(Self, Node, Node) -> Unit
   get_child(Self, Int) -> Node
   get_child_count(Self) -> Int
+  is_same_node(Self, Node) -> Bool
 }
 
 pub trait IsSVGElement : IsElement {

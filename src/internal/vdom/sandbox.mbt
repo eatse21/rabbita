@@ -16,6 +16,7 @@ pub(all) struct Sandbox {
   subscriptions : Map[Id, &Cell]
   queue : @queue.Queue[Id]
   root : &Cell
+  mut is_initial : Bool
   mut next_id : Int
   mut scheduled : Bool
   mut mount : String
@@ -35,6 +36,7 @@ pub fn Sandbox::new(root : &Cell) -> Sandbox {
     next_id: 1,
     scheduled: false,
     mount: "",
+    is_initial: true,
   }
   sandbox
 }
@@ -52,19 +54,19 @@ pub fn Sandbox::flush(self : Self) -> Unit {
       component.step(self)
     }
   }
-  let old = self.root.node()
-  self.root.refersh()
-  let new = self.root.node()
   let root_element = @dom.document().get_element_by_id(self.mount).unwrap() // TODO: handle error
   let dom_patcher = DomPatcher::new(root_element, self)
-   diff_node(old, new, dom_patcher, self)
-  // let debug_patcher = DebugPatcher::new(root_element, self)
-  // let debug_subs = self.subscriptions.map((_, _) => ())
-  // let debug_ques = self.queue.to_string()
-  // println("\{debug_subs}, \{debug_ques}")
-  // println("---------------- old: \n\{pretty_vnode(old)}")
-  // diff_node(old, new, debug_patcher, self)
-  // println("---------------- new: \n\{pretty_vnode(new)}")
+  if self.is_initial {
+    self.is_initial = false
+    self.root.refersh()
+    let new = self.root.node()
+    dom_patcher.insert(new~)
+  } else {
+    let old = self.root.node()
+    self.root.refersh()
+    let new = self.root.node()
+    diff_node(old, new, dom_patcher, self)
+  }
 }
 
 ///|

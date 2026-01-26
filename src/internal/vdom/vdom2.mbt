@@ -10,7 +10,6 @@ pub enum VNode {
   Text(String, mut node~ : @dom.Node?)
   Frag(Array[VNode], mut start~ : @dom.Comment?, mut end~ : @dom.Comment?)
   Cell(&Cell)
-  Empty // TODO: use Frag instead
 }
 
 ///|
@@ -34,8 +33,8 @@ pub fn VNode::cell(cell : &Cell) -> VNode {
 }
 
 ///|
-pub fn VNode::empty() -> VNode {
-  Empty
+pub fn VNode::fragment(childs : Array[VNode]) -> VNode {
+  Frag(childs, start=None, end=None)
 }
 
 ///|
@@ -50,8 +49,7 @@ fn VNode::set_node(self : Self, node : @dom.Node) -> Unit {
     Text(_) as n => n.node = Some(node)
     Elem(_) as n => n.node = Some(node)
     Cell(c) => c.node().set_node(node)
-    Frag(_, ..) => panic() 
-    Empty => panic()
+    Frag(_, ..) => panic()
   }
 }
 
@@ -61,7 +59,6 @@ fn VNode::get_node(self : Self) -> @dom.Node {
     Elem(_, _, _, node~, ..) | Text(_, node~) => node.unwrap()
     Cell(c) => c.node().get_node()
     Frag(_, end~, ..) => end.unwrap().get_parent_node().unwrap()
-    Empty => panic()
   }
 }
 
@@ -116,6 +113,13 @@ fn[P : Patcher] diff_node(
       }
       new.set_node(old.get_node())
     }
+    (Frag(childs1, ..) as old, Frag(childs2, ..) as new) => {
+      patcher.patch_frag(old~, fn() {
+        diff_children(Array(childs1), Array(childs2), patcher, scheduler)
+      })
+      new.start = old.start
+      new.end = old.end
+    }
     (Cell(c1), Cell(c2)) =>
       if c2.dirty_flag() {
         let c1_old = c1.node()
@@ -125,8 +129,6 @@ fn[P : Patcher] diff_node(
       } else if c1.id() != c2.id() {
         patcher.replace_old(c1.node(), c2.node())
       }
-    (Empty, _) => patcher.insert(new~)
-    (_, Empty) => patcher.remove(old~)
     (_, _) => patcher.replace(old~, new~)
   }
 }

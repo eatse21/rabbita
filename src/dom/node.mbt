@@ -11,7 +11,7 @@ pub trait IsNode: IsEventTarget {
   set_node_value(Self, @js.Nullable[String]) -> Unit = _
   get_first_child(Self) -> Node = _
   get_last_child(Self) -> Node = _
-  get_next_sibling(Self) -> Node = _
+  get_next_sibling(Self) -> @js.Nullable[Node] = _
   get_previous_sibling(Self) -> Node = _
   get_parent_node(Self) -> @js.Nullable[Node] = _
   append_child(Self, Node) -> Unit = _
@@ -20,6 +20,7 @@ pub trait IsNode: IsEventTarget {
   insert_before(Self, Node, Node) -> Unit = _
   get_child(Self, Int) -> Node = _
   get_child_count(Self) -> Int = _
+  is_same_node(Self, Node) -> Bool = _
 }
 
 ///|
@@ -118,6 +119,11 @@ impl IsNode with get_child_count(s) {
   s |> js_identity |> ffi_count_child
 }
 
+///|
+impl IsNode with is_same_node(s, other) {
+  s |> js_identity |> ffi_is_same_node(other)
+}
+
 // ---------- node API --------------
 
 ///|
@@ -136,7 +142,7 @@ extern "js" fn first_child(x : @js.Value) -> Node = "(x) => x.firstChild"
 extern "js" fn ffi_last_child(x : @js.Value) -> Node = "(x) => x.lastChild"
 
 ///|
-extern "js" fn ffi_next_sibling(x : @js.Value) -> Node = "(x) => x.nextSibling"
+extern "js" fn ffi_next_sibling(x : @js.Value) -> @js.Nullable[Node] = "(x) => x.nextSibling"
 
 ///|
 extern "js" fn ffi_previous_sibling(x : @js.Value) -> Node = "(x) => x.previousSibling"
@@ -172,3 +178,7 @@ extern "js" fn ffi_count_child(x : @js.Value) -> Int = "(x) => x.childNodes.leng
 
 ///|
 extern "js" fn ffi_set_node_value(x : @js.Value, v : @js.Nullable[String]) = "(x,v) => x.nodeValue = v"
+
+///|
+extern "js" fn ffi_is_same_node(x : @js.Value, other : Node) -> Bool =
+  "(x, other) => x === other"

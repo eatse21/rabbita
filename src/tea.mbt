@@ -62,7 +62,7 @@ pub fn[Model, Msg] TEA::new(
 ) -> TEA[Model, Msg] {
   let id = @vdom.Id::new()
   let dispatcher = { id, inbox: @queue.new() }
-  let node = @vdom.VNode::empty()
+  let node = @vdom.VNode::fragment([])
   let self = { view, update, dispatcher, id, model, node, is_dirty: true }
   self
 }

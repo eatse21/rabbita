@@ -24,16 +24,13 @@ trait Patcher {
 }
 
 ///|
-trait ElementPatcher {}
-
-///|
 enum Current {
   Elem(@dom.Element)
-  Frag(@dom.Node, @dom.Comment)
+  Frag(@dom.Node, @dom.Comment, @dom.Comment)
 }
 
 ///|
-struct DomPatcher {
+priv struct DomPatcher {
   stack : Array[Current]
   scheduler : &Scheduler
 }
@@ -52,7 +49,7 @@ fn DomPatcher::current(self : Self) -> Current {
 fn DomPatcher::end_anchor(self : Self) -> @dom.Node? {
   match self.stack.last().unwrap() {
     Elem(_) => None
-    Frag(_, e) => Some(e.as_node())
+    Frag(_, _, e) => Some(e.as_node())
   }
 }
 
@@ -61,7 +58,7 @@ impl Patcher for DomPatcher with insert(self, new~) {
   let new = self.create_node(new)
   match self.current() {
     Elem(e) => e.append_child(new)
-    Frag(n, c) => n.insert_before(new, c.as_node())
+    Frag(n, _, c) => n.insert_before(new, c.as_node())
   }
 }
 
@@ -69,8 +66,9 @@ impl Patcher for DomPatcher with insert(self, new~) {
 impl Patcher for DomPatcher with patch_frag(self, old~, f) {
   guard old is Frag(_, start~, end~)
   let parent = end.unwrap().get_parent_node().unwrap()
-  self.stack.push(Frag(parent, end.unwrap()))
+  self.stack.push(Frag(parent, start.unwrap(), end.unwrap()))
   f()
+  self.stack.pop() |> ignore
 }
 
 ///|
@@ -78,20 +76,51 @@ impl Patcher for DomPatcher with replace(self, old~, new~) {
   if old is Cell(c) {
     self.scheduler.unsubscribe(c)
   }
-  let node = match self.current() {
+  let n = match self.current() {
     Elem(e) => e.as_node()
-    Frag(n, _) => n
+    Frag(n, _, _) => n
   }
-  node.replace_child(old.get_node(), self.create_node(new))
+  fn handle_fragment(n : @dom.Node, s : @dom.Comment, e : @dom.Comment) {
+    while s.get_next_sibling().to_option() is Some(next) &&
+          !next.is_same_node(e.as_node()) {
+      n.remove_child(next)
+    }
+    n.replace_child(s.as_node(), self.create_node(new))
+    n.remove_child(e.as_node())
+  }
+
+  match old {
+    Frag(_, start=Some(s), end=Some(e)) => handle_fragment(n, s, e)
+    Cell(c) if c.node() is Frag(_, start=Some(s), end=Some(e)) =>
+      handle_fragment(n, s, e)
+    _ => n.replace_child(old.get_node(), self.create_node(new))
+  }
 }
 
 ///|
 impl Patcher for DomPatcher with replace_old(self, old1, old2) {
-  let node = match self.current() {
-    Elem(e) => e.as_node()
-    Frag(n, _) => n
+  if old1 is Cell(c) {
+    self.scheduler.unsubscribe(c)
   }
-  node.replace_child(old1.get_node(), old2.get_node())
+  let n = match self.current() {
+    Elem(e) => e.as_node()
+    Frag(n, _, _) => n
+  }
+  fn handle_fragment(n : @dom.Node, s : @dom.Comment, e : @dom.Comment) {
+    while s.get_next_sibling().to_option() is Some(next) &&
+          !next.is_same_node(e.as_node()) {
+      n.remove_child(next)
+    }
+    n.replace_child(s.as_node(), old2.get_node())
+    n.remove_child(e.as_node())
+  }
+
+  match old1 {
+    Frag(_, start=Some(s), end=Some(e)) => handle_fragment(n, s, e)
+    Cell(c) if c.node() is Frag(_, start=Some(s), end=Some(e)) =>
+      handle_fragment(n, s, e)
+    _ => n.replace_child(old1.get_node(), old2.get_node())
+  }
 }
 
 ///|
@@ -99,11 +128,25 @@ impl Patcher for DomPatcher with remove(self, old~) {
   if old is Cell(c) {
     self.scheduler.unsubscribe(c)
   }
-  let node = match self.current() {
+  let n = match self.current() {
     Elem(e) => e.as_node()
-    Frag(n, _) => n
+    Frag(n, _, _) => n
   }
-  node.remove_child(old.get_node())
+  fn handle_fragment(n : @dom.Node, s : @dom.Comment, e : @dom.Comment) {
+    while s.get_next_sibling().to_option() is Some(next) &&
+          !next.is_same_node(e.as_node()) {
+      n.remove_child(next)
+    }
+    n.remove_child(s.as_node())
+    n.remove_child(e.as_node())
+  }
+
+  match old {
+    Frag(_, start=Some(s), end=Some(e)) => handle_fragment(n, s, e)
+    Cell(c) if c.node() is Frag(_, start=Some(s), end=Some(e)) =>
+      handle_fragment(n, s, e)
+    _ => n.remove_child(old.get_node())
+  }
 }
 
 ///|
@@ -137,6 +180,7 @@ impl Patcher for DomPatcher with patch_text(_, old~, new~, str) {
 impl Patcher for DomPatcher with patch_elem(self, old~, f) {
   self.stack.push(Elem(old.get_node().to_element().unwrap()))
   f()
+  self.stack.pop() |> ignore
 }
 
 ///|
@@ -187,7 +231,6 @@ impl Patcher for DomPatcher with add_listener(self, event, listener) {
 ///|
 fn DomPatcher::create_node(self : Self, vnode : VNode) -> @dom.Node {
   match vnode {
-    Empty => @dom.document().create_text_node("").as_node() // TODO: use frag
     Text(s, ..) as v => {
       let node = @dom.document().create_text_node(s).as_node()
       v.node = Some(node)
@@ -210,6 +253,7 @@ fn DomPatcher::create_node(self : Self, vnode : VNode) -> @dom.Node {
         fragment.append_child(child)
       }
       fragment.append_child(end.as_node())
+      vnode.start = Some(start)
       vnode.end = Some(end)
       fragment.as_node()
     }
