@@ -6,4 +6,3 @@ pub(open) trait Cell {
   refersh(Self) -> Unit
   dirty_flag(Self) -> Bool
 }
-

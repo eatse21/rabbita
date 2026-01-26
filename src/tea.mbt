@@ -39,7 +39,6 @@ pub impl[Model, Msg] @vdom.Cell for TEA[Model, Msg] with node(self) {
 ///|
 pub impl[Model, Msg] @vdom.Cell for TEA[Model, Msg] with refersh(self) {
   self.node = (self.view)(self.dispatcher, self.model).to_virtual_dom()
-  @vdom.describe_vnode(self.node) |> println
   self.is_dirty = false
 }
 

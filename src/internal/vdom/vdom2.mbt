@@ -8,7 +8,7 @@ pub enum VNode {
     mut node~ : @dom.Node?
   )
   Text(String, mut node~ : @dom.Node?)
-  // Frag(Array[VNode], mut node~ : @dom.Node?)
+  Frag(Array[VNode], mut start~ : @dom.Comment?, mut end~ : @dom.Comment?)
   Cell(&Cell)
   Empty // TODO: use Frag instead
 }
@@ -50,6 +50,7 @@ fn VNode::set_node(self : Self, node : @dom.Node) -> Unit {
     Text(_) as n => n.node = Some(node)
     Elem(_) as n => n.node = Some(node)
     Cell(c) => c.node().set_node(node)
+    Frag(_, ..) => panic() 
     Empty => panic()
   }
 }
@@ -59,6 +60,7 @@ fn VNode::get_node(self : Self) -> @dom.Node {
   match self {
     Elem(_, _, _, node~, ..) | Text(_, node~) => node.unwrap()
     Cell(c) => c.node().get_node()
+    Frag(_, end~, ..) => end.unwrap().get_parent_node().unwrap()
     Empty => panic()
   }
 }

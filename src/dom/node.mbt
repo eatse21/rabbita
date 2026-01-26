@@ -13,7 +13,7 @@ pub trait IsNode: IsEventTarget {
   get_last_child(Self) -> Node = _
   get_next_sibling(Self) -> Node = _
   get_previous_sibling(Self) -> Node = _
-  get_parent_node(Self) -> Node = _
+  get_parent_node(Self) -> @js.Nullable[Node] = _
   append_child(Self, Node) -> Unit = _
   remove_child(Self, Node) -> Unit = _
   replace_child(Self, Node, Node) -> Unit = _
@@ -85,7 +85,7 @@ impl IsNode with get_previous_sibling(s) {
 
 ///|
 impl IsNode with get_parent_node(s) {
-  s |> js_identity |> ffi_parent_node
+  s |> js_identity |> ffi_parent_node 
 }
 
 ///|
@@ -142,7 +142,7 @@ extern "js" fn ffi_next_sibling(x : @js.Value) -> Node = "(x) => x.nextSibling"
 extern "js" fn ffi_previous_sibling(x : @js.Value) -> Node = "(x) => x.previousSibling"
 
 ///|
-extern "js" fn ffi_parent_node(x : @js.Value) -> Node = "(x) => x.parentNode"
+extern "js" fn ffi_parent_node(x : @js.Value) -> @js.Nullable[Node] = "(x) => x.parentNode"
 
 ///|
 extern "js" fn ffi_append_child(x : @js.Value, child : Node) = "(p,c) => p.appendChild(c)"
