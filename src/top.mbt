@@ -1,8 +1,8 @@
 ///|
-pub using @cmd {type Cmd}
+pub using @cmd {type Cmd, none, batch, perform, attempt}
 
 ///|
-pub using @cmd {none, batch, perform, attempt}
+pub using @vdom {trait Cell}
 
 ///|
 using @html {type Html}
