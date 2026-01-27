@@ -14,8 +14,10 @@ using @url {type Url, type UrlRequest}
 ///      apply patches to real DOM
 pub(all) struct Sandbox {
   subscriptions : Map[Id, &Cell]
+  subscription_tree : Map[Id, Set[Id]]
   queue : @queue.Queue[Id]
   root : &Cell
+  mut captured_link_listener : @dom.Listener
   mut is_initial : Bool
   mut next_id : Int
   mut scheduled : Bool
@@ -27,9 +29,34 @@ pub(all) struct Sandbox {
 ///|
 pub fn Sandbox::new(root : &Cell) -> Sandbox {
   root.id().value = Some(0)
-  let sandbox : Sandbox = {
+  let mut sandbox : Sandbox? = None
+  let captured_link_listener = fn(event : @dom.Event) {
+    let mouse_event = event.to_mouse_event().unwrap()
+    if not(mouse_event.get_meta_key() || mouse_event.get_ctrl_key()) {
+      event.prevent_default()
+      let href = event
+        .current_target()
+        .unwrap()
+        .to_element()
+        .unwrap()
+        .get_property("href")
+        .unwrap()
+      let curr = try! @url.parse(@dom.window().current_url())
+      let next = try! @url.parse(href)
+      let request = if curr.protocol == next.protocol &&
+        curr.host == next.host &&
+        curr.port == next.port {
+        @url.Internal(next)
+      } else {
+        External(href)
+      }
+      sandbox.unwrap().add_url_request(request)
+    }
+  }
+  sandbox = Some({
     root,
     subscriptions: Map::from_array([(root.id(), root)]),
+    subscription_tree: Map::from_array([(root.id(), Set::new())]),
     queue: @queue.new(),
     on_url_changed: None,
     on_url_request: None,
@@ -37,8 +64,9 @@ pub fn Sandbox::new(root : &Cell) -> Sandbox {
     scheduled: false,
     mount: "",
     is_initial: true,
-  }
-  sandbox
+    captured_link_listener,
+  })
+  sandbox.unwrap()
 }
 
 ///|
@@ -49,46 +77,42 @@ pub fn Sandbox::new(root : &Cell) -> Sandbox {
 /// 2. Updating all relevant models based on these effects
 /// 3. Triggering the rendering process once the queue is fully drained
 pub fn Sandbox::flush(self : Self) -> Unit {
+  let dirty_set = Set::new()
   while self.queue.pop() is Some(id) {
-    if self.subscriptions.get(id) is Some(component) {
-      component.step(self)
+    if self.subscriptions.get(id) is Some(cell) {
+      dirty_set.add(id)
+      cell.step(self)
     }
   }
   let root_element = @dom.document().get_element_by_id(self.mount).unwrap() // TODO: handle error
-  let capture_link = fn(event : @dom.Event) {
-    let mouse_event = event.to_mouse_event().unwrap()
-    if not(mouse_event.get_meta_key() || mouse_event.get_ctrl_key()) {
-      event.prevent_default()
-      let href = event.target().to_element().unwrap().get_property("href")
-      let curr = try! @url.parse(@dom.window().current_url())
-      let next = try! @url.parse(href)
-      let request = if curr.protocol == next.protocol &&
-        curr.host == next.host &&
-        curr.port == next.port {
-        @url.Internal(next)
-      } else {
-        External(href)
-      }
-      self.add_url_request(request)
-    }
-  }
-  let dom_patcher = DomPatcher::new(root_element, self, capture_link)
+  let dom_patcher = DomPatcher::new(
+    root_element,
+    self.root.id(),
+    self,
+    self.captured_link_listener,
+  )
   if self.is_initial {
     self.is_initial = false
     self.root.refersh()
     let new = self.root.node()
+    dom_patcher.set_anchor(None)
     dom_patcher.insert(new~)
   } else {
-    let old = self.root.node()
-    self.root.refersh()
-    let new = self.root.node()
-    diff_node(old, new, dom_patcher, self)
+    let dirty_ids = dirty_set.to_array()
+    while dirty_ids.pop() is Some(id) {
+      if self.subscriptions.get(id) is Some(cell) {
+        let old = cell.node()
+        cell.refersh()
+        let new = cell.node()
+        dom_patcher.set_anchor(None)
+        diff_node(old, new, dom_patcher, self)
+      }
+    }
   }
 }
 
 ///|
 pub impl Scheduler for Sandbox with add(self, cmd) {
-  println("scheduler.add: \{self.queue}")
   match cmd {
     Empty => ()
     Batch(xs) => xs.each(x => self.add(x))
@@ -109,17 +133,20 @@ pub impl Scheduler for Sandbox with add(self, cmd) {
 }
 
 ///|
-pub impl Scheduler for Sandbox with subscribe(self, cell) {
+pub impl Scheduler for Sandbox with subscribe(self, parent, cell) {
   cell.id().value = Some(self.next_id)
   self.subscriptions[cell.id()] = cell
-  println("subscribe \{cell.id()}")
+  self.subscription_tree[parent].add(cell.id())
+  self.subscription_tree[cell.id()] = Set::new()
   self.queue.push(cell.id())
   self.next_id += 1
 }
 
 ///|
-pub impl Scheduler for Sandbox with unsubscribe(self, cell) {
+pub impl Scheduler for Sandbox with unsubscribe(self, parent, cell) {
   self.subscriptions.remove(cell.id())
+  self.subscription_tree[parent].remove(cell.id())
+  self.subscription_tree.remove(cell.id())
 }
 
 ///|

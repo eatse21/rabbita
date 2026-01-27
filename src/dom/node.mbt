@@ -17,7 +17,7 @@ pub trait IsNode: IsEventTarget {
   append_child(Self, Node) -> Unit = _
   remove_child(Self, Node) -> Unit = _
   replace_child(Self, Node, Node) -> Unit = _
-  insert_before(Self, Node, Node) -> Unit = _
+  insert_before(Self, Node, @js.Nullable[Node]) -> Unit = _
   get_child(Self, Int) -> Node = _
   get_child_count(Self) -> Int = _
   is_same_node(Self, Node) -> Bool = _
@@ -160,7 +160,7 @@ extern "js" fn ffi_remove_child(x : @js.Value, child : Node) = "(p,c) => p.remov
 extern "js" fn ffi_replace_child(x : @js.Value, new : Node, old : Node) = "(p,n,o) => p.replaceChild(n,o)"
 
 ///|
-extern "js" fn insert_before(x : @js.Value, value : Node, before : Node) = "(p,value,before) => p.insertBefore(value,before)"
+extern "js" fn insert_before(x : @js.Value, value : Node, before : @js.Nullable[Node]) = "(p,value,before) => p.insertBefore(value,before)"
 
 // ---------- some specific node API --------------
 // Note: the childNodes property is a NodeList, not an array, so we can't use the Array type.

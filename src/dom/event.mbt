@@ -10,6 +10,7 @@ fn[A, B] js_identity(a : A) -> B {
 ///|
 pub trait IsEvent: @js.Cast {
   target(Self) -> EventTarget = _
+  current_target(Self) -> @js.Nullable[EventTarget] = _
   prevent_default(Self) -> Unit = _
   stop_propagation(Self) -> Unit = _
   as_event(Self) -> Event = _
@@ -45,6 +46,11 @@ pub impl @js.Cast for Event with from(value) {
 ///|
 impl IsEvent with target(s) {
   s |> js_identity |> ffi_event_target
+}
+
+///|
+impl IsEvent with current_target(s) {
+  s |> js_identity |> ffi_event_current_target
 }
 
 ///|
@@ -134,6 +140,11 @@ impl IsEvent with to_wheel_event(s) {
 
 ///|
 extern "js" fn ffi_event_target(x : @js.Value) -> EventTarget = "(self) => self.target"
+
+///|
+extern "js" fn ffi_event_current_target(
+  x : @js.Value,
+) -> @js.Nullable[EventTarget] = "(self) => self.currentTarget"
 
 ///|
 extern "js" fn ffi_to_ui_event(x : @js.Value) -> @js.Nullable[UIEvent] =

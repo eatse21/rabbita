@@ -10,7 +10,7 @@ pub trait IsElement: IsNode {
   get_attribute(Self, String) -> String = _
   remove_attribute(Self, String) -> Unit = _
   set_property(Self, String, @js.Value) -> Unit = _
-  get_property(Self, String) -> String = _
+  get_property(Self, String) -> @js.Optional[String] = _
   remove_property(Self, String) -> Unit = _
   scroll_into_view(Self) -> Unit = _
   get_scroll_top(Self) -> Double = _
@@ -162,7 +162,11 @@ extern "js" fn ffi_element_set_property(
 extern "js" fn ffi_element_remove_property(x : @js.Value, prop : String) = "(self,prop) => delete self[prop]"
 
 ///|
-extern "js" fn ffi_element_get_property(x : @js.Value, prop : String) -> String = "(self,prop) => self[prop]"
+// FIXME: The result type may not be string
+extern "js" fn ffi_element_get_property(
+  x : @js.Value,
+  prop : String,
+) -> @js.Optional[String] = "(self,prop) => self[prop]"
 
 ///|
 /// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView

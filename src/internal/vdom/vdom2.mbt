@@ -9,7 +9,7 @@ pub enum VNode {
   )
   Text(String, mut node~ : @dom.Node?)
   Frag(Array[VNode], mut start~ : @dom.Comment?, mut end~ : @dom.Comment?)
-  Cell(&Cell)
+  Cell(&Cell, mut start~ : @dom.Comment?, mut end~ : @dom.Comment?)
 }
 
 ///|
@@ -42,7 +42,7 @@ pub fn VNode::link(
 
 ///|
 pub fn VNode::cell(cell : &Cell) -> VNode {
-  Cell(cell)
+  Cell(cell, start=None, end=None)
 }
 
 ///|
@@ -72,6 +72,44 @@ fn VNode::get_node(self : Self) -> @dom.Node {
     Elem(_, _, _, node~, ..) | Text(_, node~) => node.unwrap()
     Cell(c) => c.node().get_node()
     Frag(_, end~, ..) => end.unwrap().get_parent_node().unwrap()
+  }
+}
+
+///|
+pub fn VNode::validate(self : VNode) -> Bool {
+  fn validate_array(nodes : Array[VNode]) -> Bool {
+    let mut ok = true
+    for node in nodes {
+      if ok && !node.validate() {
+        ok = false
+      }
+    }
+    ok
+  }
+
+  fn validate_children(children : Children) -> Bool {
+    match children {
+      Array(nodes) => validate_array(nodes)
+      Map(map) => {
+        let mut ok = true
+        for _, node in map {
+          if ok && !node.validate() {
+            ok = false
+          }
+        }
+        ok
+      }
+    }
+  }
+
+  match self {
+    Elem(_, _, children, namespace_uri~, node~) =>
+      namespace_uri is Some(_) && node is Some(_) && validate_children(children)
+    Text(_, node~) => node is Some(_)
+    Frag(children, start~, end~) =>
+      start is Some(_) && end is Some(_) && validate_array(children)
+    Cell(cell, start~, end~) =>
+      start is Some(_) && end is Some(_) && cell.node().validate()
   }
 }
 
@@ -112,37 +150,38 @@ fn[P : Patcher] diff_node(
       Elem(tag2, props2, childs2, namespace_uri=ns2, ..) as new,
     ) =>
       if tag1 != tag2 {
-        patcher.replace(old~, new~)
+        patcher.remove(old~)
+        patcher.insert(new~)
       } else {
         patcher.patch_elem(old~, fn() {
           diff_props(props1, props2, patcher, scheduler)
+          patcher.set_anchor(None)
           diff_children(childs1, childs2, patcher, scheduler)
         })
         new.set_node(old.get_node())
       }
     (Text(s1, ..), Text(s2, ..)) => {
       if s1 != s2 {
-        patcher.patch_text(old~, new~, s2)
+        patcher.patch_text(old~, s2)
       }
       new.set_node(old.get_node())
     }
-    (Frag(childs1, ..) as old, Frag(childs2, ..) as new) => {
+    (Frag(childs1, end~, ..) as old, Frag(childs2, ..) as new) => {
       patcher.patch_frag(old~, fn() {
+        patcher.set_anchor(Some(new))
         diff_children(Array(childs1), Array(childs2), patcher, scheduler)
       })
       new.start = old.start
       new.end = old.end
     }
-    (Cell(c1), Cell(c2)) =>
-      if c2.dirty_flag() {
-        let c1_old = c1.node()
-        c2.refersh()
-        let c2_new = c2.node()
-        diff_node(c1_old, c2_new, patcher, scheduler)
-      } else if c1.id() != c2.id() {
-        patcher.replace_old(c1.node(), c2.node())
-      }
-    (_, _) => patcher.replace(old~, new~)
+    (
+      Cell(c1, start=Some(s1), end=Some(e1)),
+      Cell(c2, start=Some(s2), end=Some(e2)),
+    ) => if c1.id() != c2.id() { patcher.relocate(c1, s1, e1, s2, e2) }
+    (_, _) => {
+      patcher.remove(old~)
+      patcher.insert(new~)
+    }
   }
 }
 
@@ -219,50 +258,67 @@ fn[P : Patcher] diff_children(
   scheduler : &Scheduler,
 ) -> Unit {
   match (old, new) {
-    (Array(old), Array(new)) =>
-      loop (old[:], new[:]) {
-        ([], []) => ()
-        ([], ys) =>
-          for y in ys {
-            patcher.insert(new=y)
-          }
-        (xs, []) =>
-          for x in xs {
-            patcher.remove(old=x)
-          }
-        ([x, .. xs], [y, .. ys]) => {
-          diff_node(x, y, patcher, scheduler)
-          continue (xs, ys)
+    (Array(old), Array(new)) => {
+      let len1 = old.length()
+      let len2 = new.length()
+      let len = if len1 > len2 {
+        for i in len1>..len2 {
+          patcher.remove(old=old[i])
         }
+        len2
+      } else {
+        for i in len2>..len1 {
+          patcher.insert(new=new[i])
+          patcher.set_anchor(Some(new[i]))
+        }
+        len1
       }
-    (Map(old), Map(new)) => {
-      for k, v1 in old {
-        if !new.contains(k) {
-          patcher.remove(old=v1)
-        }
-      }
-      for k, v2 in new {
-        match old.get(k) {
-          None => patcher.insert(new=v2)
-          Some(v1) => diff_node(v1, v2, patcher, scheduler)
-        }
+      for i in len>..0 {
+        diff_node(old[i], new[i], patcher, scheduler)
+        patcher.set_anchor(Some(new[i]))
       }
     }
-    (_, _) => {
-      fn iter(c : Children) -> Iter[VNode] {
-        match c {
-          Array(arr) => arr.iter()
-          Map(map) => map.values()
-        }
-      }
+    // loop (old[:], new[:]) {
+    //   ([], []) => ()
+    //   ([], ys) =>
+    //     for y in ys {
+    //       patcher.insert(new=y)
+    //     }
+    //   (xs, []) =>
+    //     for x in xs {
+    //       patcher.remove(old=x)
+    //     }
+    //   ([x, .. xs], [y, .. ys]) => {
+    //     diff_node(x, y, patcher, scheduler)
+    //     continue (xs, ys)
+    //   }
+    // }
+    (Map(old), Map(new)) => ...
+    // for k, v1 in old {
+    //   if !new.contains(k) {
+    //     patcher.remove(old=v1)
+    //   }
+    // }
+    // for k, v2 in new {
+    //   match old.get(k) {
+    //     None => patcher.insert(new=v2)
+    //     Some(v1) => diff_node(v1, v2, patcher, scheduler, None)
+    //   }
+    // }
+    (_, _) => ...
+    // fn iter(c : Children) -> Iter[VNode] {
+    //   match c {
+    //     Array(arr) => arr.iter()
+    //     Map(map) => map.values()
+    //   }
+    // }
 
-      for x in iter(old) {
-        patcher.remove(old=x)
-      }
-      for y in iter(new) {
-        patcher.insert(new=y)
-      }
-    }
+    // for x in iter(old) {
+    //   patcher.remove(old=x)
+    // }
+    // for y in iter(new) {
+    //   patcher.insert(new=y)
+    // }
   }
 }
 

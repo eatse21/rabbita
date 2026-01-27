@@ -14,7 +14,7 @@ using @html {type Html}
 /// - `view` is a way to turn your model into HTML.
 /// - `update` a way to update your state based on messages.
 /// 
-/// These three are the core of the TEA. Rabbit-TEA is highly unstable at this time, 
+/// These three are the core of the TEA. rabbita is highly unstable at this time, 
 /// but it follows the same pattern as Elm. You can visit https://guide.elm-lang.org/ 
 /// to get more intuition!
 /// 
@@ -41,16 +41,31 @@ pub fn App::with_route(
   })
   self.sandbox.on_url_changed = url_changed.map(f => url => f(url))
   self.sandbox.on_url_request = url_request.map(f => url => f(url))
+  if self.sandbox.mount != "" {
+    self.trigger_initial_url_changed()
+  }
 }
 
 ///|
 pub fn App::mount(self : Self, element : String) -> Unit {
   self.sandbox.mount = element
+  self.trigger_initial_url_changed()
   @dom.document()
   .get_element_by_id(element)
   .unwrap()
   .set_inner_html("<div></div>")
   self.sandbox.flush()
+}
+
+///|
+fn App::trigger_initial_url_changed(self : Self) -> Unit {
+  match self.sandbox.on_url_changed {
+    None => ()
+    Some(_) => {
+      guard (try? @url.parse(@dom.window().current_url())) is Ok(url)
+      self.sandbox.add_url_changed(url)
+    }
+  }
 }
 
 ///|

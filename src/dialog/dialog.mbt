@@ -24,15 +24,16 @@ pub fn show(id : String, modal? : Bool = true) -> Cmd {
 /// 
 /// The `return_value` argument is the value that will be filled in the `close` message.
 pub fn close(id : String, return_value? : String) -> Cmd {
-  Effect(_ => {
-    let dialog = @dom.document()
-      .get_element_by_id(id)
-      .unwrap()
-      .to_html_element()
-      .unwrap()
-      .to_html_dialog_element()
-      .unwrap()
-    dialog.close(return_value=@js.Optional::from_option(return_value))
+  Effect(_ => match @dom.document().get_element_by_id(id).to_option() {
+    None => ()
+    Some(element) => {
+      let dialog = element
+        .to_html_element()
+        .unwrap()
+        .to_html_dialog_element()
+        .unwrap()
+      dialog.close(return_value=@js.Optional::from_option(return_value))
+    }
   })
 }
 

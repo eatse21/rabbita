@@ -6,7 +6,7 @@ enum Node {
     attrs~ : Array[Attribute],
     children~ : Array[Node],
     // Store the event listener used in real DOM
-    listeners~ : Array[(String, @dom.Listener)],
+    listeners~ : Array[(String, @dom.Listener)]
   )
   ExternalNode(@dom.Node, Ref[Array[Attribute]?], width~ : Int, height~ : Int)
   Text(String)
@@ -40,7 +40,7 @@ pub fn node_ns(
 }
 
 ///|
-const ESCAPED_LINK_TAG = "RABBIT-TEA-ESCAPED-LINK"
+const ESCAPED_LINK_TAG = "rabbita-ESCAPED-LINK"
 
 ///|
 const NORMAL_LINK_TAG = "a"
@@ -240,7 +240,7 @@ fn Node::to_node(self : Node, sandbox : Sandbox) -> @dom.Node {
               .unwrap()
             if not(mouse_event.get_meta_key() || mouse_event.get_ctrl_key()) {
               event.prevent_default()
-              let href = element.get_property("href")
+              guard element.get_property("href").to_option() is Some(href)
               guard (try? @url.parse(@dom.window().current_url())) is Ok(curr)
               guard (try? @url.parse(href)) is Ok(next)
               let request = if curr.protocol == next.protocol &&
@@ -326,7 +326,7 @@ pub fn Node::patch(
         if current.get_child_count() == 0 {
           current.append_child(node.to_node(sandbox))
         } else {
-          current.insert_before(node.to_node(sandbox), current.get_child(index))
+          // current.insert_before(node.to_node(sandbox), current.get_child(index))
         }
       Append(nodes) =>
         for node in nodes {
