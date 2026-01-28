@@ -84,19 +84,15 @@ pub fn Sandbox::flush(self : Self) -> Unit {
       cell.step(self)
     }
   }
+  println("dirty set: \{dirty_set}")
   let root_element = @dom.document().get_element_by_id(self.mount).unwrap() // TODO: handle error
-  let dom_patcher = DomPatcher::new(
-    root_element,
-    self.root.id(),
-    self,
-    self.captured_link_listener,
-  )
+  let root_node = root_element.as_node()
   if self.is_initial {
     self.is_initial = false
     self.root.refersh()
     let new = self.root.node()
-    dom_patcher.set_anchor(None)
-    dom_patcher.insert(new~)
+    let id = self.root.id()
+    new.insert(self, id, root_node, null())
   } else {
     let dirty_ids = dirty_set.to_array()
     while dirty_ids.pop() is Some(id) {
@@ -104,8 +100,7 @@ pub fn Sandbox::flush(self : Self) -> Unit {
         let old = cell.node()
         cell.refersh()
         let new = cell.node()
-        dom_patcher.set_anchor(None)
-        diff_node(old, new, dom_patcher, self)
+        diff_node(old, new, self, root_node, null(), id)
       }
     }
   }
@@ -134,12 +129,17 @@ pub impl Scheduler for Sandbox with add(self, cmd) {
 
 ///|
 pub impl Scheduler for Sandbox with subscribe(self, parent, cell) {
-  cell.id().value = Some(self.next_id)
-  self.subscriptions[cell.id()] = cell
-  self.subscription_tree[parent].add(cell.id())
-  self.subscription_tree[cell.id()] = Set::new()
-  self.queue.push(cell.id())
-  self.next_id += 1
+  let id = cell.id()
+  if id.value is None {
+    id.value = Some(self.next_id)
+    self.next_id += 1
+  }
+  if !self.subscriptions.contains(id) {
+    self.subscriptions[id] = cell
+    self.subscription_tree[parent].add(id)
+    self.subscription_tree[id] = Set::new()
+    self.queue.push(id)
+  }
 }
 
 ///|
