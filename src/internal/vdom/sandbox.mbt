@@ -104,6 +104,7 @@ pub fn Sandbox::flush(self : Self) -> Unit {
       }
     }
   }
+  // self.root.node().validate()
 }
 
 ///|
