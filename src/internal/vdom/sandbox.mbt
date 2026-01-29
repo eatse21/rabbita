@@ -89,18 +89,19 @@ pub fn Sandbox::flush(self : Self) -> Unit {
   let root_node = root_element.as_node()
   if self.is_initial {
     self.is_initial = false
-    self.root.refersh()
-    let new = self.root.node()
-    let id = self.root.id()
-    new.insert(self, id, root_node, null())
+    let root = self.root
+    let vnode = root.view()
+    let id = root.id()
+    let inode = vnode.insert(self, id, root_node, null())
+    root.inode().val = Some(inode)
   } else {
     let dirty_ids = dirty_set.to_array()
     while dirty_ids.pop() is Some(id) {
       if self.subscriptions.get(id) is Some(cell) {
-        let old = cell.node()
-        cell.refersh()
-        let new = cell.node()
-        diff_node(old, new, self, root_node, null(), id)
+        let vnode = cell.view()
+        let inode = cell.inode().val.unwrap()
+        let inode = diff_node(inode, vnode, self, root_node, null(), id)
+        cell.inode().val = Some(inode)
       }
     }
   }

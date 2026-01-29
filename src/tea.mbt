@@ -1,8 +1,8 @@
 ///|
 struct TEA[Model, Msg] {
   mut model : Model
-  mut node : @vdom.VNode
   mut is_dirty : Bool
+  inode : Ref[@vdom.INode?]
   dispatcher : Dispatcher[Msg]
   update : (Dispatcher[Msg], Msg, Model) -> (@cmd.Cmd, Model)
   view : (Dispatcher[Msg], Model) -> @html.Html
@@ -17,6 +17,11 @@ pub fn[Model, Msg] TEA::dispatcher(self : Self[Model, Msg]) -> Dispatcher[Msg] {
 ///|
 pub impl[Model, Msg] @vdom.Cell for TEA[Model, Msg] with dirty_flag(self) {
   self.is_dirty
+}
+
+///|
+pub impl[Model, Msg] @vdom.Cell for TEA[Model, Msg] with inode(self) {
+  self.inode
 }
 
 ///|
@@ -37,15 +42,15 @@ pub impl[Model, Msg] @vdom.Cell for TEA[Model, Msg] with step(self, scheduler) {
 }
 
 ///|
-pub impl[Model, Msg] @vdom.Cell for TEA[Model, Msg] with node(self) {
-  self.node
+pub impl[Model, Msg] @vdom.Cell for TEA[Model, Msg] with view(self) {
+  (self.view)(self.dispatcher, self.model).0
 }
 
-///|
-pub impl[Model, Msg] @vdom.Cell for TEA[Model, Msg] with refersh(self) {
-  self.node = (self.view)(self.dispatcher, self.model).to_virtual_dom()
-  self.is_dirty = false
-}
+// ///|
+// pub impl[Model, Msg] @vdom.Cell for TEA[Model, Msg] with refersh(self) {
+//   self.node = (self.view)(self.dispatcher, self.model).to_virtual_dom()
+//   self.is_dirty = false
+// }
 
 ///|
 struct Dispatcher[Msg] {
@@ -75,7 +80,14 @@ pub fn[Model, Msg] TEA::new(
 ) -> TEA[Model, Msg] {
   let id = @vdom.Id::new()
   let dispatcher = { id, inbox: @queue.new() }
-  let node = @vdom.VNode::fragment([])
-  let self = { view, update, dispatcher, id, model, node, is_dirty: true }
+  let self = {
+    view,
+    update,
+    dispatcher,
+    id,
+    model,
+    is_dirty: true,
+    inode: @ref.new(None),
+  }
   self
 }

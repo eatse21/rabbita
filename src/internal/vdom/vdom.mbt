@@ -1,82 +1,40 @@
 ///|
 pub enum VNode {
-  Elem(
-    String,
-    Props,
-    Children,
-    namespace_uri~ : String?,
-    mut binding~ : Binding
-  )
-  Text(String, mut binding~ : Binding)
-  Frag(Array[VNode], mut binding~ : Binding)
-  Cell(&Cell, mut binding~ : Binding)
+  Elem(String, Props, Children[VNode], namespace_uri~ : String?)
+  Text(String)
+  Frag(Array[VNode])
+  Cell(&Cell)
 }
 
 ///|
-pub enum Binding {
-  Empty
-  Single(@dom.Element)
-  Range(@dom.Comment, @dom.Comment)
+enum INode {
+  Elem(String, Props, Children[INode], namespace_uri~ : String?, @dom.Element)
+  Text(String, @dom.Element)
+  Frag(Array[INode], @dom.Comment, @dom.Comment)
+  Cell(&Cell, INode, @dom.Comment, @dom.Comment)
 }
 
 ///|
-pub fn Binding::start(self : Self) -> @dom.Node {
-  match self {
-    Empty => panic()
-    Single(e) => e.as_node()
-    Range(s, _) => s.as_node()
+fn INode::start(s : Self) -> @dom.Node {
+  match s {
+    Elem(_, _, _, e, ..) | Text(_, e) => e.as_node()
+    Frag(_, s, _) | Cell(_, _, s, _) => s.as_node()
   }
 }
 
 ///|
-pub fn Binding::end(self : Self) -> @dom.Node {
-  match self {
-    Empty => panic()
-    Single(e) => e.as_node()
-    Range(_, e) => e.as_node()
-  }
-}
-
-///|
-fn Binding::to_string(self : Self) -> String {
-  fn node_desc(n : @dom.Node) -> String {
-    let node_type = n.get_node_type()
-    let name = n.get_node_name()
-    let value = n.get_node_value()
-    match node_type {
-      1 => "<\{name}>"
-      3 => "text(\"\{value}\")"
-      8 => "comment(\"\{value}\")"
-      _ => "node(type=\{node_type}, name=\{name}, value=\{value})"
-    }
-  }
-
-  match self {
-    Empty => "binding: Empty"
-    Single(e) => "binding: Single " + node_desc(e.as_node())
-    Range(s, e) =>
-      "binding: Range(" +
-      node_desc(s.as_node()) +
-      "," +
-      node_desc(e.as_node()) +
-      ")"
-  }
-}
-
-///|
-fn VNode::remove(
+fn INode::remove(
   self : Self,
   sandbox : Sandbox,
   cell_id : Id,
   parent : @dom.Node,
 ) -> Unit {
-  if self is Cell(c, ..) {
+  if self is Cell(c, _, _, _) {
     sandbox.unsubscribe(cell_id, c)
   }
-  match self.binding() {
-    Empty => panic()
-    Single(e) => parent.remove_child(e.as_node())
-    Range(s, e) => {
+  match self {
+    Elem(_, _, _, e, ..) | Text(_, e) => parent.remove_child(e.as_node())
+    Frag(_, s, e) | Cell(_, _, s, e) => {
       let s = s.as_node()
       let e = e.as_node()
       // guard s.get_parent_node().to_option() is Some(a) &&
@@ -92,17 +50,20 @@ fn VNode::remove(
 }
 
 ///|
-fn VNode::relocate(
+fn INode::relocate(
   self : Self,
-  sandbox : Sandbox,
-  cell_id : Id,
   parent : @dom.Node,
   before : @js.Nullable[@dom.Node],
 ) -> Unit {
-  match self.binding() {
-    Single(e) => parent.insert_before(e.as_node(), before)
-    Range(s, e) if s.get_parent_node().to_option() is Some(_) &&
-      !e.get_parent_node().is_null() => {
+  match self {
+    Elem(_, _, _, e, ..) | Text(_, e) =>
+      parent.insert_before(e.as_node(), before)
+    Frag(_, s, e) | Cell(_, _, s, e) => {
+      {
+        guard s.get_parent_node().to_option() is Some(a)
+        guard e.get_parent_node().to_option() is Some(b)
+        guard a.is_same_node(b)
+      }
       let s = s.as_node()
       let e = e.as_node()
       let mut anchor = before
@@ -111,16 +72,14 @@ fn VNode::relocate(
         parent.insert_before(n, anchor)
         anchor = nullable(n)
       }
-      let new_start = @dom.document().create_comment("\{rand.int()}")
-      let new_end = @dom.document().create_comment("")
-      parent.insert_before(new_end.as_node(), before)
-      parent.insert_before(new_start.as_node(), anchor)
-      self.bind(Range(new_start, new_end))
+      parent.insert_before(e, before)
+      parent.insert_before(s, anchor)
     }
-    // _ => self.insert(sandbox, cell_id, parent, before)
-    _ => panic()
   }
 }
+
+///|
+let rand : @random.Rand = @random.Rand::new()
 
 ///|
 fn VNode::insert(
@@ -129,60 +88,56 @@ fn VNode::insert(
   cell_id : Id,
   parent : @dom.Node,
   before : @js.Nullable[@dom.Node],
-) -> Unit {
-  if self is Cell(c, ..) {
-    sandbox.subscribe(cell_id, c)
-  }
-  if self is Cell(c, binding=Range(_)) {
-    // always reuse DOM for cell
-    self.relocate(sandbox, cell_id, parent, before)
-  } else {
-    let n = self.mount(sandbox, cell_id)
-    parent.insert_before(n, before)
-  }
-}
-
-///|
-let rand : @random.Rand = @random.Rand::new()
-
-///|
-fn VNode::mount(self : Self, sandbox : Sandbox, cell_id : Id) -> @dom.Node {
+) -> INode {
   match self {
-    Text(s, ..) as v => {
+    Text(s) => {
       let e = @dom.document().create_text_node(s)
-      v.binding = Single(e)
-      e.as_node()
+      parent.insert_before(e.as_node(), before)
+      Text(s, e)
     }
-    Cell(c, ..) as v => {
-      if c.dirty_flag() {
-        c.refersh()
-      }
+    // if c.dirty_flag() {
+    //   c.refersh()
+    // } 
+    Cell(c) => {
+      sandbox.subscribe(cell_id, c)
       let start = @dom.document().create_comment("")
       let end = @dom.document().create_comment("")
-      v.binding = Range(start, end)
       let fragment = @dom.document().create_document_fragment()
-      fragment.append_child(start.as_node())
-      c.node().insert(sandbox, c.id(), fragment.as_node(), null())
-      fragment.append_child(end.as_node())
-      fragment.as_node()
+      fragment.insert_before(start.as_node(), null())
+      let inter = match c.inode().val {
+        None => {
+          let inter = c
+            .view()
+            .insert(sandbox, c.id(), fragment.as_node(), null())
+          c.inode().val = Some(inter)
+          inter
+        }
+        Some(inter) => {
+          inter.relocate(fragment.as_node(), null())
+          inter
+        }
+      }
+      fragment.insert_before(end.as_node(), null())
+      parent.insert_before(fragment.as_node(), before)
+      Cell(c, inter, start, end)
     }
-    Frag(childs, ..) as v => {
+    Frag(childs) => {
       let doc = @dom.document()
       let fragment = doc.create_document_fragment()
       let start = doc.create_comment("start\{rand.int()}")
       let end = doc.create_comment("end")
       fragment.append_child(start.as_node())
-      for child in childs {
-        child.insert(sandbox, cell_id, fragment.as_node(), null())
-      }
+      let childs = childs.map(fn(x) {
+        x.insert(sandbox, cell_id, fragment.as_node(), null())
+      })
       fragment.append_child(end.as_node())
-      v.binding = Range(start, end)
-      fragment.as_node()
+      parent.insert_before(fragment.as_node(), before)
+      Frag(childs, start, end)
     }
-    Elem(tag, props, childs, namespace_uri=_, ..) as v => {
+    Elem(tag, properties, childs, namespace_uri~) => {
       let s = if tag == CAPTURED_LINK_TAG { "a" } else { tag }
       let element = @dom.document().create_element(s)
-      let { slots, handlers, attrs, props, styles } = props
+      let { slots, handlers, attrs, props, styles } = properties
       for e, h in handlers {
         let slot = @ref.new(h)
         element.add_event_listener(e, x => (slot.val)(x, sandbox))
@@ -201,19 +156,19 @@ fn VNode::mount(self : Self, sandbox : Sandbox, cell_id : Id) -> @dom.Node {
       for n, val in styles {
         style_sheet.set_property(n, val)
       }
-      let parent = element.as_node()
-      match childs {
-        Array(xs) =>
-          for x in xs {
-            x.insert(sandbox, cell_id, parent, null())
+      let n = element.as_node()
+      let childs = match childs {
+        Array(xs) => Array(xs.map(x => x.insert(sandbox, cell_id, n, null())))
+        Map(mp) => {
+          let imp = {}
+          for k, v in mp {
+            imp[k] = v.insert(sandbox, cell_id, n, null())
           }
-        Map(mp) =>
-          for _, x in mp {
-            x.insert(sandbox, cell_id, parent, null())
-          }
+          Map(imp)
+        }
       }
-      v.binding = Single(element)
-      parent
+      parent.insert_before(n, before)
+      Elem(tag, properties, childs, namespace_uri~, element)
     }
   }
 }
@@ -225,21 +180,21 @@ const CAPTURED_LINK_TAG : String = "RABBITA_CAPTURED_LINK"
 pub fn VNode::elem(
   tag : String,
   props : Props,
-  children : Children,
+  children : Children[VNode],
   namespace_uri? : String,
 ) -> VNode {
-  Elem(tag, props, children, namespace_uri~, binding=Empty)
+  Elem(tag, props, children, namespace_uri~)
 }
 
 ///|
 pub fn VNode::text(s : String) -> VNode {
-  Text(s, binding=Empty)
+  Text(s)
 }
 
 ///|
 pub fn VNode::link(
   props : Props,
-  children : Children,
+  children : Children[VNode],
   escape? : Bool = false,
 ) -> VNode {
   let tag = if escape { "a" } else { CAPTURED_LINK_TAG }
@@ -248,83 +203,63 @@ pub fn VNode::link(
 
 ///|
 pub fn VNode::cell(cell : &Cell) -> VNode {
-  Cell(cell, binding=Empty)
+  Cell(cell)
 }
 
 ///|
 pub fn VNode::fragment(childs : Array[VNode]) -> VNode {
-  Frag(childs, binding=Empty)
+  Frag(childs)
 }
 
 ///|
-pub(all) enum Children {
-  Array(Array[VNode])
-  Map(Map[String, VNode])
+pub(all) enum Children[T] {
+  Array(Array[T])
+  Map(Map[String, T])
 }
 
-///|
-fn VNode::binding(self : Self) -> Binding {
-  match self {
-    Frag(_, binding~)
-    | Text(_, binding~)
-    | Elem(_, _, _, binding~, ..)
-    | Cell(_, binding~) => binding
-  }
-}
+// ///|
+// pub fn VNode::validate(self : VNode) -> Unit {
+//   fn validate_array(nodes : Array[VNode]) -> Unit {
+//     for node in nodes {
+//       node.validate()
+//     }
+//   }
 
-///|
-fn VNode::bind(self : Self, binding : Binding) -> Unit {
-  match self {
-    Frag(_) as v => v.binding = binding
-    Text(_) as v => v.binding = binding
-    Elem(_) as v => v.binding = binding
-    Cell(_) as v => v.binding = binding
-  }
-}
+//   fn validate_children(children : Children[VNode]) -> Unit {
+//     match children {
+//       Array(nodes) => validate_array(nodes)
+//       Map(map) =>
+//         for _, node in map {
+//           node.validate()
+//         }
+//     }
+//   }
 
-///|
-pub fn VNode::validate(self : VNode) -> Unit {
-  fn validate_array(nodes : Array[VNode]) -> Unit {
-    for node in nodes {
-      node.validate()
-    }
-  }
-
-  fn validate_children(children : Children) -> Unit {
-    match children {
-      Array(nodes) => validate_array(nodes)
-      Map(map) =>
-        for _, node in map {
-          node.validate()
-        }
-    }
-  }
-
-  match self {
-    Frag(cs, ..) => validate_array(cs)
-    Elem(_, _, cs, ..) => validate_children(cs)
-    Cell(c, ..) => c.node().validate()
-    Text(_) => ()
-  }
-  match self.binding() {
-    Single(e) => if e.get_parent_node().is_null() { panic() }
-    Range(s, e) => {
-      guard s.get_parent_node().to_option() is Some(a) else {
-        log_node(nullable(s.as_node()))
-        panic()
-      }
-      guard e.get_parent_node().to_option() is Some(b) else {
-        log_node(nullable(e.as_node()))
-        panic()
-      }
-      guard a.is_same_node(b) else {
-        log_node(nullable(s.as_node()))
-        panic()
-      }
-    }
-    Empty => panic()
-  }
-}
+//   match self {
+//     Frag(cs, ..) => validate_array(cs)
+//     Elem(_, _, cs, ..) => validate_children(cs)
+//     Cell(c, ..) => c.node().validate()
+//     Text(_) => ()
+//   }
+//   match self.binding() {
+//     Single(e) => if e.get_parent_node().is_null() { panic() }
+//     Range(s, e) => {
+//       guard s.get_parent_node().to_option() is Some(a) else {
+//         log_node(nullable(s.as_node()))
+//         panic()
+//       }
+//       guard e.get_parent_node().to_option() is Some(b) else {
+//         log_node(nullable(e.as_node()))
+//         panic()
+//       }
+//       guard a.is_same_node(b) else {
+//         log_node(nullable(s.as_node()))
+//         panic()
+//       }
+//     }
+//     Empty => panic()
+//   }
+// }
 
 ///|
 pub struct Props {
@@ -365,16 +300,16 @@ extern "js" fn log_node(x : @js.Nullable[@dom.Node]) = "(x) => console.log(x)"
 
 ///|
 fn diff_node(
-  old : VNode,
+  old : INode,
   new : VNode,
   sandbox : Sandbox,
   parent : @dom.Node,
   anchor : @js.Nullable[@dom.Node],
   cell_id : Id,
-) -> Unit {
+) -> INode {
   match (old, new) {
     (
-      Elem(tag1, props1, childs1, namespace_uri=ns1, binding=Single(e) as b),
+      Elem(tag1, props1, childs1, namespace_uri=ns1, e),
       Elem(tag2, props2, childs2, namespace_uri=ns2, ..),
     ) =>
       if tag1 != tag2 {
@@ -382,17 +317,24 @@ fn diff_node(
         new.insert(sandbox, cell_id, parent.as_node(), anchor)
       } else {
         diff_props(props1, props2, sandbox, e)
-        diff_children(childs1, childs2, sandbox, e.as_node(), null(), cell_id)
-        new.bind(b)
+        let childs = diff_children(
+          childs1,
+          childs2,
+          sandbox,
+          e.as_node(),
+          null(),
+          cell_id,
+        )
+        Elem(tag2, props2, childs, namespace_uri=ns2, e)
       }
-    (Text(s1, binding=Single(e) as b), Text(s2, ..)) => {
+    (Text(s1, e), Text(s2)) => {
       if s1 != s2 {
         e.set_node_value(@js.Nullable::from_option(Some(s2)))
       }
-      new.bind(b)
+      Text(s2, e)
     }
-    (Frag(childs1, binding=Range(_, e) as b), Frag(childs2, ..)) => {
-      diff_children(
+    (Frag(childs1, s, e), Frag(childs2, ..)) => {
+      let childs = diff_children(
         Array(childs1),
         Array(childs2),
         sandbox,
@@ -400,15 +342,16 @@ fn diff_node(
         nullable(e.as_node()),
         cell_id,
       )
-      new.bind(b)
+      guard childs is Array(childs)
+      Frag(childs, s, e)
     }
-    (Cell(c1, binding=Range(_) as b), Cell(c2, ..)) => {
+    (Cell(c1, inter, s, e), Cell(c2)) =>
       if c1.id() != c2.id() {
         old.remove(sandbox, cell_id, parent.as_node())
         new.insert(sandbox, cell_id, parent.as_node(), anchor)
+      } else {
+        Cell(c2, inter, s, e)
       }
-      new.bind(b)
-    }
     (_, _) => {
       old.remove(sandbox, cell_id, parent.as_node())
       new.insert(sandbox, cell_id, parent.as_node(), anchor)
@@ -487,24 +430,25 @@ fn diff_props(
 
 ///|
 fn diff_children(
-  old : Children,
-  new : Children,
+  old : Children[INode],
+  new : Children[VNode],
   sandbox : Sandbox,
   parent : @dom.Node,
   anchor : @js.Nullable[@dom.Node],
   cell_id : Id,
-) -> Unit {
+) -> Children[INode] {
   match (old, new) {
     (Array(old), Array(new)) => {
-      if old.length() == 3 && new.length() == 3 {
-        println("---------------diff_children(Arr,Arr)")
-        println(old.map(x => x.binding().to_string()))
-        println(new.map(x => x.binding().to_string()))
-        println("-------------------------------------")
-      }
+      // if old.length() == 3 && new.length() == 3 {
+      //   println("---------------diff_children(Arr,Arr)")
+      //   println(old.map(x => x.binding().to_string()))
+      //   println(new.map(x => x.binding().to_string()))
+      //   println("-------------------------------------")
+      // }
       let len1 = old.length()
       let len2 = new.length()
       let mut before = anchor
+      let acc = []
       let len = if len1 > len2 {
         for i in len1>..len2 {
           old[i].remove(sandbox, cell_id, parent)
@@ -512,15 +456,18 @@ fn diff_children(
         len2
       } else {
         for i in len2>..len1 {
-          new[i].insert(sandbox, cell_id, parent, before)
-          before = nullable(new[i].binding().start())
+          let inode = new[i].insert(sandbox, cell_id, parent, before)
+          acc.push(inode)
+          before = nullable(inode.start())
         }
         len1
       }
       for i in len>..0 {
-        diff_node(old[i], new[i], sandbox, parent, before, cell_id)
-        before = nullable(new[i].binding().start())
+        let inode = diff_node(old[i], new[i], sandbox, parent, before, cell_id)
+        acc.push(inode)
+        before = nullable(inode.start())
       }
+      Array(acc.rev())
     }
     (Map(old), Map(new)) => {
       for k, v1 in old {
@@ -530,38 +477,48 @@ fn diff_children(
       }
       let order = new.to_array()
       let mut before = null()
+      let reversed = []
       for i in order.length()>..0 {
         let (k, v2) = order[i]
-        match old.get(k) {
+        let inode = match old.get(k) {
           None => v2.insert(sandbox, cell_id, parent, before)
           Some(v1) => {
-            diff_node(v1, v2, sandbox, parent, before, cell_id)
-            v2.relocate(sandbox, cell_id, parent, before)
+            let inode = diff_node(v1, v2, sandbox, parent, before, cell_id)
+            inode.relocate(parent, before)
+            inode
           }
         }
-        before = nullable(v2.binding().start())
+        reversed.push((k, inode))
+        before = nullable(inode.start())
       }
+      Map(Map::from_array(reversed))
     }
     (_, _) => {
-      fn iter(c : Children) -> Iter[VNode] {
-        match c {
-          Array(arr) => arr.iter()
-          Map(map) => map.values()
-        }
+      match old {
+        Map(xs) => xs.each((_, x) => x.remove(sandbox, cell_id, parent))
+        Array(xs) => xs.each(x => x.remove(sandbox, cell_id, parent))
       }
-
-      for x in iter(old) {
-        x.remove(sandbox, cell_id, parent)
-      }
-      for y in iter(new) {
-        y.insert(sandbox, cell_id, parent, null())
-      }
+      new.map(y => y.insert(sandbox, cell_id, parent, null()))
     }
   }
 }
 
 ///|
-pub fn vlink(props : Props, children : Children, escape~ : Bool) -> VNode {
-  let tag = if escape { ESCAPED_LINK_TAG } else { NORMAL_LINK_TAG }
-  VNode::elem(tag, props, children)
+fn[A, B] Children::map(c : Children[A], f : (A) -> B) -> Children[B] {
+  match c {
+    Array(arr) => Array(arr.map(f))
+    Map(mp) => Map(mp.map((_, v) => f(v)))
+  }
 }
+
+
+///|
+pub fn variant_to_js_value(value : @variant.Variant) -> @js.Value {
+  match value {
+    String(value) => @js.Value::cast_from(value)
+    Floating(value) => @js.Value::cast_from(value)
+    Integer(value) => @js.Value::cast_from(value)
+    Boolean(value) => @js.Value::cast_from(value)
+  }
+}
+

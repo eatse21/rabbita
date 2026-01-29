@@ -73,7 +73,7 @@ pub fn cell(cell : &@vdom.Cell) -> Html {
 
 ///|
 pub trait IsChildren {
-  to_children(Self) -> @vdom.Children
+  to_children(Self) -> @vdom.Children[VNode]
 }
 
 // ///|
@@ -114,7 +114,7 @@ pub impl IsChildren for Array[Html] with to_children(self) {
 // }
 
 ///|
-pub impl IsChildren for @vdom.Children with to_children(children) {
+pub impl IsChildren for @vdom.Children[VNode] with to_children(children) {
   children
 }
 
