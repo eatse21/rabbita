@@ -13,9 +13,8 @@ using @url {type Url, type UrlRequest}
 /// 3. mount(patch)
 ///      apply patches to real DOM
 pub(all) struct Sandbox {
-  subscriptions : Map[Id, &Cell]
-  subscription_tree : Map[Id, Set[Id]]
-  queue : @queue.Queue[Id]
+  live_map : Map[Id, &Cell]
+  msg_queue : Array[Id]
   root : &Cell
   mut captured_link_listener : @dom.Listener
   mut is_initial : Bool
@@ -55,9 +54,8 @@ pub fn Sandbox::new(root : &Cell) -> Sandbox {
   }
   sandbox = Some({
     root,
-    subscriptions: Map::from_array([(root.state().id, root)]),
-    subscription_tree: Map::from_array([(root.state().id, Set::new())]),
-    queue: @queue.new(),
+    live_map: Map::from_array([(root.state().id, root)]),
+    msg_queue: [],
     on_url_changed: None,
     on_url_request: None,
     next_id: 1,
@@ -78,29 +76,28 @@ pub fn Sandbox::new(root : &Cell) -> Sandbox {
 /// 3. Triggering the rendering process once the queue is fully drained
 pub fn Sandbox::flush(self : Self) -> Unit {
   let dirty_set = Set::new()
-  while self.queue.pop() is Some(id) {
-    if self.subscriptions.get(id) is Some(cell) {
+  while self.msg_queue.pop() is Some(id) {
+    if self.live_map.get(id) is Some(cell) {
       dirty_set.add(id)
       cell.step(self)
     }
   }
-  println("dirty set: \{dirty_set}")
+  // println("dirty set: \{dirty_set}")
   let root_element = @dom.document().get_element_by_id(self.mount).unwrap() // TODO: handle error
   let root_node = root_element.as_node()
   if self.is_initial {
     self.is_initial = false
     let root = self.root
     let vnode = root.view()
-    let id = root.state().id
-    let inode = vnode.insert(self, id, root_node, null())
+    let inode = vnode.insert(self, root, root_node, null())
     root.state().inode = Some(inode)
   } else {
     let dirty_ids = dirty_set.to_array()
     while dirty_ids.pop() is Some(id) {
-      if self.subscriptions.get(id) is Some(cell) {
+      if self.live_map.get(id) is Some(cell) {
         let vnode = cell.view()
         let inode = cell.state().inode.unwrap()
-        let inode = diff_node(inode, vnode, self, root_node, null(), id)
+        let inode = diff_node(inode, vnode, self, root_node, null(), cell)
         cell.state().inode = Some(inode)
       }
     }
@@ -116,7 +113,7 @@ pub impl Scheduler for Sandbox with add(self, cmd) {
     Effect(effect) => effect(self)
     Message(id, send_message) => {
       send_message()
-      self.queue.push(id)
+      self.msg_queue.push(id)
     }
   }
   if !self.scheduled {
@@ -136,19 +133,27 @@ pub impl Scheduler for Sandbox with subscribe(self, parent, cell) {
     id.value = Some(self.next_id)
     self.next_id += 1
   }
-  if !self.subscriptions.contains(id) {
-    self.subscriptions[id] = cell
-    self.subscription_tree[parent].add(id)
-    self.subscription_tree[id] = Set::new()
-    self.queue.push(id)
-  }
+  cell.state().live_count += 1
+  self.live_map[id] = cell
+  parent.state().childs.add(id)
+  self.msg_queue.push(id) // sus
 }
 
 ///|
 pub impl Scheduler for Sandbox with unsubscribe(self, parent, cell) {
-  self.subscriptions.remove(cell.state().id)
-  self.subscription_tree[parent].remove(cell.state().id)
-  self.subscription_tree.remove(cell.state().id)
+  let id = cell.state().id
+  parent.state().childs.remove(id)
+  let xs = cell.state().childs.to_array()
+  while xs.pop() is Some(id) {
+    if self.live_map.get(id) is Some(x) {
+      let s = x.state()
+      s.live_count -= 1
+      if s.live_count == 0 {
+        self.live_map.remove(id)
+        xs.push_iter(s.childs.iter())
+      }
+    }
+  }
 }
 
 ///|

@@ -7,7 +7,7 @@ pub enum VNode {
 }
 
 ///|
-enum INode {
+priv enum INode {
   Elem(String, Props, Children[INode], namespace_uri~ : String?, @dom.Element)
   Text(String, @dom.Element)
   Frag(Array[INode], @dom.Comment, @dom.Comment)
@@ -26,11 +26,11 @@ fn INode::start(s : Self) -> @dom.Node {
 fn INode::remove(
   self : Self,
   sandbox : Sandbox,
-  cell_id : Id,
+  cell : &Cell,
   parent : @dom.Node,
 ) -> Unit {
   if self is Cell(c, _, _, _) {
-    sandbox.unsubscribe(cell_id, c)
+    sandbox.unsubscribe(cell, c)
   }
   match self {
     Elem(_, _, _, e, ..) | Text(_, e) => parent.remove_child(e.as_node())
@@ -85,7 +85,7 @@ let rand : @random.Rand = @random.Rand::new()
 fn VNode::insert(
   self : Self,
   sandbox : Sandbox,
-  cell_id : Id,
+  cell : &Cell,
   parent : @dom.Node,
   before : @js.Nullable[@dom.Node],
 ) -> INode {
@@ -99,16 +99,14 @@ fn VNode::insert(
     //   c.refersh()
     // } 
     Cell(c) => {
-      sandbox.subscribe(cell_id, c)
+      sandbox.subscribe(cell, c)
       let start = @dom.document().create_comment("")
       let end = @dom.document().create_comment("")
       let fragment = @dom.document().create_document_fragment()
       fragment.insert_before(start.as_node(), null())
       let inter = match c.state().inode {
         None => {
-          let inter = c
-            .view()
-            .insert(sandbox, c.state().id, fragment.as_node(), null())
+          let inter = c.view().insert(sandbox, c, fragment.as_node(), null())
           c.state().inode = Some(inter)
           inter
         }
@@ -128,7 +126,7 @@ fn VNode::insert(
       let end = doc.create_comment("end")
       fragment.append_child(start.as_node())
       let childs = childs.map(fn(x) {
-        x.insert(sandbox, cell_id, fragment.as_node(), null())
+        x.insert(sandbox, cell, fragment.as_node(), null())
       })
       fragment.append_child(end.as_node())
       parent.insert_before(fragment.as_node(), before)
@@ -136,7 +134,11 @@ fn VNode::insert(
     }
     Elem(tag, properties, childs, namespace_uri~) => {
       let s = if tag == CAPTURED_LINK_TAG { "a" } else { tag }
-      let element = @dom.document().create_element(s)
+      let doc = @dom.document()
+      let element = match namespace_uri {
+        None => doc.create_element(s)
+        Some(ns) => doc.create_element_ns(ns, s)
+      }
       let { slots, handlers, attrs, props, styles } = properties
       for e, h in handlers {
         let slot = @ref.new(h)
@@ -158,11 +160,11 @@ fn VNode::insert(
       }
       let n = element.as_node()
       let childs = match childs {
-        Array(xs) => Array(xs.map(x => x.insert(sandbox, cell_id, n, null())))
+        Array(xs) => Array(xs.map(x => x.insert(sandbox, cell, n, null())))
         Map(mp) => {
           let imp = {}
           for k, v in mp {
-            imp[k] = v.insert(sandbox, cell_id, n, null())
+            imp[k] = v.insert(sandbox, cell, n, null())
           }
           Map(imp)
         }
@@ -305,16 +307,16 @@ fn diff_node(
   sandbox : Sandbox,
   parent : @dom.Node,
   anchor : @js.Nullable[@dom.Node],
-  cell_id : Id,
+  cell : &Cell,
 ) -> INode {
   match (old, new) {
     (
       Elem(tag1, props1, childs1, namespace_uri=ns1, e),
-      Elem(tag2, props2, childs2, namespace_uri=ns2, ..),
+      Elem(tag2, props2, childs2, namespace_uri=ns2),
     ) =>
-      if tag1 != tag2 {
-        old.remove(sandbox, cell_id, parent.as_node())
-        new.insert(sandbox, cell_id, parent.as_node(), anchor)
+      if tag1 != tag2 || ns1 != ns2 {
+        old.remove(sandbox, cell, parent.as_node())
+        new.insert(sandbox, cell, parent.as_node(), anchor)
       } else {
         diff_props(props1, props2, sandbox, e)
         let childs = diff_children(
@@ -323,7 +325,7 @@ fn diff_node(
           sandbox,
           e.as_node(),
           null(),
-          cell_id,
+          cell,
         )
         Elem(tag2, props2, childs, namespace_uri=ns2, e)
       }
@@ -340,21 +342,21 @@ fn diff_node(
         sandbox,
         parent.as_node(),
         nullable(e.as_node()),
-        cell_id,
+        cell,
       )
       guard childs is Array(childs)
       Frag(childs, s, e)
     }
     (Cell(c1, inter, s, e), Cell(c2)) =>
       if c1.state().id != c2.state().id {
-        old.remove(sandbox, cell_id, parent.as_node())
-        new.insert(sandbox, cell_id, parent.as_node(), anchor)
+        old.remove(sandbox, cell, parent.as_node())
+        new.insert(sandbox, cell, parent.as_node(), anchor)
       } else {
         Cell(c2, inter, s, e)
       }
     (_, _) => {
-      old.remove(sandbox, cell_id, parent.as_node())
-      new.insert(sandbox, cell_id, parent.as_node(), anchor)
+      old.remove(sandbox, cell, parent.as_node())
+      new.insert(sandbox, cell, parent.as_node(), anchor)
     }
   }
 }
@@ -435,7 +437,7 @@ fn diff_children(
   sandbox : Sandbox,
   parent : @dom.Node,
   anchor : @js.Nullable[@dom.Node],
-  cell_id : Id,
+  cell : &Cell,
 ) -> Children[INode] {
   match (old, new) {
     (Array(old), Array(new)) => {
@@ -451,19 +453,19 @@ fn diff_children(
       let acc = []
       let len = if len1 > len2 {
         for i in len1>..len2 {
-          old[i].remove(sandbox, cell_id, parent)
+          old[i].remove(sandbox, cell, parent)
         }
         len2
       } else {
         for i in len2>..len1 {
-          let inode = new[i].insert(sandbox, cell_id, parent, before)
+          let inode = new[i].insert(sandbox, cell, parent, before)
           acc.push(inode)
           before = nullable(inode.start())
         }
         len1
       }
       for i in len>..0 {
-        let inode = diff_node(old[i], new[i], sandbox, parent, before, cell_id)
+        let inode = diff_node(old[i], new[i], sandbox, parent, before, cell)
         acc.push(inode)
         before = nullable(inode.start())
       }
@@ -472,7 +474,7 @@ fn diff_children(
     (Map(old), Map(new)) => {
       for k, v1 in old {
         if !new.contains(k) {
-          v1.remove(sandbox, cell_id, parent)
+          v1.remove(sandbox, cell, parent)
         }
       }
       let order = new.to_array()
@@ -481,9 +483,9 @@ fn diff_children(
       for i in order.length()>..0 {
         let (k, v2) = order[i]
         let inode = match old.get(k) {
-          None => v2.insert(sandbox, cell_id, parent, before)
+          None => v2.insert(sandbox, cell, parent, before)
           Some(v1) => {
-            let inode = diff_node(v1, v2, sandbox, parent, before, cell_id)
+            let inode = diff_node(v1, v2, sandbox, parent, before, cell)
             inode.relocate(parent, before)
             inode
           }
@@ -495,10 +497,10 @@ fn diff_children(
     }
     (_, _) => {
       match old {
-        Map(xs) => xs.each((_, x) => x.remove(sandbox, cell_id, parent))
-        Array(xs) => xs.each(x => x.remove(sandbox, cell_id, parent))
+        Map(xs) => xs.each((_, x) => x.remove(sandbox, cell, parent))
+        Array(xs) => xs.each(x => x.remove(sandbox, cell, parent))
       }
-      new.map(y => y.insert(sandbox, cell_id, parent, null()))
+      new.map(y => y.insert(sandbox, cell, parent, null()))
     }
   }
 }

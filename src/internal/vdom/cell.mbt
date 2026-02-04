@@ -10,6 +10,7 @@ struct State {
   mut inode : INode?
   mut childs : Set[Id]
   mut dirty : Bool
+  mut live_count : Int
   id : Id
 }
 
@@ -25,5 +26,5 @@ pub fn State::mark_dirty(s : Self) -> Unit {
 
 ///|
 pub fn State::new() -> State {
-  { inode: None, childs: Set::new(), dirty: true, id: Id::new() }
+  { inode: None, childs: Set::new(), dirty: true, id: Id::new(), live_count: 0 }
 }
