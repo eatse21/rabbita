@@ -12,7 +12,9 @@ pub impl @js.Cast for DocumentFragment with from(value) {
   value |> js_identity
 }
 
+///|
 pub impl IsEventTarget for DocumentFragment
+
 ///|
 pub impl IsNode for DocumentFragment
 

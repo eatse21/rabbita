@@ -86,7 +86,7 @@ impl IsNode with get_previous_sibling(s) {
 
 ///|
 impl IsNode with get_parent_node(s) {
-  s |> js_identity |> ffi_parent_node 
+  s |> js_identity |> ffi_parent_node
 }
 
 ///|
@@ -160,7 +160,11 @@ extern "js" fn ffi_remove_child(x : @js.Value, child : Node) = "(p,c) => p.remov
 extern "js" fn ffi_replace_child(x : @js.Value, new : Node, old : Node) = "(p,n,o) => p.replaceChild(n,o)"
 
 ///|
-extern "js" fn insert_before(x : @js.Value, value : Node, before : @js.Nullable[Node]) = "(p,value,before) => p.insertBefore(value,before)"
+extern "js" fn insert_before(
+  x : @js.Value,
+  value : Node,
+  before : @js.Nullable[Node],
+) = "(p,value,before) => p.insertBefore(value,before)"
 
 // ---------- some specific node API --------------
 // Note: the childNodes property is a NodeList, not an array, so we can't use the Array type.
@@ -180,5 +184,4 @@ extern "js" fn ffi_count_child(x : @js.Value) -> Int = "(x) => x.childNodes.leng
 extern "js" fn ffi_set_node_value(x : @js.Value, v : @js.Nullable[String]) = "(x,v) => x.nodeValue = v"
 
 ///|
-extern "js" fn ffi_is_same_node(x : @js.Value, other : Node) -> Bool =
-  "(x, other) => x === other"
+extern "js" fn ffi_is_same_node(x : @js.Value, other : Node) -> Bool = "(x, other) => x === other"

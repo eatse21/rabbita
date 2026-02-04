@@ -104,12 +104,12 @@ fn VNode::insert(
       let end = @dom.document().create_comment("")
       let fragment = @dom.document().create_document_fragment()
       fragment.insert_before(start.as_node(), null())
-      let inter = match c.inode().val {
+      let inter = match c.state().inode {
         None => {
           let inter = c
             .view()
-            .insert(sandbox, c.id(), fragment.as_node(), null())
-          c.inode().val = Some(inter)
+            .insert(sandbox, c.state().id, fragment.as_node(), null())
+          c.state().inode = Some(inter)
           inter
         }
         Some(inter) => {
@@ -346,7 +346,7 @@ fn diff_node(
       Frag(childs, s, e)
     }
     (Cell(c1, inter, s, e), Cell(c2)) =>
-      if c1.id() != c2.id() {
+      if c1.state().id != c2.state().id {
         old.remove(sandbox, cell_id, parent.as_node())
         new.insert(sandbox, cell_id, parent.as_node(), anchor)
       } else {
@@ -511,7 +511,6 @@ fn[A, B] Children::map(c : Children[A], f : (A) -> B) -> Children[B] {
   }
 }
 
-
 ///|
 pub fn variant_to_js_value(value : @variant.Variant) -> @js.Value {
   match value {
@@ -521,4 +520,3 @@ pub fn variant_to_js_value(value : @variant.Variant) -> @js.Value {
     Boolean(value) => @js.Value::cast_from(value)
   }
 }
-

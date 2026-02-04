@@ -1,8 +1,29 @@
 ///|
 pub(open) trait Cell {
-  id(Self) -> Id
   step(Self, &Scheduler) -> Unit
-  dirty_flag(Self) -> Bool
   view(Self) -> VNode
-  inode(Self) -> Ref[INode?]
+  state(Self) -> State
+}
+
+///|
+struct State {
+  mut inode : INode?
+  mut childs : Set[Id]
+  mut dirty : Bool
+  id : Id
+}
+
+///|
+pub fn State::id(s : Self) -> Id {
+  s.id
+}
+
+///|
+pub fn State::mark_dirty(s : Self) -> Unit {
+  s.dirty = true
+}
+
+///|
+pub fn State::new() -> State {
+  { inode: None, childs: Set::new(), dirty: true, id: Id::new() }
 }

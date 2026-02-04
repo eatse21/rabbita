@@ -28,7 +28,7 @@ pub(all) struct Sandbox {
 
 ///|
 pub fn Sandbox::new(root : &Cell) -> Sandbox {
-  root.id().value = Some(0)
+  root.state().id.value = Some(0)
   let mut sandbox : Sandbox? = None
   let captured_link_listener = fn(event : @dom.Event) {
     let mouse_event = event.to_mouse_event().unwrap()
@@ -55,8 +55,8 @@ pub fn Sandbox::new(root : &Cell) -> Sandbox {
   }
   sandbox = Some({
     root,
-    subscriptions: Map::from_array([(root.id(), root)]),
-    subscription_tree: Map::from_array([(root.id(), Set::new())]),
+    subscriptions: Map::from_array([(root.state().id, root)]),
+    subscription_tree: Map::from_array([(root.state().id, Set::new())]),
     queue: @queue.new(),
     on_url_changed: None,
     on_url_request: None,
@@ -91,17 +91,17 @@ pub fn Sandbox::flush(self : Self) -> Unit {
     self.is_initial = false
     let root = self.root
     let vnode = root.view()
-    let id = root.id()
+    let id = root.state().id
     let inode = vnode.insert(self, id, root_node, null())
-    root.inode().val = Some(inode)
+    root.state().inode = Some(inode)
   } else {
     let dirty_ids = dirty_set.to_array()
     while dirty_ids.pop() is Some(id) {
       if self.subscriptions.get(id) is Some(cell) {
         let vnode = cell.view()
-        let inode = cell.inode().val.unwrap()
+        let inode = cell.state().inode.unwrap()
         let inode = diff_node(inode, vnode, self, root_node, null(), id)
-        cell.inode().val = Some(inode)
+        cell.state().inode = Some(inode)
       }
     }
   }
@@ -131,7 +131,7 @@ pub impl Scheduler for Sandbox with add(self, cmd) {
 
 ///|
 pub impl Scheduler for Sandbox with subscribe(self, parent, cell) {
-  let id = cell.id()
+  let id = cell.state().id
   if id.value is None {
     id.value = Some(self.next_id)
     self.next_id += 1
@@ -146,9 +146,9 @@ pub impl Scheduler for Sandbox with subscribe(self, parent, cell) {
 
 ///|
 pub impl Scheduler for Sandbox with unsubscribe(self, parent, cell) {
-  self.subscriptions.remove(cell.id())
-  self.subscription_tree[parent].remove(cell.id())
-  self.subscription_tree.remove(cell.id())
+  self.subscriptions.remove(cell.state().id)
+  self.subscription_tree[parent].remove(cell.state().id)
+  self.subscription_tree.remove(cell.state().id)
 }
 
 ///|

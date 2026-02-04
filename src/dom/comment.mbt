@@ -12,7 +12,9 @@ pub impl @js.Cast for Comment with from(value) {
   value |> js_identity
 }
 
+///|
 pub impl IsEventTarget for Comment
+
 ///|
 pub impl IsNode for Comment
 

@@ -1,12 +1,10 @@
 ///|
 struct TEA[Model, Msg] {
   mut model : Model
-  mut is_dirty : Bool
-  inode : Ref[@vdom.INode?]
   dispatcher : Dispatcher[Msg]
   update : (Dispatcher[Msg], Msg, Model) -> (@cmd.Cmd, Model)
   view : (Dispatcher[Msg], Model) -> @html.Html
-  id : @vdom.Id
+  state : @vdom.State
 }
 
 ///|
@@ -15,18 +13,8 @@ pub fn[Model, Msg] TEA::dispatcher(self : Self[Model, Msg]) -> Dispatcher[Msg] {
 }
 
 ///|
-pub impl[Model, Msg] @vdom.Cell for TEA[Model, Msg] with dirty_flag(self) {
-  self.is_dirty
-}
-
-///|
-pub impl[Model, Msg] @vdom.Cell for TEA[Model, Msg] with inode(self) {
-  self.inode
-}
-
-///|
-pub impl[Model, Msg] @vdom.Cell for TEA[Model, Msg] with id(self) {
-  self.id
+pub impl[Model, Msg] @vdom.Cell for TEA[Model, Msg] with state(self) {
+  self.state
 }
 
 ///|
@@ -35,7 +23,7 @@ pub impl[Model, Msg] @vdom.Cell for TEA[Model, Msg] with step(self, scheduler) {
     let (cmd, model) = (self.update)(self.dispatcher, msg, self.model)
     self.model = model
     scheduler.add(cmd)
-    self.is_dirty = true
+    self.state.mark_dirty()
   } else {
     // violate the invariant
   }
@@ -78,16 +66,8 @@ pub fn[Model, Msg] TEA::new(
   update~ : (Dispatcher[Msg], Msg, Model) -> (Cmd, Model),
   view~ : (Dispatcher[Msg], Model) -> Html,
 ) -> TEA[Model, Msg] {
-  let id = @vdom.Id::new()
-  let dispatcher = { id, inbox: @queue.new() }
-  let self = {
-    view,
-    update,
-    dispatcher,
-    id,
-    model,
-    is_dirty: true,
-    inode: @ref.new(None),
-  }
+  let state = @vdom.State::new()
+  let dispatcher = { id: state.id(), inbox: @queue.new() }
+  let self = { view, update, dispatcher, model, state }
   self
 }

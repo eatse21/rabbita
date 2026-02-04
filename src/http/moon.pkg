@@ -1,1 +1,4 @@
-import { "Yoorkin/rabbit-tea/cmd", "Yoorkin/rabbit-tea/internal/vdom" }
+import {
+  "Yoorkin/rabbit-tea/cmd",
+  "Yoorkin/rabbit-tea/internal/vdom",
+}
