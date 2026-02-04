@@ -1,4 +1,5 @@
 import {
   "Yoorkin/rabbit-tea/cmd",
   "Yoorkin/rabbit-tea/internal/vdom",
+  "moonbitlang/core/json",
 }

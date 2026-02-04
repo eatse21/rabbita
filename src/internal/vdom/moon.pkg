@@ -2,5 +2,8 @@ import {
   "Yoorkin/rabbit-tea/dom",
   "Yoorkin/rabbit-tea/url",
   "Yoorkin/rabbit-tea/variant",
+  "moonbitlang/core/queue",
+  "moonbitlang/core/random",
+  "moonbitlang/core/ref",
   "moonbit-community/js-ffi/js",
 }

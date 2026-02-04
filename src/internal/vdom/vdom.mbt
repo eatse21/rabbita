@@ -79,9 +79,6 @@ fn INode::relocate(
 }
 
 ///|
-let rand : @random.Rand = @random.Rand::new()
-
-///|
 fn VNode::insert(
   self : Self,
   sandbox : Sandbox,
@@ -122,7 +119,7 @@ fn VNode::insert(
     Frag(childs) => {
       let doc = @dom.document()
       let fragment = doc.create_document_fragment()
-      let start = doc.create_comment("start\{rand.int()}")
+      let start = doc.create_comment("start")
       let end = doc.create_comment("end")
       fragment.append_child(start.as_node())
       let childs = childs.map(fn(x) {
@@ -297,8 +294,7 @@ fn[T] null() -> @js.Nullable[T] {
   @js.Nullable::null()
 }
 
-///|
-extern "js" fn log_node(x : @js.Nullable[@dom.Node]) = "(x) => console.log(x)"
+// extern "js" fn log_node(x : @js.Nullable[@dom.Node]) = "(x) => console.log(x)"
 
 ///|
 fn diff_node(
@@ -335,7 +331,7 @@ fn diff_node(
       }
       Text(s2, e)
     }
-    (Frag(childs1, s, e), Frag(childs2, ..)) => {
+    (Frag(childs1, s, e), Frag(childs2)) => {
       let childs = diff_children(
         Array(childs1),
         Array(childs2),
