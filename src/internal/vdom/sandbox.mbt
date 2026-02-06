@@ -106,15 +106,11 @@ pub fn Sandbox::flush(self : Self) -> Unit {
     self.paint_scheduled = true
     @dom.window().request_animation_frame(fn(_) {
       // println("dirty set: \{dirty_set}")
+      self.live_map.clear()
       let cells = Queue::from_array([self.root])
       while cells.pop() is Some(cell) {
         let state = cell.state()
-        for _, link in state.old_childs {
-          match link.link {
-            None => continue
-            Some(c) => cells.push(c)
-          }
-        }
+        self.live_map[state.id] = cell
         if state.dirty {
           let vnode = cell.view()
           // The parent cell helps child cells initialize their inodes during vdom diff,
@@ -134,14 +130,6 @@ pub fn Sandbox::flush(self : Self) -> Unit {
           state.old_childs = state.new_childs
           state.new_childs = Map::new()
         }
-      }
-
-      // reconstruct live_map
-      self.live_map.clear()
-      cells.push(self.root)
-      while cells.pop() is Some(cell) {
-        let state = cell.state()
-        self.live_map[state.id] = cell
         for _, link in state.old_childs {
           if link.link is Some(c) {
             cells.push(c)
