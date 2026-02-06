@@ -11,11 +11,11 @@ priv enum INode {
   Elem(String, Props, Children[INode], namespace_uri~ : String?, @dom.Element)
   Text(String, @dom.Element)
   Frag(Array[INode], @dom.Comment, @dom.Comment)
-  Cell(&Cell, INode, @dom.Comment, @dom.Comment)
+  Cell(&Cell, INode, Link, @dom.Comment, @dom.Comment)
 }
 
 ///|
-fn INode::scan_childs(s : Self) -> Array[&Cell] {
+fn INode::scan_direct_childs(s : Self) -> Array[Link] {
   let tmp = [s]
   let result = []
   while tmp.pop() is Some(inode) {
@@ -27,7 +27,7 @@ fn INode::scan_childs(s : Self) -> Array[&Cell] {
           Array(arr) => tmp.push_iter(arr.iter())
         }
       Frag(xs, _, _) => tmp.push_iter(xs.iter())
-      Cell(c, _, _, _) => result.push(c)
+      Cell(_, _, link, _, _) => result.push(link)
     }
   }
   return result
@@ -37,7 +37,15 @@ fn INode::scan_childs(s : Self) -> Array[&Cell] {
 fn INode::start(s : Self) -> @dom.Node {
   match s {
     Elem(_, _, _, e, ..) | Text(_, e) => e.as_node()
-    Frag(_, s, _) | Cell(_, _, s, _) => s.as_node()
+    Frag(_, s, _) | Cell(_, _, _, s, _) => s.as_node()
+  }
+}
+
+///|
+fn INode::end(s : Self) -> @dom.Node {
+  match s {
+    Elem(_, _, _, e, ..) | Text(_, e) => e.as_node()
+    Frag(_, _, e) | Cell(_, _, _, _, e) => e.as_node()
   }
 }
 
@@ -48,12 +56,12 @@ fn INode::remove(
   cell : &Cell,
   parent : @dom.Node,
 ) -> Unit {
-  // if self is Cell(c, _, _, _) {
-  //   sandbox.unsubscribe(cell, c)
-  // }
+  for link in self.scan_direct_childs() {
+    link.detach()
+  }
   match self {
     Elem(_, _, _, e, ..) | Text(_, e) => parent.remove_child(e.as_node())
-    Frag(_, s, e) | Cell(_, _, s, e) => {
+    Frag(_, s, e) | Cell(_, _, _, s, e) => {
       let s = s.as_node()
       let e = e.as_node()
       // guard s.get_parent_node().to_option() is Some(a) &&
@@ -77,7 +85,7 @@ fn INode::relocate(
   match self {
     Elem(_, _, _, e, ..) | Text(_, e) =>
       parent.insert_before(e.as_node(), before)
-    Frag(_, s, e) | Cell(_, _, s, e) => {
+    Frag(_, s, e) | Cell(_, _, _, s, e) => {
       {
         guard s.get_parent_node().to_option() is Some(a)
         guard e.get_parent_node().to_option() is Some(b)
@@ -121,6 +129,8 @@ fn VNode::insert(
         state.id.value = Some(sandbox.next_id)
         sandbox.next_id += 1
       }
+      let link = Link::new(c)
+      cell.state().new_childs[state.id] = link
       let start = @dom.document().create_comment("")
       let end = @dom.document().create_comment("")
       let fragment = @dom.document().create_document_fragment()
@@ -138,7 +148,7 @@ fn VNode::insert(
       }
       fragment.insert_before(end.as_node(), null())
       parent.insert_before(fragment.as_node(), before)
-      Cell(c, inter, start, end)
+      Cell(c, inter, link, start, end)
     }
     Frag(childs) => {
       let doc = @dom.document()
@@ -367,12 +377,12 @@ fn diff_node(
       guard childs is Array(childs)
       Frag(childs, s, e)
     }
-    (Cell(c1, inter, s, e), Cell(c2)) =>
+    (Cell(c1, inter, link, s, e), Cell(c2)) =>
       if c1.state().id != c2.state().id {
         old.remove(sandbox, cell, parent.as_node())
         new.insert(sandbox, cell, parent.as_node(), anchor)
       } else {
-        Cell(c2, inter, s, e)
+        Cell(c2, inter, link, s, e)
       }
     (_, _) => {
       old.remove(sandbox, cell, parent.as_node())

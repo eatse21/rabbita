@@ -77,8 +77,8 @@ pub fn Sandbox::new(root : &Cell) -> Sandbox {
 pub fn Sandbox::drain(self : Self) -> Unit {
   if !self.drain_scheduled {
     self.drain_scheduled = true
-    while self.msg_queue.pop() is Some(msg) {
-      if self.live_map.get(msg) is Some(cell) {
+    while self.msg_queue.pop() is Some(id) {
+      if self.live_map.get(id) is Some(cell) {
         cell.step(self)
         self.dirty_set.add(cell.state().id)
       }
@@ -96,38 +96,7 @@ pub fn Sandbox::initialize(self : Self) -> Unit {
   let vnode = root.view()
   let inode = vnode.insert(self, root, element.as_node(), null())
   root.state().inode = Some(inode)
-  let cells = [self.root]
-  while cells.pop() is Some(cell) {
-    let state = cell.state()
-    self.update_cell_tree(state)
-    for _, link in state.childs {
-      if link.link is Some(child) {
-        cells.push(child)
-      }
-    }
-  }
   println(self.live_map.keys())
-}
-
-///|
-fn Sandbox::update_cell_tree(_self : Self, parent : State) -> Unit {
-  // Update cell tree and live map: invalidate old link and update childs map
-  for _, old_child in parent.childs {
-    if old_child.link is None {
-      continue
-    }
-    old_child.detach()
-  }
-  parent.childs.clear()
-  for new_child in parent.inode.unwrap().scan_childs() {
-    let new_child_state = new_child.state()
-    // invalidate old link
-    new_child.state().parent_link.detach()
-    // add new link
-    let link = Link::new(new_child)
-    new_child_state.parent_link = link
-    parent.childs[new_child_state.id] = link
-  }
 }
 
 ///|
@@ -138,35 +107,48 @@ pub fn Sandbox::flush(self : Self) -> Unit {
     @dom.window().request_animation_frame(fn(_) {
       // println("dirty set: \{dirty_set}")
       let cells = Queue::from_array([self.root])
-      let new_live_map = {}
       while cells.pop() is Some(cell) {
         let state = cell.state()
-        new_live_map[state.id] = cell
-        if state.dirty {
-          let vnode = cell.view()
-          // The parent cell helps child cells initialize their inodes during vdom diff,
-          // so initially child cells are not in the dirty set
-          guard state.inode is Some(inode)
-          let (parent, before) = match inode {
-            Frag(_, _, e) | Cell(_, _, _, e) =>
-              (e.get_parent_node().unwrap(), e.get_next_sibling())
-            Text(_, e) | Elem(_, _, _, e, ..) =>
-              (e.get_parent_node().unwrap(), e.get_next_sibling())
-          }
-          let inode = diff_node(inode, vnode, self, parent, before, cell)
-          state.inode = Some(inode)
-          self.update_cell_tree(state)
-          state.dirty = false
-        }
-        for _, link in state.childs {
+        for _, link in state.old_childs {
           match link.link {
             None => continue
             Some(c) => cells.push(c)
           }
         }
+        if state.dirty {
+          let vnode = cell.view()
+          // The parent cell helps child cells initialize their inodes during vdom diff,
+          // so initially child cells are not in the dirty set
+          guard state.inode is Some(inode)
+          let end = inode.end()
+          let parent = end.get_parent_node().unwrap()
+          let next_sibling = end.get_next_sibling()
+          let inode = diff_node(inode, vnode, self, parent, next_sibling, cell)
+          state.inode = Some(inode)
+          state.dirty = false
+          for id, link in state.old_childs {
+            if link.link is Some(_) {
+              state.new_childs[id] = link
+            }
+          }
+          state.old_childs = state.new_childs
+          state.new_childs = Map::new()
+        }
+      }
+
+      // reconstruct live_map
+      self.live_map.clear()
+      cells.push(self.root)
+      while cells.pop() is Some(cell) {
+        let state = cell.state()
+        self.live_map[state.id] = cell
+        for _, link in state.old_childs {
+          if link.link is Some(c) {
+            cells.push(c)
+          }
+        }
       }
       // self.root.node().validate()
-      self.live_map = new_live_map
       self.paint_scheduled = false
     })
     |> ignore
@@ -187,29 +169,6 @@ pub impl Scheduler for Sandbox with add(self, cmd) {
   }
   self.drain()
 }
-
-// ///|
-// pub impl Scheduler for Sandbox with subscribe(self, parent, cell) {
-//   let state = cell.state()
-//   if state.id.value is None {
-//     state.id.value = Some(self.next_id)
-//     self.next_id += 1
-//   }
-//   state.live_count += 1
-//   state.parent = Some(parent.state().id)
-//   parent.state().childs.set(state.id, cell)
-// }
-
-// ///|
-// pub impl Scheduler for Sandbox with unsubscribe(self, _parent, cell) {
-//   let state = cell.state()
-//   state.live_count -= 1
-//   if state.live_count < 1 &&
-//     state.parent is Some(pid) &&
-//     self.live_map.get(pid) is Some(parent) {
-//     parent.state().childs.remove(state.id)
-//   }
-// }
 
 ///|
 pub impl Scheduler for Sandbox with add_url_changed(self, url) {
