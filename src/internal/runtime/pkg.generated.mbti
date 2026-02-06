@@ -5,9 +5,6 @@ import {
   "Yoorkin/rabbit-tea/dom",
   "Yoorkin/rabbit-tea/url",
   "Yoorkin/rabbit-tea/variant",
-  "moonbit-community/js-ffi/js",
-  "moonbitlang/core/queue",
-  "moonbitlang/core/set",
 }
 
 // Values
@@ -18,8 +15,6 @@ pub fn batch(Array[Cmd]) -> Cmd
 pub let none : Cmd
 
 pub fn[A] perform((A) -> Cmd, async () -> A noraise) -> Cmd
-
-pub fn variant_to_js_value(@variant.Variant) -> @js.Value
 
 // Errors
 
@@ -54,17 +49,10 @@ pub fn Props::empty() -> Self
 pub fn Props::new(Map[String, String], Map[String, @variant.Variant], Map[String, String], Map[String, (@dom.Event, &Scheduler) -> Unit]) -> Self
 
 pub(all) struct Sandbox {
-  mut live_map : Map[Id, &Cell]
-  msg_queue : @queue.Queue[Id]
-  mut drain_scheduled : Bool
-  dirty_set : @set.Set[Id]
-  mut paint_scheduled : Bool
-  root : &Cell
-  mut captured_link_listener : (@dom.Event) -> Unit
-  mut next_id : Int
   mut mount : String
   mut on_url_changed : ((@url.Url) -> Cmd)?
   mut on_url_request : ((@url.UrlRequest) -> Cmd)?
+  // private fields
 }
 pub fn Sandbox::drain(Self) -> Unit
 pub fn Sandbox::flush(Self) -> Unit

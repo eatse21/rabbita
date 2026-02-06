@@ -500,7 +500,7 @@ fn[A, B] Children::map(c : Children[A], f : (A) -> B) -> Children[B] {
 }
 
 ///|
-pub fn variant_to_js_value(value : @variant.Variant) -> @js.Value {
+fn variant_to_js_value(value : @variant.Variant) -> @js.Value {
   match value {
     String(value) => @js.Value::cast_from(value)
     Floating(value) => @js.Value::cast_from(value)

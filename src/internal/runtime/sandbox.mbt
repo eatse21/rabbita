@@ -13,14 +13,14 @@ using @queue {type Queue}
 /// 3. mount(patch)
 ///      apply patches to real DOM
 pub(all) struct Sandbox {
-  mut live_map : Map[Id, &Cell]
-  msg_queue : Queue[Id]
-  mut drain_scheduled : Bool
-  dirty_set : Set[Id]
-  mut paint_scheduled : Bool
-  root : &Cell
-  mut captured_link_listener : @dom.Listener
-  mut next_id : Int
+  priv live_map : Map[Id, &Cell]
+  priv msg_queue : Queue[Id]
+  priv mut drain_scheduled : Bool
+  priv dirty_set : Set[Id]
+  priv mut paint_scheduled : Bool
+  priv root : &Cell
+  priv captured_link_listener : @dom.Listener
+  priv mut next_id : Int
   mut mount : String
   mut on_url_changed : ((Url) -> Cmd)?
   mut on_url_request : ((UrlRequest) -> Cmd)?

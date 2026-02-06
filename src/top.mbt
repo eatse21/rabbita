@@ -16,7 +16,7 @@ pub using @html {type Html}
 /// to get more intuition!
 /// 
 /// To start the application with router, you can use the `application` function.
-pub fn new(root : &@runtime.Cell) -> App {
+pub fn new(root : &Cell) -> App {
   let sandbox = @runtime.Sandbox::new(root)
   App::{ sandbox, }
 }
