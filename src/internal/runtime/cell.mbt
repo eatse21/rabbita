@@ -16,7 +16,7 @@ struct State {
 }
 
 ///|
-struct Link {
+priv struct Link {
   mut val : &Cell?
 }
 
@@ -31,9 +31,6 @@ fn Link::new(c : &Cell) -> Link {
 }
 
 ///|
-fn Link::empty() -> Link {
-  { val: None }
-}
 
 ///|
 pub fn State::id(s : Self) -> Id {

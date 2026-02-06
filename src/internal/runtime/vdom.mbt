@@ -50,12 +50,7 @@ fn INode::end(s : Self) -> @dom.Node {
 }
 
 ///|
-fn INode::remove(
-  self : Self,
-  sandbox : Sandbox,
-  cell : &Cell,
-  parent : @dom.Node,
-) -> Unit {
+fn INode::remove(self : Self, sandbox : Sandbox, parent : @dom.Node) -> Unit {
   for link in self.scan_direct_childs() {
     if link.val is Some(c) {
       sandbox.drop_live_subtree(c)
@@ -306,7 +301,7 @@ fn diff_node(
       Elem(tag2, props2, childs2, namespace_uri=ns2),
     ) =>
       if tag1 != tag2 || ns1 != ns2 {
-        old.remove(sandbox, cell, parent.as_node())
+        old.remove(sandbox, parent.as_node())
         new.insert(sandbox, cell, parent.as_node(), anchor)
       } else {
         diff_props(props1, props2, sandbox, e)
@@ -340,13 +335,13 @@ fn diff_node(
     }
     (Cell(c1, inter, link, s, e), Cell(c2)) =>
       if c1.state().id != c2.state().id {
-        old.remove(sandbox, cell, parent.as_node())
+        old.remove(sandbox, parent.as_node())
         new.insert(sandbox, cell, parent.as_node(), anchor)
       } else {
         Cell(c2, inter, link, s, e)
       }
     (_, _) => {
-      old.remove(sandbox, cell, parent.as_node())
+      old.remove(sandbox, parent.as_node())
       new.insert(sandbox, cell, parent.as_node(), anchor)
     }
   }
@@ -444,7 +439,7 @@ fn diff_children(
       let acc = []
       let len = if len1 > len2 {
         for i in len1>..len2 {
-          old[i].remove(sandbox, cell, parent)
+          old[i].remove(sandbox, parent)
         }
         len2
       } else {
@@ -465,7 +460,7 @@ fn diff_children(
     (Map(old), Map(new)) => {
       for k, v1 in old {
         if !new.contains(k) {
-          v1.remove(sandbox, cell, parent)
+          v1.remove(sandbox, parent)
         }
       }
       let order = new.to_array()
@@ -488,8 +483,8 @@ fn diff_children(
     }
     (_, _) => {
       match old {
-        Map(xs) => xs.each((_, x) => x.remove(sandbox, cell, parent))
-        Array(xs) => xs.each(x => x.remove(sandbox, cell, parent))
+        Map(xs) => xs.each((_, x) => x.remove(sandbox, parent))
+        Array(xs) => xs.each(x => x.remove(sandbox, parent))
       }
       new.map(y => y.insert(sandbox, cell, parent, null()))
     }

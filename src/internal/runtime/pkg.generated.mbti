@@ -35,8 +35,6 @@ pub impl Eq for Id
 pub impl Hash for Id
 pub impl Show for Id
 
-type Link
-
 pub struct Props {
   mut slots : Map[String, Ref[(@dom.Event, &Scheduler) -> Unit]]
   handlers : Map[String, (@dom.Event, &Scheduler) -> Unit]
