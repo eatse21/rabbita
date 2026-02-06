@@ -1,5 +1,5 @@
 import {
   "Yoorkin/rabbit-tea/url",
   "moonbit-community/js-ffi/js",
-  "Yoorkin/rabbit-tea/internal/vdom",
+  "Yoorkin/rabbit-tea/internal/runtime",
 }

@@ -3,41 +3,41 @@ package "Yoorkin/rabbit-tea"
 
 import {
   "Yoorkin/rabbit-tea/html",
-  "Yoorkin/rabbit-tea/internal/vdom",
+  "Yoorkin/rabbit-tea/internal/runtime",
   "Yoorkin/rabbit-tea/url",
 }
 
 // Values
-pub fn[A, E : Error] attempt((Result[A, E]) -> @vdom.Cmd, async () -> A raise E) -> @vdom.Cmd
+pub fn[A, E : Error] attempt((Result[A, E]) -> @runtime.Cmd, async () -> A raise E) -> @runtime.Cmd
 
-pub fn batch(Array[@vdom.Cmd]) -> @vdom.Cmd
+pub fn batch(Array[@runtime.Cmd]) -> @runtime.Cmd
 
-pub fn new(&@vdom.Cell) -> App
+pub fn new(&@runtime.Cell) -> App
 
-pub fn none() -> @vdom.Cmd
+pub fn none() -> @runtime.Cmd
 
-pub fn[A] perform((A) -> @vdom.Cmd, async () -> A noraise) -> @vdom.Cmd
+pub fn[A] perform((A) -> @runtime.Cmd, async () -> A noraise) -> @runtime.Cmd
 
 // Errors
 
 // Types and methods
 type App
 pub fn App::mount(Self, String) -> Unit
-pub fn App::with_route(Self, url_changed? : (@url.Url) -> @vdom.Cmd, url_request? : (@url.UrlRequest) -> @vdom.Cmd) -> Unit
+pub fn App::with_route(Self, url_changed? : (@url.Url) -> @runtime.Cmd, url_request? : (@url.UrlRequest) -> @runtime.Cmd) -> Unit
 
 type Dispatcher[Msg]
-pub fn[Msg] Dispatcher::message(Self[Msg], Msg) -> @vdom.Cmd
-pub fn[Payload, Msg] Dispatcher::message1(Self[Msg], (Payload) -> Msg) -> (Payload) -> @vdom.Cmd
+pub fn[Msg] Dispatcher::message(Self[Msg], Msg) -> @runtime.Cmd
+pub fn[Payload, Msg] Dispatcher::message1(Self[Msg], (Payload) -> Msg) -> (Payload) -> @runtime.Cmd
 
 type TEA[Model, Msg]
 pub fn[Model, Msg] TEA::dispatcher(Self[Model, Msg]) -> Dispatcher[Msg]
-pub fn[Model, Msg] TEA::new(model~ : Model, update~ : (Dispatcher[Msg], Msg, Model) -> (@vdom.Cmd, Model), view~ : (Dispatcher[Msg], Model) -> @html.Html) -> Self[Model, Msg]
-pub impl[Model, Msg] @vdom.Cell for TEA[Model, Msg]
+pub fn[Model, Msg] TEA::new(model~ : Model, update~ : (Dispatcher[Msg], Msg, Model) -> (@runtime.Cmd, Model), view~ : (Dispatcher[Msg], Model) -> @html.Html) -> Self[Model, Msg]
+pub impl[Model, Msg] @runtime.Cell for TEA[Model, Msg]
 
 // Type aliases
-pub using @vdom {type Cmd}
+pub using @runtime {type Cmd}
 
-pub using @vdom {trait Cell}
+pub using @runtime {trait Cell}
 
 // Traits
 

@@ -3,7 +3,7 @@ enum Attribute {
   Attribute(String, String)
   Property(String, @variant.Variant)
   Style(String, String)
-  Handler(String, (@dom.Event, &@vdom.Scheduler) -> Unit)
+  Handler(String, (@dom.Event, &@runtime.Scheduler) -> Unit)
 }
 
 ///|

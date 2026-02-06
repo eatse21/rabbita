@@ -1,26 +1,26 @@
 // ///|
-// priv struct Attribute[Msg](@vdom.Attribute[Msg])
+// priv struct Attribute[Msg](@runtime.Attribute[Msg])
 
 // ///| Specify an style
 // // fn[Msg] style_(key : String, value : String) -> Attribute[Msg] {
-// //   @vdom.style(key, value)
+// //   @runtime.style(key, value)
 // // }
 
 // ///|
 // fn[Msg] attribute(key : String, value : String) -> Attribute[Msg] {
-//   @vdom.attribute(key, value)
+//   @runtime.attribute(key, value)
 // }
 
 // ///|
 // fn[M] property(key : String, value : @variant.Variant) -> Attribute[M] {
-//   @vdom.property(key, value)
+//   @runtime.property(key, value)
 // }
 
 // ///|
 // // fn[Msg] href(value : String) -> Attribute[Msg] {
 // //   // Note: `href` will be the value you specified, but by property, the value 
 // //   // will be resolved to an absolute URL.
-// //   @vdom.property("href", @variant.String(value))
+// //   @runtime.property("href", @variant.String(value))
 // // }
 
 // ///|
@@ -39,5 +39,5 @@
 
 // ///|
 // // fn[Msg] target(value : Target) -> Attribute[Msg] {
-// //   @vdom.attribute("target", value.to_string())
+// //   @runtime.attribute("target", value.to_string())
 // // }

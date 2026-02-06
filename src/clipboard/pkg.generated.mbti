@@ -2,13 +2,13 @@
 package "Yoorkin/rabbit-tea/clipboard"
 
 import {
-  "Yoorkin/rabbit-tea/internal/vdom",
+  "Yoorkin/rabbit-tea/internal/runtime",
 }
 
 // Values
-pub fn copy(Item, copied? : @vdom.Cmd, failed? : (String) -> @vdom.Cmd) -> @vdom.Cmd
+pub fn copy(Item, copied? : @runtime.Cmd, failed? : (String) -> @runtime.Cmd) -> @runtime.Cmd
 
-pub fn paste(pasted~ : (Item) -> @vdom.Cmd, failed? : (String) -> @vdom.Cmd) -> @vdom.Cmd
+pub fn paste(pasted~ : (Item) -> @runtime.Cmd, failed? : (String) -> @runtime.Cmd) -> @runtime.Cmd
 
 // Errors
 

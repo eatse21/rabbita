@@ -10,7 +10,7 @@
 // //   attributes : Array[Attribute[Msg]],
 // //   children : Array[Html[Msg]]
 // // ) -> Html[Msg] {
-// //   @vdom.node(tag, attributes.map(x => x.0), children.map(x => x.0))
+// //   @runtime.node(tag, attributes.map(x => x.0), children.map(x => x.0))
 // // }
 
 // ///|
@@ -24,16 +24,16 @@
 //     ..optional.iter().filter_map(x => x).map(x => x.0),
 //     ..positional.iter().map(x => x.0),
 //   ]
-//   @vdom.node(tag, attrs, children.map(x => x.0))
+//   @runtime.node(tag, attrs, children.map(x => x.0))
 // }
 
 // ///|
 // /// Represents an empty element
 // pub fn[M] nothing() -> Html[M] {
-//   @vdom.nothing()
+//   @runtime.nothing()
 // }
 
 // ///|
 // pub fn[Msg] text(str : String) -> Html[Msg] {
-//   @vdom.text(str)
+//   @runtime.text(str)
 // }

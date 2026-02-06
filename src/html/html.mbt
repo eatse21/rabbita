@@ -1,12 +1,12 @@
 ///|
-using @vdom {type VNode, type Props}
+using @runtime {type VNode, type Props}
 
 ///|
 #alias(T)
-pub(all) struct Html(@vdom.VNode)
+pub(all) struct Html(@runtime.VNode)
 
 ///|
-pub fn Html::to_virtual_dom(self : Html) -> @vdom.VNode {
+pub fn Html::to_virtual_dom(self : Html) -> @runtime.VNode {
   self.0
 }
 
@@ -67,18 +67,18 @@ pub fn nothing() -> Html {
 }
 
 ///|
-pub fn cell(cell : &@vdom.Cell) -> Html {
-  @vdom.VNode::cell(cell)
+pub fn cell(cell : &@runtime.Cell) -> Html {
+  @runtime.VNode::cell(cell)
 }
 
 ///|
 pub trait IsChildren {
-  to_children(Self) -> @vdom.Children[VNode]
+  to_children(Self) -> @runtime.Children[VNode]
 }
 
 // ///|
 // pub trait IsHtml {
-//   to_html(Self) -> @vdom.VNode
+//   to_html(Self) -> @runtime.VNode
 // }
 
 // pub impl IsHtml for Html with to_html(self) {
@@ -114,20 +114,20 @@ pub impl IsChildren for Array[Html] with to_children(self) {
 // }
 
 ///|
-pub impl IsChildren for @vdom.Children[VNode] with to_children(children) {
+pub impl IsChildren for @runtime.Children[VNode] with to_children(children) {
   children
 }
 
 ///|
 pub fn[C : IsChildren] fragment(children : C) -> Html {
   match children.to_children() {
-    Array(nodes) => @vdom.VNode::fragment(nodes)
+    Array(nodes) => @runtime.VNode::fragment(nodes)
     Map(nodes) => {
       let values = []
       for _, node in nodes {
         values.push(node)
       }
-      @vdom.VNode::fragment(values)
+      @runtime.VNode::fragment(values)
     }
   }
 }
@@ -321,7 +321,11 @@ pub fn[C : IsChildren] a(
   if id is Some(id) {
     attrs.push(Attribute("id", id))
   }
-  @vdom.VNode::link(attributes_to_props(attrs), children.to_children(), escape~)
+  @runtime.VNode::link(
+    attributes_to_props(attrs),
+    children.to_children(),
+    escape~,
+  )
 }
 
 ///|
@@ -822,7 +826,7 @@ pub fn[C : IsChildren] option(
 //   height~ : Int,
 // ) -> Html {
 //   let attrs = attrs.map(_.map(_.map(x => x.0)))
-//   @vdom.external(node, attrs, width~, height~)
+//   @runtime.external(node, attrs, width~, height~)
 // }
 
 // table

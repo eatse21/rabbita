@@ -2,26 +2,26 @@
 package "Yoorkin/rabbit-tea/cmd"
 
 import {
-  "Yoorkin/rabbit-tea/internal/vdom",
+  "Yoorkin/rabbit-tea/internal/runtime",
 }
 
 // Values
-pub fn[A, E : Error] attempt((Result[A, E]) -> @vdom.Cmd, async () -> A raise E) -> @vdom.Cmd
+pub fn[A, E : Error] attempt((Result[A, E]) -> @runtime.Cmd, async () -> A raise E) -> @runtime.Cmd
 
-pub fn batch(Array[@vdom.Cmd]) -> @vdom.Cmd
+pub fn batch(Array[@runtime.Cmd]) -> @runtime.Cmd
 
-pub fn none() -> @vdom.Cmd
+pub fn none() -> @runtime.Cmd
 
-pub fn[A] perform((A) -> @vdom.Cmd, async () -> A noraise) -> @vdom.Cmd
+pub fn[A] perform((A) -> @runtime.Cmd, async () -> A noraise) -> @runtime.Cmd
 
 // Errors
 
 // Types and methods
 
 // Type aliases
-pub using @vdom {type Cmd}
+pub using @runtime {type Cmd}
 
-pub using @vdom {trait Scheduler}
+pub using @runtime {trait Scheduler}
 
 // Traits
 

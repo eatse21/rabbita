@@ -2,7 +2,7 @@
 pub using @cmd {type Cmd, none, batch, perform, attempt}
 
 ///|
-pub using @vdom {trait Cell}
+pub using @runtime {trait Cell}
 
 ///|
 using @html {type Html}
@@ -19,8 +19,8 @@ using @html {type Html}
 /// to get more intuition!
 /// 
 /// To start the application with router, you can use the `application` function.
-pub fn new(root : &@vdom.Cell) -> App {
-  let sandbox = @vdom.Sandbox::new(root)
+pub fn new(root : &@runtime.Cell) -> App {
+  let sandbox = @runtime.Sandbox::new(root)
   App::{ sandbox, }
 }
 
@@ -71,5 +71,5 @@ fn App::trigger_initial_url_changed(self : Self) -> Unit {
 
 ///|
 struct App {
-  sandbox : @vdom.Sandbox
+  sandbox : @runtime.Sandbox
 }

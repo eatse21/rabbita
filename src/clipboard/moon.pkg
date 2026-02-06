@@ -1,6 +1,6 @@
 import {
   "Yoorkin/rabbit-tea/cmd",
   "Yoorkin/rabbit-tea/dom",
-  "Yoorkin/rabbit-tea/internal/vdom",
+  "Yoorkin/rabbit-tea/internal/runtime",
   "moonbit-community/js-ffi/js",
 }

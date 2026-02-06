@@ -1,15 +1,15 @@
 ///|
-pub using @vdom {type Cmd, trait Scheduler}
+pub using @runtime {type Cmd, trait Scheduler}
 
 ///|
 /// Create a command that does nothing.
-pub fn none() -> @vdom.Cmd {
+pub fn none() -> @runtime.Cmd {
   Empty
 }
 
 ///|
 /// Create a command that runs multiple commands.
-pub fn batch(xs : Array[@vdom.Cmd]) -> @vdom.Cmd {
+pub fn batch(xs : Array[@runtime.Cmd]) -> @runtime.Cmd {
   Batch(xs)
 }
 
@@ -19,9 +19,9 @@ pub fn batch(xs : Array[@vdom.Cmd]) -> @vdom.Cmd {
 /// The async function `f` will be called, and the result will be wrapped in a 
 /// message `msg`, then trigger another update with this message.
 pub fn[A] perform(
-  msg : (A) -> @vdom.Cmd,
+  msg : (A) -> @runtime.Cmd,
   f : async () -> A noraise,
-) -> @vdom.Cmd {
+) -> @runtime.Cmd {
   Effect(scheduler => @js.async_run(() => scheduler.add(msg(f()))))
 }
 
@@ -31,9 +31,9 @@ pub fn[A] perform(
 /// This is similar to `perform`, but it converts the returned value 
 /// or thrown error into a `Result`.
 pub fn[A, E : Error] attempt(
-  msg : (Result[A, E]) -> @vdom.Cmd,
+  msg : (Result[A, E]) -> @runtime.Cmd,
   f : async () -> A raise E,
-) -> @vdom.Cmd {
+) -> @runtime.Cmd {
   Effect(scheduler => @js.async_run(() => {
     let msg = try f() catch {
       e => msg(Err(e))

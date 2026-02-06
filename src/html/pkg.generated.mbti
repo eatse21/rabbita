@@ -2,7 +2,7 @@
 package "Yoorkin/rabbit-tea/html"
 
 import {
-  "Yoorkin/rabbit-tea/internal/vdom",
+  "Yoorkin/rabbit-tea/internal/runtime",
   "Yoorkin/rabbit-tea/variant",
 }
 
@@ -17,11 +17,11 @@ pub fn[C : IsChildren] blockquote(style? : Array[String], id? : String, class? :
 
 pub fn br(style? : Array[String], id? : String, class? : String) -> Html
 
-pub fn[C : IsChildren] button(style? : Array[String], id? : String, class? : String, click? : @vdom.Cmd, C) -> Html
+pub fn[C : IsChildren] button(style? : Array[String], id? : String, class? : String, click? : @runtime.Cmd, C) -> Html
 
 pub fn[C : IsChildren] caption(style? : Array[String], id? : String, class? : String, C) -> Html
 
-pub fn cell(&@vdom.Cell) -> Html
+pub fn cell(&@runtime.Cell) -> Html
 
 pub fn[C : IsChildren] code(style? : Array[String], id? : String, class? : String, C) -> Html
 
@@ -31,9 +31,9 @@ pub fn[C : IsChildren] colgroup(style? : Array[String], id? : String, span? : In
 
 pub fn[C : IsChildren] dd(style? : Array[String], id? : String, class? : String, C) -> Html
 
-pub fn[C : IsChildren] dialog(style? : Array[String], id? : String, class? : String, open? : Bool, close? : (String) -> @vdom.Cmd, cancel? : @vdom.Cmd, C) -> Html
+pub fn[C : IsChildren] dialog(style? : Array[String], id? : String, class? : String, open? : Bool, close? : (String) -> @runtime.Cmd, cancel? : @runtime.Cmd, C) -> Html
 
-pub fn[C : IsChildren] div(style? : Array[String], id? : String, class? : String, click? : @vdom.Cmd, C) -> Html
+pub fn[C : IsChildren] div(style? : Array[String], id? : String, class? : String, click? : @runtime.Cmd, C) -> Html
 
 pub fn[C : IsChildren] dl(style? : Array[String], id? : String, class? : String, C) -> Html
 
@@ -67,11 +67,11 @@ pub fn iframe(style? : Array[String], id? : String, class? : String, src? : Stri
 
 pub fn[C : IsChildren] img(style? : Array[String], id? : String, class? : String, src? : String, alt? : String, title? : String, width? : Int, height? : Int, border? : Int, C) -> Html
 
-pub fn[C : IsChildren] input(input_type? : InputType, name? : String, value? : String, checked? : Bool, read_only? : Bool, multiple? : Bool, accept? : String, placeholder? : String, auto_complete? : AutoComplete, style? : Array[String], max? : Int, min? : Int, step? : Int, maxlength? : Int, minlength? : Int, pattern? : String, size? : Int, width? : Int, height? : Int, id? : String, class? : String, change? : (String) -> @vdom.Cmd, input? : (String) -> @vdom.Cmd, C) -> Html
+pub fn[C : IsChildren] input(input_type? : InputType, name? : String, value? : String, checked? : Bool, read_only? : Bool, multiple? : Bool, accept? : String, placeholder? : String, auto_complete? : AutoComplete, style? : Array[String], max? : Int, min? : Int, step? : Int, maxlength? : Int, minlength? : Int, pattern? : String, size? : Int, width? : Int, height? : Int, id? : String, class? : String, change? : (String) -> @runtime.Cmd, input? : (String) -> @runtime.Cmd, C) -> Html
 
 pub fn[C : IsChildren] label(style? : Array[String], id? : String, class? : String, for_? : String, C) -> Html
 
-pub fn[C : IsChildren] li(style? : Array[String], value? : Int, id? : String, class? : String, click? : @vdom.Cmd, C) -> Html
+pub fn[C : IsChildren] li(style? : Array[String], value? : Int, id? : String, class? : String, click? : @runtime.Cmd, C) -> Html
 
 pub fn[C : IsChildren] node(String, Array[Attribute], C) -> Html
 
@@ -79,29 +79,29 @@ pub fn nothing() -> Html
 
 pub fn[C : IsChildren] ol(style? : Array[String], reversed? : Bool, start? : Int, id? : String, class? : String, C) -> Html
 
-pub fn on_change((String) -> @vdom.Cmd) -> Attribute
+pub fn on_change((String) -> @runtime.Cmd) -> Attribute
 
-pub fn on_click((Mouse) -> @vdom.Cmd) -> Attribute
+pub fn on_click((Mouse) -> @runtime.Cmd) -> Attribute
 
-pub fn on_double_click((Mouse) -> @vdom.Cmd) -> Attribute
+pub fn on_double_click((Mouse) -> @runtime.Cmd) -> Attribute
 
-pub fn on_input((String) -> @vdom.Cmd) -> Attribute
+pub fn on_input((String) -> @runtime.Cmd) -> Attribute
 
-pub fn on_mouse_down((Mouse) -> @vdom.Cmd) -> Attribute
+pub fn on_mouse_down((Mouse) -> @runtime.Cmd) -> Attribute
 
-pub fn on_mouse_enter((Mouse) -> @vdom.Cmd) -> Attribute
+pub fn on_mouse_enter((Mouse) -> @runtime.Cmd) -> Attribute
 
-pub fn on_mouse_leave((Mouse) -> @vdom.Cmd) -> Attribute
+pub fn on_mouse_leave((Mouse) -> @runtime.Cmd) -> Attribute
 
-pub fn on_mouse_move((Mouse) -> @vdom.Cmd) -> Attribute
+pub fn on_mouse_move((Mouse) -> @runtime.Cmd) -> Attribute
 
-pub fn on_mouse_out((Mouse) -> @vdom.Cmd) -> Attribute
+pub fn on_mouse_out((Mouse) -> @runtime.Cmd) -> Attribute
 
-pub fn on_mouse_over((Mouse) -> @vdom.Cmd) -> Attribute
+pub fn on_mouse_over((Mouse) -> @runtime.Cmd) -> Attribute
 
-pub fn on_mouse_up((Mouse) -> @vdom.Cmd) -> Attribute
+pub fn on_mouse_up((Mouse) -> @runtime.Cmd) -> Attribute
 
-pub fn on_scroll((Scroll) -> @vdom.Cmd) -> Attribute
+pub fn on_scroll((Scroll) -> @runtime.Cmd) -> Attribute
 
 pub fn[C : IsChildren] option(style? : Array[String], id? : String, class? : String, disabled? : Bool, value? : String, selected? : Bool, C) -> Html
 
@@ -113,7 +113,7 @@ pub fn property(String, @variant.Variant) -> Attribute
 
 pub fn[C : IsChildren] section(style? : Array[String], id? : String, class? : String, C) -> Html
 
-pub fn[C : IsChildren] select(style? : Array[String], id? : String, class? : String, disabled? : Bool, name? : String, change? : (String) -> @vdom.Cmd, C) -> Html
+pub fn[C : IsChildren] select(style? : Array[String], id? : String, class? : String, disabled? : Bool, name? : String, change? : (String) -> @runtime.Cmd, C) -> Html
 
 pub fn[C : IsChildren] span(style? : Array[String], id? : String, class? : String, C) -> Html
 
@@ -145,7 +145,7 @@ pub fn[C : IsChildren] tr(style? : Array[String], id? : String, class? : String,
 
 pub fn[C : IsChildren] u(style? : Array[String], id? : String, class? : String, C) -> Html
 
-pub fn[C : IsChildren] ul(style? : Array[String], id? : String, class? : String, click? : @vdom.Cmd, C) -> Html
+pub fn[C : IsChildren] ul(style? : Array[String], id? : String, class? : String, click? : @runtime.Cmd, C) -> Html
 
 // Errors
 
@@ -158,10 +158,10 @@ pub(all) enum AutoComplete {
 }
 
 #alias(T)
-pub(all) struct Html(@vdom.VNode)
+pub(all) struct Html(@runtime.VNode)
 #deprecated
-pub fn Html::inner(Self) -> @vdom.VNode
-pub fn Html::to_virtual_dom(Self) -> @vdom.VNode
+pub fn Html::inner(Self) -> @runtime.VNode
+pub fn Html::to_virtual_dom(Self) -> @runtime.VNode
 pub impl IsChildren for Html
 
 pub(all) enum InputType {
@@ -220,10 +220,10 @@ pub(all) enum Target {
 
 // Traits
 pub trait IsChildren {
-  to_children(Self) -> @vdom.Children[@vdom.VNode]
+  to_children(Self) -> @runtime.Children[@runtime.VNode]
 }
 pub impl IsChildren for String
-pub impl IsChildren for @vdom.Children[@vdom.VNode]
+pub impl IsChildren for @runtime.Children[@runtime.VNode]
 pub impl IsChildren for Array[Html]
 pub impl IsChildren for Map[String, Html]
 

@@ -1,5 +1,5 @@
 ///|
-using @vdom {trait Scheduler}
+using @runtime {trait Scheduler}
 
 ///|
 pub(all) enum Expecting[Msg, Model] {

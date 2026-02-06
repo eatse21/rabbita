@@ -4,7 +4,7 @@ struct TEA[Model, Msg] {
   dispatcher : Dispatcher[Msg]
   update : (Dispatcher[Msg], Msg, Model) -> (@cmd.Cmd, Model)
   view : (Dispatcher[Msg], Model) -> @html.Html
-  state : @vdom.State
+  state : @runtime.State
 }
 
 ///|
@@ -13,12 +13,15 @@ pub fn[Model, Msg] TEA::dispatcher(self : Self[Model, Msg]) -> Dispatcher[Msg] {
 }
 
 ///|
-pub impl[Model, Msg] @vdom.Cell for TEA[Model, Msg] with state(self) {
+pub impl[Model, Msg] @runtime.Cell for TEA[Model, Msg] with state(self) {
   self.state
 }
 
 ///|
-pub impl[Model, Msg] @vdom.Cell for TEA[Model, Msg] with step(self, scheduler) {
+pub impl[Model, Msg] @runtime.Cell for TEA[Model, Msg] with step(
+  self,
+  scheduler,
+) {
   if self.dispatcher.inbox.pop() is Some(msg) {
     let (cmd, model) = (self.update)(self.dispatcher, msg, self.model)
     self.model = model
@@ -30,19 +33,19 @@ pub impl[Model, Msg] @vdom.Cell for TEA[Model, Msg] with step(self, scheduler) {
 }
 
 ///|
-pub impl[Model, Msg] @vdom.Cell for TEA[Model, Msg] with view(self) {
+pub impl[Model, Msg] @runtime.Cell for TEA[Model, Msg] with view(self) {
   (self.view)(self.dispatcher, self.model).0
 }
 
 // ///|
-// pub impl[Model, Msg] @vdom.Cell for TEA[Model, Msg] with refersh(self) {
+// pub impl[Model, Msg] @runtime.Cell for TEA[Model, Msg] with refersh(self) {
 //   self.node = (self.view)(self.dispatcher, self.model).to_virtual_dom()
 //   self.is_dirty = false
 // }
 
 ///|
 struct Dispatcher[Msg] {
-  id : @vdom.Id
+  id : @runtime.Id
   inbox : @queue.Queue[Msg]
 }
 
@@ -66,7 +69,7 @@ pub fn[Model, Msg] TEA::new(
   update~ : (Dispatcher[Msg], Msg, Model) -> (Cmd, Model),
   view~ : (Dispatcher[Msg], Model) -> Html,
 ) -> TEA[Model, Msg] {
-  let state = @vdom.State::new()
+  let state = @runtime.State::new()
   let dispatcher = { id: state.id(), inbox: @queue.new() }
   let self = { view, update, dispatcher, model, state }
   self

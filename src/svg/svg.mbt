@@ -1,8 +1,8 @@
 // ///|
-// pub(all) struct Svg(@vdom.Node)
+// pub(all) struct Svg(@runtime.Node)
 
 // ///|
-// pub(all) struct Attribute(@vdom.Attribute)
+// pub(all) struct Attribute(@runtime.Attribute)
 
 // ///|
 // pub fn node(
@@ -10,7 +10,7 @@
 //   attrs : Array[Attribute],
 //   children : Array[Svg],
 // ) -> Svg {
-//   @vdom.node_ns(
+//   @runtime.node_ns(
 //     @dom.namespace_svg,
 //     tag,
 //     attrs.map(x => x.0),
@@ -20,12 +20,12 @@
 
 // ///|
 // pub fn attribute(key : String, value : String) -> Attribute {
-//   @vdom.attribute(key, value)
+//   @runtime.attribute(key, value)
 // }
 
 // ///|
 // pub fn property(key : String, value : @variant.Variant) -> Attribute {
-//   @vdom.property(key, value)
+//   @runtime.property(key, value)
 // }
 
 // ///|
@@ -66,7 +66,7 @@
 //   if xmlns is Some(val) {
 //     attrs.push(attribute("xmlns", val))
 //   }
-//   @vdom.node_ns(
+//   @runtime.node_ns(
 //     @dom.namespace_svg,
 //     "svg",
 //     attrs.map(x => x.0),
@@ -77,10 +77,10 @@
 // ///|
 // /// Create an SVG element from a svg string.
 // pub fn from_string(svg : String) -> @html.Html {
-//   @vdom.node_ns(
+//   @runtime.node_ns(
 //     @dom.namespace_svg,
 //     "svg",
-//     [@vdom.property("innerHTML", String(svg))],
+//     [@runtime.property("innerHTML", String(svg))],
 //     [],
 //   )
 // }

@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Yoorkin/rabbit-tea/internal/vdom"
+package "Yoorkin/rabbit-tea/internal/runtime"
 
 import {
   "Yoorkin/rabbit-tea/dom",

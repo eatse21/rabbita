@@ -2,15 +2,15 @@
 package "Yoorkin/rabbit-tea/dialog"
 
 import {
-  "Yoorkin/rabbit-tea/internal/vdom",
+  "Yoorkin/rabbit-tea/internal/runtime",
 }
 
 // Values
-pub fn close(String, return_value? : String) -> @vdom.Cmd
+pub fn close(String, return_value? : String) -> @runtime.Cmd
 
-pub fn request_close(String, return_value? : String) -> @vdom.Cmd
+pub fn request_close(String, return_value? : String) -> @runtime.Cmd
 
-pub fn show(String, modal? : Bool) -> @vdom.Cmd
+pub fn show(String, modal? : Bool) -> @runtime.Cmd
 
 // Errors
 

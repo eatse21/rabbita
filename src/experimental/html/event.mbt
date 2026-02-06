@@ -42,7 +42,7 @@
 
 // ///|
 // fn[Msg] mouse_event(event : String, msg : (Mouse) -> Msg) -> Attribute[Msg] {
-//   @vdom.on(event, HandleEvent(event => msg(event.to_mouse_event().unwrap())))
+//   @runtime.on(event, HandleEvent(event => msg(event.to_mouse_event().unwrap())))
 // }
 
 // ///|
@@ -52,7 +52,7 @@
 
 // ///|
 // fn[Msg] input_event(msg : (String) -> Msg) -> Attribute[Msg] {
-//   @vdom.on(
+//   @runtime.on(
 //     "input",
 //     HandleEvent(event => {
 //       let value : String = event
@@ -67,7 +67,7 @@
 
 // ///|
 // fn[Msg] change_event(msg : (String) -> Msg) -> Attribute[Msg] {
-//   @vdom.on(
+//   @runtime.on(
 //     "change",
 //     HandleEvent(event => {
 //       let target = event.target()
@@ -125,7 +125,7 @@
 
 // ///|
 // fn[M] scroll_event(msg : (Scroll) -> M) -> Attribute[M] {
-//   @vdom.on(
+//   @runtime.on(
 //     "scroll",
 //     HandleEvent(event => msg(event.target().to_element().unwrap())),
 //   )
