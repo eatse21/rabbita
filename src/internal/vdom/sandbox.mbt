@@ -96,7 +96,6 @@ pub fn Sandbox::initialize(self : Self) -> Unit {
   let vnode = root.view()
   let inode = vnode.insert(self, root, element.as_node(), null())
   root.state().inode = Some(inode)
-  println(self.live_map.keys())
 }
 
 ///|
@@ -132,7 +131,6 @@ pub fn Sandbox::flush(self : Self) -> Unit {
   if !self.paint_scheduled {
     self.paint_scheduled = true
     @dom.window().request_animation_frame(fn(_) {
-      // println("dirty set: \{dirty_set}")
       let dirty = self.dirty_set.to_array()
       self.dirty_set.clear()
       for id in dirty {
