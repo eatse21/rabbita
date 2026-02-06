@@ -1,43 +1,11 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "Yoorkin/rabbit-tea/html/canvas"
 
-import(
-  "Yoorkin/rabbit-tea/dom"
-  "Yoorkin/rabbit-tea/html"
-  "Yoorkin/rabbit-tea/internal/vdom"
-)
-
 // Values
-pub fn new(width~ : Double, height~ : Double, click? : (@html.Mouse) -> @vdom.Cmd, mousemove? : (@html.Mouse) -> @vdom.Cmd, mousedown? : (@html.Mouse) -> @vdom.Cmd, mouseup? : (@html.Mouse) -> @vdom.Cmd, mouseenter? : (@html.Mouse) -> @vdom.Cmd, mouseleave? : (@html.Mouse) -> @vdom.Cmd) -> Model
 
 // Errors
 
 // Types and methods
-pub(all) enum Color {
-  RGB(Int, Int, Int)
-  RGBA(Int, Int, Int, Int)
-  Black
-  White
-}
-pub fn Color::to_string(Self) -> String
-pub impl Show for Color
-
-type Context2D
-pub fn Context2D::begin_path(Self) -> Unit
-pub fn Context2D::clear_rect(Self, Double, Double, Double, Double) -> Unit
-pub fn Context2D::fill_rect(Self, Double, Double, Double, Double) -> Unit
-pub fn Context2D::fill_text(Self, String, Double, Double) -> Unit
-pub fn Context2D::line_to(Self, Double, Double) -> Unit
-pub fn Context2D::move_to(Self, Double, Double) -> Unit
-pub fn Context2D::set_fill_style(Self, Color) -> Unit
-pub fn Context2D::set_line_width(Self, Double) -> Unit
-pub fn Context2D::set_stroke_style(Self, Color) -> Unit
-pub fn Context2D::stroke(Self) -> Unit
-pub fn Context2D::to_unsafe_js(Self) -> @dom.CanvasRenderingContext2D
-
-type Model
-pub fn Model::context2d(Self) -> Context2D
-pub fn Model::to_html(Self) -> @html.Html
 
 // Type aliases
 

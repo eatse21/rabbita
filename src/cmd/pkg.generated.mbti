@@ -1,9 +1,9 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "Yoorkin/rabbit-tea/cmd"
 
-import(
-  "Yoorkin/rabbit-tea/internal/vdom"
-)
+import {
+  "Yoorkin/rabbit-tea/internal/vdom",
+}
 
 // Values
 pub fn[A, E : Error] attempt((Result[A, E]) -> @vdom.Cmd, async () -> A raise E) -> @vdom.Cmd

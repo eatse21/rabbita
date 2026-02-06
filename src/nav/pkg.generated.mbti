@@ -1,9 +1,9 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "Yoorkin/rabbit-tea/nav"
 
-import(
-  "Yoorkin/rabbit-tea/internal/vdom"
-)
+import {
+  "Yoorkin/rabbit-tea/internal/vdom",
+}
 
 // Values
 pub fn back() -> @vdom.Cmd

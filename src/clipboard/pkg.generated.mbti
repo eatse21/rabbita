@@ -1,9 +1,9 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "Yoorkin/rabbit-tea/clipboard"
 
-import(
-  "Yoorkin/rabbit-tea/internal/vdom"
-)
+import {
+  "Yoorkin/rabbit-tea/internal/vdom",
+}
 
 // Values
 pub fn copy(Item, copied? : @vdom.Cmd, failed? : (String) -> @vdom.Cmd) -> @vdom.Cmd

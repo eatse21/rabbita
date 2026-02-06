@@ -1,57 +1,11 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "Yoorkin/rabbit-tea/svg"
 
-import(
-  "Yoorkin/rabbit-tea/html"
-  "Yoorkin/rabbit-tea/internal/vdom"
-  "Yoorkin/rabbit-tea/variant"
-)
-
 // Values
-pub fn attribute(String, String) -> Attribute
-
-pub fn circle(id? : String, class? : String, style? : Array[String], cx~ : Int, cy~ : Int, r~ : Int, fill? : String, stroke? : String, stroke_width? : Int, fill_opacity? : Int) -> Svg
-
-pub fn defs(Array[Svg]) -> Svg
-
-pub fn ellipse(id? : String, class? : String, style? : Array[String], cx~ : Int, cy~ : Int, rx~ : Int, ry~ : Int, fill? : String, stroke? : String, stroke_width? : Int) -> Svg
-
-pub fn from_string(String) -> @html.Html
-
-pub fn g(Array[Svg], id? : String, class? : String, style? : Array[String], fill? : String, stroke? : String) -> Svg
-
-pub fn image(id? : String, class? : String, style? : Array[String], href~ : String, x~ : Int, y~ : Int, preserveAspectRatio? : String) -> Svg
-
-pub fn line(id? : String, class? : String, style? : Array[String], x1~ : Int, y1~ : Int, x2~ : Int, y2~ : Int, fill? : String, stroke? : String, stroke_width? : Int, stroke_linecap? : String) -> Svg
-
-pub fn node(String, Array[Attribute], Array[Svg]) -> Svg
-
-pub fn path(id? : String, class? : String, style? : Array[String], d~ : String) -> Svg
-
-pub fn polyline(id? : String, class? : String, style? : Array[String], points~ : Array[(Int, Int)], pathLength~ : Int, fill? : String, stroke? : String, stroke_width? : Int, stroke_linecap? : String) -> Svg
-
-pub fn property(String, @variant.Variant) -> Attribute
-
-pub fn rect(id? : String, class? : String, style? : Array[String], x~ : Int, y~ : Int, width~ : Int, height~ : Int, rx? : Int, ry? : Int, fill? : String, stroke? : String, stroke_width? : Int) -> Svg
-
-pub fn svg(Array[Attribute], Array[Svg], id? : String, class? : String, style? : Array[String], width? : Int, height? : Int, view_box? : String, xmlns? : String) -> @html.Html
-
-pub fn svg_text(id? : String, class? : String, style? : Array[String], x~ : Int, y~ : Int, text~ : String, dx? : Int, dy? : Int, rotate? : String, length_adjust? : String, text_length? : Int) -> Svg
-
-pub fn svg_use(id? : String, class? : String, style? : Array[String], href~ : String, x~ : Int, y~ : Int, stroke? : String, stroke_width? : Int, fill? : String, fill_opacity? : Int) -> Svg
-
-pub fn view(id? : String, class? : String, style? : Array[String], view_box? : String, zoom_and_pan? : String, preserve_aspect_ratio? : String) -> Svg
 
 // Errors
 
 // Types and methods
-pub(all) struct Attribute(@vdom.Attribute)
-#deprecated
-pub fn Attribute::inner(Self) -> @vdom.Attribute
-
-pub(all) struct Svg(@vdom.Node)
-#deprecated
-pub fn Svg::inner(Self) -> @vdom.Node
 
 // Type aliases
 

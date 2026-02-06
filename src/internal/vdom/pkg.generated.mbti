@@ -1,47 +1,25 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "Yoorkin/rabbit-tea/internal/vdom"
 
-import(
-  "Yoorkin/rabbit-tea/dom"
-  "Yoorkin/rabbit-tea/url"
-  "Yoorkin/rabbit-tea/variant"
-  "moonbit-community/js-ffi/js"
-  "moonbitlang/core/queue"
-)
+import {
+  "Yoorkin/rabbit-tea/dom",
+  "Yoorkin/rabbit-tea/url",
+  "Yoorkin/rabbit-tea/variant",
+  "moonbit-community/js-ffi/js",
+  "moonbitlang/core/queue",
+  "moonbitlang/core/set",
+}
 
 // Values
-pub fn attribute(String, String) -> Attribute
-
-pub fn diff(Node, Node) -> Patch
-
-pub fn diff_without_key(Array[Node], Array[Node]) -> Array[Patch]
-
-pub fn do_diff(Node, Node) -> Array[Patch]
-
-pub fn external(@dom.Node, Ref[Array[Attribute]?], width~ : Int, height~ : Int) -> Node
-
-pub fn link(Array[Attribute], Array[Node], escape? : Bool) -> Node
-
-pub fn node(String, Array[Attribute], Array[Node]) -> Node
-
-pub fn node_ns(String, String, Array[Attribute], Array[Node]) -> Node
-
-pub fn nothing() -> Node
-
-pub fn on(String, Handler) -> Attribute
-
-pub fn property(String, @variant.Variant) -> Attribute
-
-pub fn style(String, String) -> Attribute
-
-pub fn text(String) -> Node
-
 pub fn variant_to_js_value(@variant.Variant) -> @js.Value
 
 // Errors
 
 // Types and methods
-type Attribute
+pub(all) enum Children[T] {
+  Array(Array[T])
+  Map(Map[String, T])
+}
 
 pub(all) enum Cmd {
   Effect((&Scheduler) -> Unit)
@@ -50,48 +28,68 @@ pub(all) enum Cmd {
   Empty
 }
 
-pub(all) enum Handler {
-  Normal(Cmd)
-  HandleEvent((@dom.Event) -> Cmd)
-  Custom(Cmd, stop_propagation~ : Bool, prevent_default~ : Bool)
-}
-
 type Id
 pub fn Id::new() -> Self
 pub impl Compare for Id
 pub impl Eq for Id
 pub impl Hash for Id
+pub impl Show for Id
 
-type Node
-pub fn Node::patch(Self, Self, Sandbox, mount~ : String) -> Unit
+type Link
 
-pub(all) struct Nodes {
-  old : Node
-  new : Node
+pub struct Props {
+  mut slots : Map[String, Ref[(@dom.Event, &Scheduler) -> Unit]]
+  handlers : Map[String, (@dom.Event, &Scheduler) -> Unit]
+  attrs : Map[String, String]
+  props : Map[String, @variant.Variant]
+  styles : Map[String, String]
 }
-
-type Patch
+pub fn Props::empty() -> Self
+pub fn Props::new(Map[String, String], Map[String, @variant.Variant], Map[String, String], Map[String, (@dom.Event, &Scheduler) -> Unit]) -> Self
 
 pub(all) struct Sandbox {
-  subscriptions : Map[Id, &Cell]
-  queue : @queue.Queue[Id]
+  mut live_map : Map[Id, &Cell]
+  msg_queue : @queue.Queue[Id]
+  mut drain_scheduled : Bool
+  dirty_set : @set.Set[Id]
+  mut paint_scheduled : Bool
   root : &Cell
+  mut captured_link_listener : (@dom.Event) -> Unit
+  mut next_id : Int
   mut mount : String
   mut on_url_changed : ((@url.Url) -> Cmd)?
   mut on_url_request : ((@url.UrlRequest) -> Cmd)?
 }
+pub fn Sandbox::drain(Self) -> Unit
 pub fn Sandbox::flush(Self) -> Unit
+pub fn Sandbox::initialize(Self) -> Unit
 pub fn Sandbox::new(&Cell) -> Self
 pub impl Scheduler for Sandbox
+
+type State
+pub fn State::id(Self) -> Id
+pub fn State::mark_dirty(Self) -> Unit
+pub fn State::new() -> Self
+
+pub enum VNode {
+  Elem(String, Props, Children[VNode], namespace_uri~ : String?)
+  Text(String)
+  Frag(Array[VNode])
+  Cell(&Cell)
+}
+pub fn VNode::cell(&Cell) -> Self
+pub fn VNode::elem(String, Props, Children[Self], namespace_uri? : String) -> Self
+pub fn VNode::fragment(Array[Self]) -> Self
+pub fn VNode::link(Props, Children[Self], escape? : Bool) -> Self
+pub fn VNode::text(String) -> Self
 
 // Type aliases
 
 // Traits
 pub(open) trait Cell {
-  id(Self) -> Id
   step(Self, &Scheduler) -> Unit
-  node(Self) -> Node
-  refersh(Self) -> Unit
+  view(Self) -> VNode
+  state(Self) -> State
 }
 
 pub(open) trait Scheduler {

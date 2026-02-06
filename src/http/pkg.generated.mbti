@@ -1,9 +1,9 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "Yoorkin/rabbit-tea/http"
 
-import(
-  "Yoorkin/rabbit-tea/internal/vdom"
-)
+import {
+  "Yoorkin/rabbit-tea/internal/vdom",
+}
 
 // Values
 pub fn[Model] delete(String, expect~ : Expecting[@vdom.Cmd, Model]) -> @vdom.Cmd

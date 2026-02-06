@@ -1,11 +1,11 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "Yoorkin/rabbit-tea"
 
-import(
-  "Yoorkin/rabbit-tea/html"
-  "Yoorkin/rabbit-tea/internal/vdom"
-  "Yoorkin/rabbit-tea/url"
-)
+import {
+  "Yoorkin/rabbit-tea/html",
+  "Yoorkin/rabbit-tea/internal/vdom",
+  "Yoorkin/rabbit-tea/url",
+}
 
 // Values
 pub fn[A, E : Error] attempt((Result[A, E]) -> @vdom.Cmd, async () -> A raise E) -> @vdom.Cmd
@@ -27,13 +27,17 @@ pub fn App::with_route(Self, url_changed? : (@url.Url) -> @vdom.Cmd, url_request
 
 type Dispatcher[Msg]
 pub fn[Msg] Dispatcher::message(Self[Msg], Msg) -> @vdom.Cmd
+pub fn[Payload, Msg] Dispatcher::message1(Self[Msg], (Payload) -> Msg) -> (Payload) -> @vdom.Cmd
 
 type TEA[Model, Msg]
+pub fn[Model, Msg] TEA::dispatcher(Self[Model, Msg]) -> Dispatcher[Msg]
 pub fn[Model, Msg] TEA::new(model~ : Model, update~ : (Dispatcher[Msg], Msg, Model) -> (@vdom.Cmd, Model), view~ : (Dispatcher[Msg], Model) -> @html.Html) -> Self[Model, Msg]
 pub impl[Model, Msg] @vdom.Cell for TEA[Model, Msg]
 
 // Type aliases
 pub using @vdom {type Cmd}
+
+pub using @vdom {trait Cell}
 
 // Traits
 

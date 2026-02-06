@@ -1,9 +1,9 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "Yoorkin/rabbit-tea/dialog"
 
-import(
-  "Yoorkin/rabbit-tea/internal/vdom"
-)
+import {
+  "Yoorkin/rabbit-tea/internal/vdom",
+}
 
 // Values
 pub fn close(String, return_value? : String) -> @vdom.Cmd

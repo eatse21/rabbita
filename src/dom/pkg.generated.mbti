@@ -1,9 +1,9 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "Yoorkin/rabbit-tea/dom"
 
-import(
-  "moonbit-community/js-ffi/js"
-)
+import {
+  "moonbit-community/js-ffi/js",
+}
 
 // Values
 pub const DOM_KEY_LOCATION_LEFT : Int = 0x01
@@ -163,6 +163,12 @@ pub fn CloseEvent::get_reason(Self) -> String
 pub fn CloseEvent::get_was_clean(Self) -> Bool
 pub impl IsEvent for CloseEvent
 pub impl @js.Cast for CloseEvent
+
+type Comment
+pub fn Comment::to_node(Self) -> Node
+pub impl IsEventTarget for Comment
+pub impl IsNode for Comment
+pub impl @js.Cast for Comment
 
 type CompositionEvent
 pub fn CompositionEvent::get_data(Self) -> String
@@ -471,14 +477,11 @@ type SVGStringList
 
 type StylePropertyMap
 
-type Comment
-pub fn Comment::to_node(Self) -> Node
-pub impl IsEventTarget for Comment
-pub impl IsNode for Comment
-pub impl @js.Cast for Comment
-
 type Text
 pub fn Text::to_node(Self) -> Node
+pub impl IsEventTarget for Text
+pub impl IsNode for Text
+pub impl @js.Cast for Text
 
 type TextTrack
 
@@ -547,7 +550,7 @@ pub trait IsElement : IsNode {
   get_attribute(Self, String) -> String
   remove_attribute(Self, String) -> Unit
   set_property(Self, String, @js.Value) -> Unit
-  get_property(Self, String) -> String
+  get_property(Self, String) -> @js.Optional[String]
   remove_property(Self, String) -> Unit
   scroll_into_view(Self) -> Unit
   get_scroll_top(Self) -> Double
@@ -562,6 +565,7 @@ pub trait IsElement : IsNode {
 
 pub trait IsEvent : @js.Cast {
   target(Self) -> EventTarget
+  current_target(Self) -> @js.Nullable[EventTarget]
   prevent_default(Self) -> Unit
   stop_propagation(Self) -> Unit
   as_event(Self) -> Event
@@ -764,15 +768,16 @@ pub trait IsNode : IsEventTarget {
   get_node_type(Self) -> Int
   get_node_name(Self) -> String
   get_node_value(Self) -> String
+  set_node_value(Self, @js.Nullable[String]) -> Unit
   get_first_child(Self) -> Node
   get_last_child(Self) -> Node
-  get_next_sibling(Self) -> Node
-  get_previous_sibling(Self) -> Node
-  get_parent_node(Self) -> Node
+  get_next_sibling(Self) -> @js.Nullable[Node]
+  get_previous_sibling(Self) -> @js.Nullable[Node]
+  get_parent_node(Self) -> @js.Nullable[Node]
   append_child(Self, Node) -> Unit
   remove_child(Self, Node) -> Unit
   replace_child(Self, Node, Node) -> Unit
-  insert_before(Self, Node, Node) -> Unit
+  insert_before(Self, Node, @js.Nullable[Node]) -> Unit
   get_child(Self, Int) -> Node
   get_child_count(Self) -> Int
   is_same_node(Self, Node) -> Bool
@@ -809,3 +814,4 @@ pub trait IsSVGGraphicsElement : IsSVGElement {
 pub trait IsUIEvent : IsEvent {
   as_ui_event(Self) -> UIEvent
 }
+
