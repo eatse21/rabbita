@@ -11,27 +11,28 @@ struct State {
   mut old_childs : Map[Id, Link]
   mut new_childs : Map[Id, Link]
   mut dirty : Bool
+  mut attach_count : Int
   id : Id
 }
 
 ///|
 struct Link {
-  mut link : &Cell?
+  mut val : &Cell?
 }
 
 ///|
 fn Link::detach(s : Self) -> Unit {
-  s.link = None
+  s.val = None
 }
 
 ///|
 fn Link::new(c : &Cell) -> Link {
-  { link: Some(c) }
+  { val: Some(c) }
 }
 
 ///|
 fn Link::empty() -> Link {
-  { link: None }
+  { val: None }
 }
 
 ///|
@@ -51,6 +52,7 @@ pub fn State::new() -> State {
     new_childs: {},
     old_childs: {},
     dirty: true,
+    attach_count: 0,
     id: Id::new(),
   }
 }

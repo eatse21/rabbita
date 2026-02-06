@@ -57,6 +57,9 @@ fn INode::remove(
   parent : @dom.Node,
 ) -> Unit {
   for link in self.scan_direct_childs() {
+    if link.val is Some(c) {
+      sandbox.drop_live_subtree(c)
+    }
     link.detach()
   }
   match self {
@@ -129,6 +132,8 @@ fn VNode::insert(
         state.id.value = Some(sandbox.next_id)
         sandbox.next_id += 1
       }
+      state.attach_count += 1
+      sandbox.live_map[state.id] = c
       let link = Link::new(c)
       cell.state().new_childs[state.id] = link
       let start = @dom.document().create_comment("")
@@ -249,50 +254,6 @@ pub(all) enum Children[T] {
   Array(Array[T])
   Map(Map[String, T])
 }
-
-// ///|
-// pub fn VNode::validate(self : VNode) -> Unit {
-//   fn validate_array(nodes : Array[VNode]) -> Unit {
-//     for node in nodes {
-//       node.validate()
-//     }
-//   }
-
-//   fn validate_children(children : Children[VNode]) -> Unit {
-//     match children {
-//       Array(nodes) => validate_array(nodes)
-//       Map(map) =>
-//         for _, node in map {
-//           node.validate()
-//         }
-//     }
-//   }
-
-//   match self {
-//     Frag(cs, ..) => validate_array(cs)
-//     Elem(_, _, cs, ..) => validate_children(cs)
-//     Cell(c, ..) => c.node().validate()
-//     Text(_) => ()
-//   }
-//   match self.binding() {
-//     Single(e) => if e.get_parent_node().is_null() { panic() }
-//     Range(s, e) => {
-//       guard s.get_parent_node().to_option() is Some(a) else {
-//         log_node(nullable(s.as_node()))
-//         panic()
-//       }
-//       guard e.get_parent_node().to_option() is Some(b) else {
-//         log_node(nullable(e.as_node()))
-//         panic()
-//       }
-//       guard a.is_same_node(b) else {
-//         log_node(nullable(s.as_node()))
-//         panic()
-//       }
-//     }
-//     Empty => panic()
-//   }
-// }
 
 ///|
 pub struct Props {

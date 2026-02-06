@@ -100,18 +100,50 @@ pub fn Sandbox::initialize(self : Self) -> Unit {
 }
 
 ///|
+fn Sandbox::drop_live_subtree(self : Self, root : &Cell) -> Unit {
+  let stack = [root]
+  while stack.pop() is Some(cell) {
+    let state = cell.state()
+    state.attach_count -= 1
+    if state.attach_count <= 0 {
+      self.live_map.remove(state.id)
+      self.dirty_set.remove(state.id)
+    }
+    // Removal can happen mid-diff; scan both old/new links to avoid leaving orphans.
+    // Example: parent replaces child A with B (B goes to new_childs), then the
+    // parent subtree is removed before commit. If we only scan old_childs,
+    // B would stay live even though its DOM is gone.
+    for _, link in state.old_childs {
+      if link.val is Some(c) {
+        stack.push(c)
+      }
+    }
+    for _, link in state.new_childs {
+      if link.val is Some(c) {
+        stack.push(c)
+      }
+    }
+  }
+}
+
+///|
 /// Schedules a drawing frame to be rendered on the next animation frame.
 pub fn Sandbox::flush(self : Self) -> Unit {
   if !self.paint_scheduled {
     self.paint_scheduled = true
     @dom.window().request_animation_frame(fn(_) {
       // println("dirty set: \{dirty_set}")
-      self.live_map.clear()
-      let cells = Queue::from_array([self.root])
-      while cells.pop() is Some(cell) {
-        let state = cell.state()
-        self.live_map[state.id] = cell
-        if state.dirty {
+      let dirty = self.dirty_set.to_array()
+      self.dirty_set.clear()
+      for id in dirty {
+        if self.live_map.get(id) is Some(cell) {
+          let state = cell.state()
+          // Dirty-set can contain stale ids; skip if already clean.
+          // Example: a cell was marked dirty, then got removed or superseded
+          // before flush; keeping this guard prevents redundant diff/crash.
+          if !state.dirty {
+            continue
+          }
           let vnode = cell.view()
           // The parent cell helps child cells initialize their inodes during vdom diff,
           // so initially child cells are not in the dirty set
@@ -123,17 +155,12 @@ pub fn Sandbox::flush(self : Self) -> Unit {
           state.inode = Some(inode)
           state.dirty = false
           for id, link in state.old_childs {
-            if link.link is Some(_) {
+            if link.val is Some(_) {
               state.new_childs[id] = link
             }
           }
           state.old_childs = state.new_childs
           state.new_childs = Map::new()
-        }
-        for _, link in state.old_childs {
-          if link.link is Some(c) {
-            cells.push(c)
-          }
         }
       }
       // self.root.node().validate()
