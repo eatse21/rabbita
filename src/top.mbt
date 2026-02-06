@@ -1,11 +1,8 @@
 ///|
-pub using @cmd {type Cmd, none, batch, perform, attempt}
+pub using @runtime {trait Cell, type Cmd, none, batch, perform, attempt}
 
 ///|
-pub using @runtime {trait Cell}
-
-///|
-using @html {type Html}
+pub using @html {type Html}
 
 ///|
 /// Start the application.
@@ -27,8 +24,8 @@ pub fn new(root : &@runtime.Cell) -> App {
 ///|
 pub fn App::with_route(
   self : Self,
-  url_changed? : (@url.Url) -> @cmd.Cmd,
-  url_request? : (@url.UrlRequest) -> @cmd.Cmd,
+  url_changed? : (@url.Url) -> Cmd,
+  url_request? : (@url.UrlRequest) -> Cmd,
 ) -> Unit {
   @dom.window()
   .to_event_target()

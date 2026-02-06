@@ -1,7 +1,4 @@
 ///|
-using @cmd {type Cmd}
-
-///|
 struct Mouse(@dom.MouseEvent)
 
 ///|

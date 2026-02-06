@@ -1,5 +1,5 @@
 ///|
-using @runtime {type VNode, type Props}
+using @runtime {type VNode, type Props, type Cmd}
 
 ///|
 #alias(T)

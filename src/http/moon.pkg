@@ -1,5 +1,4 @@
 import {
-  "Yoorkin/rabbit-tea/cmd",
   "Yoorkin/rabbit-tea/internal/runtime",
   "moonbitlang/core/json",
 }

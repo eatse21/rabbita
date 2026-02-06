@@ -1,2 +1,2 @@
 ///|
-using @cmd {type Cmd}
+using @runtime {type Cmd}

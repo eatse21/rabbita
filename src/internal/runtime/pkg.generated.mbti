@@ -11,6 +11,14 @@ import {
 }
 
 // Values
+pub fn[A, E : Error] attempt((Result[A, E]) -> Cmd, async () -> A raise E) -> Cmd
+
+pub fn batch(Array[Cmd]) -> Cmd
+
+pub let none : Cmd
+
+pub fn[A] perform((A) -> Cmd, async () -> A noraise) -> Cmd
+
 pub fn variant_to_js_value(@variant.Variant) -> @js.Value
 
 // Errors

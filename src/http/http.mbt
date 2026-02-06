@@ -1,5 +1,5 @@
 ///|
-using @runtime {trait Scheduler}
+using @runtime {trait Scheduler, type Cmd}
 
 ///|
 pub(all) enum Expecting[Msg, Model] {
@@ -57,9 +57,9 @@ extern "js" fn js_request(
 fn[Model] request(
   url : String,
   http_method : String,
-  expect~ : Expecting[@cmd.Cmd, Model],
+  expect~ : Expecting[Cmd, Model],
   body~ : Body,
-) -> @cmd.Cmd {
+) -> Cmd {
   let launch = fn(scheduler : &Scheduler) {
     let has_body = match body {
       Empty => false
@@ -100,19 +100,13 @@ fn[Model] request(
 
 ///|
 /// Create a command to send a GET request.
-pub fn[Model] get(
-  url : String,
-  expect~ : Expecting[@cmd.Cmd, Model],
-) -> @cmd.Cmd {
+pub fn[Model] get(url : String, expect~ : Expecting[Cmd, Model]) -> Cmd {
   request(url, "GET", expect~, body=Empty)
 }
 
 ///|
 /// Create a command to send a PUT request.
-pub fn[Model] delete(
-  url : String,
-  expect~ : Expecting[@cmd.Cmd, Model],
-) -> @cmd.Cmd {
+pub fn[Model] delete(url : String, expect~ : Expecting[Cmd, Model]) -> Cmd {
   request(url, "DELETE", expect~, body=Empty)
 }
 
@@ -121,8 +115,8 @@ pub fn[Model] delete(
 pub fn[Model] post(
   url : String,
   body : Body,
-  expect~ : Expecting[@cmd.Cmd, Model],
-) -> @cmd.Cmd {
+  expect~ : Expecting[Cmd, Model],
+) -> Cmd {
   request(url, "POST", body~, expect~)
 }
 
@@ -131,7 +125,7 @@ pub fn[Model] post(
 pub fn[Model] patch(
   url : String,
   body : Body,
-  expect~ : Expecting[@cmd.Cmd, Model],
-) -> @cmd.Cmd {
+  expect~ : Expecting[Cmd, Model],
+) -> Cmd {
   request(url, "PATCH", body~, expect~)
 }

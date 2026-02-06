@@ -1,7 +1,4 @@
 ///|
-using @url {type Url, type UrlRequest}
-
-///|
 using @queue {type Queue}
 
 ///|

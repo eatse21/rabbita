@@ -2,5 +2,4 @@ import {
   "Yoorkin/rabbit-tea/internal/runtime" as @runtime,
   "Yoorkin/rabbit-tea/dom",
   "Yoorkin/rabbit-tea/variant",
-  "Yoorkin/rabbit-tea/cmd",
 }
