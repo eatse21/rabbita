@@ -8,10 +8,30 @@ pub(open) trait Cell {
 ///|
 struct State {
   mut inode : INode?
-  mut childs : Set[Id]
+  mut childs : Map[Id, Link]
+  mut parent_link : Link
   mut dirty : Bool
-  mut live_count : Int
   id : Id
+}
+
+///|
+priv struct Link {
+  mut link : &Cell?
+}
+
+///|
+fn Link::detach(s : Self) -> Unit {
+  s.link = None
+}
+
+///|
+fn Link::new(c : &Cell) -> Link {
+  { link: Some(c) }
+}
+
+///|
+fn Link::empty() -> Link {
+  { link: None }
 }
 
 ///|
@@ -26,5 +46,11 @@ pub fn State::mark_dirty(s : Self) -> Unit {
 
 ///|
 pub fn State::new() -> State {
-  { inode: None, childs: Set::new(), dirty: true, id: Id::new(), live_count: 0 }
+  {
+    inode: None,
+    childs: {},
+    dirty: true,
+    id: Id::new(),
+    parent_link: Link::empty(),
+  }
 }

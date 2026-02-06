@@ -54,6 +54,7 @@ pub fn App::mount(self : Self, element : String) -> Unit {
   .get_element_by_id(element)
   .unwrap()
   .set_inner_html("<div></div>")
+  self.sandbox.initialize()
   self.sandbox.flush()
 }
 

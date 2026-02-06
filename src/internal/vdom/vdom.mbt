@@ -15,6 +15,25 @@ priv enum INode {
 }
 
 ///|
+fn INode::scan_childs(s : Self) -> Array[&Cell] {
+  let tmp = [s]
+  let result = []
+  while tmp.pop() is Some(inode) {
+    match inode {
+      Text(_) => ()
+      Elem(_, _, cs, _, ..) =>
+        match cs {
+          Map(mp) => tmp.push_iter(mp.values())
+          Array(arr) => tmp.push_iter(arr.iter())
+        }
+      Frag(xs, _, _) => tmp.push_iter(xs.iter())
+      Cell(c, _, _, _) => result.push(c)
+    }
+  }
+  return result
+}
+
+///|
 fn INode::start(s : Self) -> @dom.Node {
   match s {
     Elem(_, _, _, e, ..) | Text(_, e) => e.as_node()
@@ -29,9 +48,9 @@ fn INode::remove(
   cell : &Cell,
   parent : @dom.Node,
 ) -> Unit {
-  if self is Cell(c, _, _, _) {
-    sandbox.unsubscribe(cell, c)
-  }
+  // if self is Cell(c, _, _, _) {
+  //   sandbox.unsubscribe(cell, c)
+  // }
   match self {
     Elem(_, _, _, e, ..) | Text(_, e) => parent.remove_child(e.as_node())
     Frag(_, s, e) | Cell(_, _, s, e) => {
@@ -96,7 +115,12 @@ fn VNode::insert(
     //   c.refersh()
     // } 
     Cell(c) => {
-      sandbox.subscribe(cell, c)
+      // sandbox.subscribe(cell, c)
+      let state = c.state()
+      if state.id.value is None {
+        state.id.value = Some(sandbox.next_id)
+        sandbox.next_id += 1
+      }
       let start = @dom.document().create_comment("")
       let end = @dom.document().create_comment("")
       let fragment = @dom.document().create_document_fragment()
