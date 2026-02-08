@@ -1,7 +1,7 @@
 import {
-  "Yoorkin/rabbit-tea/dom",
+  "moonbit-community/rabbita/dom",
   "moonbit-community/js-ffi/js",
-  "Yoorkin/rabbit-tea/html",
+  "moonbit-community/rabbita/html",
 }
 
 options(

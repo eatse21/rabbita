@@ -1,5 +1,5 @@
 import {
-  "Yoorkin/rabbit-tea/internal/runtime" as @runtime,
-  "Yoorkin/rabbit-tea/dom",
-  "Yoorkin/rabbit-tea/variant",
+  "moonbit-community/rabbita/internal/runtime" as @runtime,
+  "moonbit-community/rabbita/dom",
+  "moonbit-community/rabbita/variant",
 }

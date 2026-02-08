@@ -1,6 +1,6 @@
 import {
-  "Yoorkin/rabbit-tea/url",
-  "Yoorkin/rabbit-tea/dom",
-  "Yoorkin/rabbit-tea/internal/runtime",
+  "moonbit-community/rabbita/url",
+  "moonbit-community/rabbita/dom",
+  "moonbit-community/rabbita/internal/runtime",
   "moonbit-community/js-ffi/js",
 }

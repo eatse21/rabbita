@@ -1,8 +1,8 @@
 import {
-  "Yoorkin/rabbit-tea/html",
-  "Yoorkin/rabbit-tea/internal/runtime",
-  "Yoorkin/rabbit-tea/url",
-  "Yoorkin/rabbit-tea/dom",
+  "moonbit-community/rabbita/html",
+  "moonbit-community/rabbita/internal/runtime",
+  "moonbit-community/rabbita/url",
+  "moonbit-community/rabbita/dom",
   "moonbitlang/core/queue",
   "moonbitlang/core/ref",
   "moonbit-community/js-ffi/js",
