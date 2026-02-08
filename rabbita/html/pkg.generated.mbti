@@ -13,19 +13,33 @@ pub fn[C : IsChildren] abbr(style? : Array[String], id? : String, class? : Strin
 
 pub fn[C : IsChildren] address(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
+pub fn area(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute]) -> Html
+
 pub fn[C : IsChildren] article(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
 pub fn[C : IsChildren] aside(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
 pub fn attribute(String, String) -> Attribute
 
+pub fn[C : IsChildren] audio(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
 pub fn[C : IsChildren] b(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
+pub fn base(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute]) -> Html
+
+pub fn[C : IsChildren] bdi(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
+pub fn[C : IsChildren] bdo(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
 pub fn[C : IsChildren] blockquote(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
+pub fn[C : IsChildren] body(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
 pub fn br(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute]) -> Html
 
 pub fn[C : IsChildren] button(style? : Array[String], id? : String, class? : String, click? : @runtime.Cmd, attrs? : Array[Attribute], C) -> Html
+
+pub fn[C : IsChildren] canvas(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
 pub fn[C : IsChildren] caption(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
@@ -37,6 +51,8 @@ pub fn[C : IsChildren] col(style? : Array[String], id? : String, span? : Int, cl
 
 pub fn[C : IsChildren] colgroup(style? : Array[String], id? : String, span? : Int, class? : String, attrs? : Array[Attribute], C) -> Html
 
+pub fn[C : IsChildren] data(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
 pub fn[C : IsChildren] datalist(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
 pub fn[C : IsChildren] dd(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
@@ -44,6 +60,8 @@ pub fn[C : IsChildren] dd(style? : Array[String], id? : String, class? : String,
 pub fn[C : IsChildren] del(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
 pub fn[C : IsChildren] details(style? : Array[String], id? : String, class? : String, open? : Bool, attrs? : Array[Attribute], C) -> Html
+
+pub fn[C : IsChildren] dfn(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
 pub fn[C : IsChildren] dialog(style? : Array[String], id? : String, class? : String, open? : Bool, close? : (String) -> @runtime.Cmd, cancel? : @runtime.Cmd, attrs? : Array[Attribute], C) -> Html
 
@@ -54,6 +72,10 @@ pub fn[C : IsChildren] dl(style? : Array[String], id? : String, class? : String,
 pub fn[C : IsChildren] dt(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
 pub fn[C : IsChildren] em(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
+pub fn embed(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute]) -> Html
+
+pub fn fencedframe(style? : Array[String], id? : String, class? : String, src? : String, title? : String, width? : Int, height? : Int, attrs? : Array[Attribute]) -> Html
 
 pub fn[C : IsChildren] fieldset(style? : Array[String], id? : String, class? : String, disabled? : Bool, name? : String, attrs? : Array[Attribute], C) -> Html
 
@@ -67,6 +89,8 @@ pub fn[C : IsChildren] form(style? : Array[String], id? : String, class? : Strin
 
 pub fn[C : IsChildren] fragment(C) -> Html
 
+pub fn[C : IsChildren] geolocation(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
 pub fn[C : IsChildren] h1(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
 pub fn[C : IsChildren] h2(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
@@ -79,11 +103,17 @@ pub fn[C : IsChildren] h5(style? : Array[String], id? : String, class? : String,
 
 pub fn[C : IsChildren] h6(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
+pub fn[C : IsChildren] head(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
 pub fn[C : IsChildren] header(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
+pub fn[C : IsChildren] hgroup(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
 pub fn[C : IsChildren] hr(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
 pub fn href(String) -> Attribute
+
+pub fn[C : IsChildren] html(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
 pub fn[C : IsChildren] i(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
@@ -103,9 +133,19 @@ pub fn[C : IsChildren] legend(style? : Array[String], id? : String, class? : Str
 
 pub fn[C : IsChildren] li(style? : Array[String], value? : Int, id? : String, class? : String, click? : @runtime.Cmd, attrs? : Array[Attribute], C) -> Html
 
+pub fn link(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute]) -> Html
+
 pub fn[C : IsChildren] main_(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
+pub fn[C : IsChildren] map(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
 pub fn[C : IsChildren] mark(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
+pub fn[C : IsChildren] math(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
+pub fn[C : IsChildren] menu(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
+pub fn meta(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute]) -> Html
 
 pub fn[C : IsChildren] meter(style? : Array[String], id? : String, class? : String, value? : Int, min? : Int, max? : Int, low? : Int, high? : Int, optimum? : Int, attrs? : Array[Attribute], C) -> Html
 
@@ -113,7 +153,11 @@ pub fn[C : IsChildren] nav(style? : Array[String], id? : String, class? : String
 
 pub fn[C : IsChildren] node(String, Array[Attribute], C) -> Html
 
+pub fn[C : IsChildren] noscript(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
 pub fn nothing() -> Html
+
+pub fn[C : IsChildren] object(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
 pub fn[C : IsChildren] ol(style? : Array[String], reversed? : Bool, start? : Int, id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
@@ -149,6 +193,8 @@ pub fn[C : IsChildren] output(style? : Array[String], id? : String, class? : Str
 
 pub fn[C : IsChildren] p(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
+pub fn[C : IsChildren] picture(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
 pub fn[C : IsChildren] pre(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
 pub fn[C : IsChildren] progress(style? : Array[String], id? : String, class? : String, value? : Int, max? : Int, attrs? : Array[Attribute], C) -> Html
@@ -157,15 +203,31 @@ pub fn property(String, @variant.Variant) -> Attribute
 
 pub fn[C : IsChildren] q(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
+pub fn[C : IsChildren] rp(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
+pub fn[C : IsChildren] rt(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
+pub fn[C : IsChildren] ruby(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
 pub fn[C : IsChildren] s(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
 pub fn[C : IsChildren] samp(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
+pub fn[C : IsChildren] script(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
+pub fn[C : IsChildren] search(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
 pub fn[C : IsChildren] section(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
 pub fn[C : IsChildren] select(style? : Array[String], id? : String, class? : String, disabled? : Bool, name? : String, change? : (String) -> @runtime.Cmd, attrs? : Array[Attribute], C) -> Html
 
+pub fn[C : IsChildren] selectedcontent(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
+pub fn[C : IsChildren] slot(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
 pub fn[C : IsChildren] small(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
+pub fn source(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute]) -> Html
 
 pub fn[C : IsChildren] span(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
@@ -173,11 +235,15 @@ pub fn[C : IsChildren] strong(style? : Array[String], id? : String, class? : Str
 
 pub fn style(String, String) -> Attribute
 
+pub fn[C : IsChildren] style_tag(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
 pub fn[C : IsChildren] sub(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
 pub fn[C : IsChildren] summary(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
 pub fn[C : IsChildren] sup(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
+pub fn[C : IsChildren] svg(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
 pub fn[C : IsChildren] table(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
@@ -186,6 +252,8 @@ pub fn target(Target) -> Attribute
 pub fn[C : IsChildren] tbody(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
 pub fn[C : IsChildren] td(style? : Array[String], id? : String, colspan? : Int, rowspan? : Int, headers? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
+pub fn[C : IsChildren] template(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
 pub fn text(String) -> Html
 
@@ -199,13 +267,21 @@ pub fn[C : IsChildren] thead(style? : Array[String], id? : String, class? : Stri
 
 pub fn[C : IsChildren] time(style? : Array[String], id? : String, class? : String, datetime? : String, attrs? : Array[Attribute], C) -> Html
 
+pub fn[C : IsChildren] title(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
 pub fn[C : IsChildren] tr(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
+pub fn track(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute]) -> Html
 
 pub fn[C : IsChildren] u(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
 
 pub fn[C : IsChildren] ul(style? : Array[String], id? : String, class? : String, click? : @runtime.Cmd, attrs? : Array[Attribute], C) -> Html
 
 pub fn[C : IsChildren] var_(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
+pub fn[C : IsChildren] video(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+
+pub fn wbr(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute]) -> Html
 
 // Errors
 
