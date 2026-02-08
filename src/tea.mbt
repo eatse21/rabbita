@@ -1,33 +1,39 @@
 ///|
-struct TEA[Model, Msg] {
-  mut model : Model
+using @runtime {trait IsCell}
+
+///|
+priv struct TypedCell[Model, Msg] {
+  model : Ref[Model]
   dispatcher : Dispatcher[Msg]
   dispatch : (Msg) -> Cmd
   update : (Dispatch[Msg], Msg, Model) -> (Cmd, Model)
   view : (Dispatch[Msg], Model) -> @html.Html
-  state : @runtime.State
+  flags : @runtime.Flags
 }
 
 ///|
-pub impl[Model, Msg] Cell for TEA[Model, Msg] with state(self) {
-  self.state
-}
+pub type Dispatch[Msg] = (Msg) -> Cmd
 
 ///|
-pub impl[Model, Msg] Cell for TEA[Model, Msg] with step(self, scheduler) {
+impl[Model, Msg] IsCell for TypedCell[Model, Msg] with step(self, scheduler) {
   if self.dispatcher.inbox.pop() is Some(msg) {
-    let (cmd, model) = (self.update)(self.dispatch, msg, self.model)
-    self.model = model
+    let (cmd, model) = (self.update)(self.dispatch, msg, self.model.val)
+    self.model.val = model
     scheduler.add(cmd)
-    self.state.mark_dirty()
+    self.flags.mark_dirty()
   } else {
     // violate the invariant
   }
 }
 
 ///|
-pub impl[Model, Msg] Cell for TEA[Model, Msg] with view(self) {
-  (self.view)(self.dispatch, self.model).0
+impl[Model, Msg] IsCell for TypedCell[Model, Msg] with view(self) {
+  (self.view)(self.dispatch, self.model.val).0
+}
+
+///|
+impl[Model, Msg] IsCell for TypedCell[Model, Msg] with flags(self) {
+  self.flags
 }
 
 ///|
@@ -43,16 +49,22 @@ fn[Msg] Dispatcher::message(self : Self[Msg], msg : Msg) -> Cmd {
 }
 
 ///|
-pub type Dispatch[Msg] = (Msg) -> Cmd
+struct Cell(&IsCell)
 
 ///|
-pub fn[Model, Msg] TEA::new(
+pub fn Cell::view(self : Self) -> Html {
+  @runtime.VNode::slot(self.0)
+}
+
+///|
+pub fn[Model, Msg] cell(
   model~ : Model,
   update~ : (Dispatch[Msg], Msg, Model) -> (Cmd, Model),
   view~ : (Dispatch[Msg], Model) -> Html,
-) -> TEA[Model, Msg] {
-  let state = @runtime.State::new()
-  let dispatcher = { id: state.id(), inbox: @queue.new() }
+) -> Cell {
+  let flags = @runtime.Flags::new()
+  let dispatcher = { id: flags.id(), inbox: @queue.new() }
   let dispatch = m => dispatcher.message(m)
-  { view, update, dispatcher, dispatch, model, state }
+  let model = @ref.new(model)
+  Cell({ view, update, dispatcher, dispatch, model, flags })
 }

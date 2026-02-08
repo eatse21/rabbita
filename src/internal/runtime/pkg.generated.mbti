@@ -31,12 +31,26 @@ pub(all) enum Cmd {
   Empty
 }
 
+type Flags
+pub fn Flags::id(Self) -> Id
+pub fn Flags::mark_dirty(Self) -> Unit
+pub fn Flags::new() -> Self
+
 type Id
 pub fn Id::new() -> Self
 pub impl Compare for Id
 pub impl Eq for Id
 pub impl Hash for Id
 pub impl Show for Id
+
+type InstId
+pub fn InstId::new() -> Self
+pub impl Compare for InstId
+pub impl Eq for InstId
+pub impl Hash for InstId
+pub impl Show for InstId
+
+type Instance
 
 pub struct Props {
   mut slots : Map[String, Ref[(@dom.Event, &Scheduler) -> Unit]]
@@ -57,33 +71,28 @@ pub(all) struct Sandbox {
 pub fn Sandbox::drain(Self) -> Unit
 pub fn Sandbox::flush(Self) -> Unit
 pub fn Sandbox::initialize(Self) -> Unit
-pub fn Sandbox::new(&Cell) -> Self
+pub fn Sandbox::new(&IsCell) -> Self
 pub impl Scheduler for Sandbox
-
-type State
-pub fn State::id(Self) -> Id
-pub fn State::mark_dirty(Self) -> Unit
-pub fn State::new() -> Self
 
 pub enum VNode {
   Elem(String, Props, Children[VNode], namespace_uri~ : String?)
   Text(String)
   Frag(Array[VNode])
-  Cell(&Cell)
+  Slot(&IsCell)
 }
-pub fn VNode::cell(&Cell) -> Self
 pub fn VNode::elem(String, Props, Children[Self], namespace_uri? : String) -> Self
 pub fn VNode::fragment(Array[Self]) -> Self
 pub fn VNode::link(Props, Children[Self], escape? : Bool) -> Self
+pub fn VNode::slot(&IsCell) -> Self
 pub fn VNode::text(String) -> Self
 
 // Type aliases
 
 // Traits
-pub(open) trait Cell {
+pub(open) trait IsCell {
   step(Self, &Scheduler) -> Unit
   view(Self) -> VNode
-  state(Self) -> State
+  flags(Self) -> Flags
 }
 
 pub(open) trait Scheduler {

@@ -21,8 +21,6 @@ pub fn[C : IsChildren] button(style? : Array[String], id? : String, class? : Str
 
 pub fn[C : IsChildren] caption(style? : Array[String], id? : String, class? : String, C) -> Html
 
-pub fn cell(&@runtime.Cell) -> Html
-
 pub fn[C : IsChildren] code(style? : Array[String], id? : String, class? : String, C) -> Html
 
 pub fn[C : IsChildren] col(style? : Array[String], id? : String, span? : Int, class? : String, C) -> Html

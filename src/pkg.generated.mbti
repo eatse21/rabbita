@@ -12,7 +12,9 @@ pub fn[A, E : Error] attempt((Result[A, E]) -> @runtime.Cmd, async () -> A raise
 
 pub fn batch(Array[@runtime.Cmd]) -> @runtime.Cmd
 
-pub fn new(&@runtime.Cell) -> App
+pub fn[Model, Msg] cell(model~ : Model, update~ : ((Msg) -> @runtime.Cmd, Msg, Model) -> (@runtime.Cmd, Model), view~ : ((Msg) -> @runtime.Cmd, Model) -> @html.Html) -> Cell
+
+pub fn new(Cell) -> App
 
 pub let none : @runtime.Cmd
 
@@ -25,9 +27,8 @@ type App
 pub fn App::mount(Self, String) -> Unit
 pub fn App::with_route(Self, url_changed? : (@url.Url) -> @runtime.Cmd, url_request? : (@url.UrlRequest) -> @runtime.Cmd) -> Unit
 
-type TEA[Model, Msg]
-pub fn[Model, Msg] TEA::new(model~ : Model, update~ : ((Msg) -> @runtime.Cmd, Msg, Model) -> (@runtime.Cmd, Model), view~ : ((Msg) -> @runtime.Cmd, Model) -> @html.Html) -> Self[Model, Msg]
-pub impl[Model, Msg] @runtime.Cell for TEA[Model, Msg]
+type Cell
+pub fn Cell::view(Self) -> @html.Html
 
 // Type aliases
 pub using @runtime {type Cmd}
@@ -35,8 +36,6 @@ pub using @runtime {type Cmd}
 pub type Dispatch[Msg] = (Msg) -> @runtime.Cmd
 
 pub using @html {type Html}
-
-pub using @runtime {trait Cell}
 
 // Traits
 

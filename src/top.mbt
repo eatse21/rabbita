@@ -1,5 +1,5 @@
 ///|
-pub using @runtime {trait Cell, type Cmd, none, batch, perform, attempt}
+pub using @runtime {type Cmd, none, batch, perform, attempt}
 
 ///|
 pub using @html {type Html}
@@ -16,8 +16,8 @@ pub using @html {type Html}
 /// to get more intuition!
 /// 
 /// To start the application with router, you can use the `application` function.
-pub fn new(root : &Cell) -> App {
-  let sandbox = @runtime.Sandbox::new(root)
+pub fn new(root : Cell) -> App {
+  let sandbox = @runtime.Sandbox::new(root.0)
   App::{ sandbox, }
 }
 

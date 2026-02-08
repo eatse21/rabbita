@@ -3,7 +3,7 @@ pub enum VNode {
   Elem(String, Props, Children[VNode], namespace_uri~ : String?)
   Text(String)
   Frag(Array[VNode])
-  Cell(&Cell)
+  Slot(&IsCell)
 }
 
 ///|
@@ -11,7 +11,29 @@ priv enum INode {
   Elem(String, Props, Children[INode], namespace_uri~ : String?, @dom.Element)
   Text(String, @dom.Element)
   Frag(Array[INode], @dom.Comment, @dom.Comment)
-  Cell(&Cell, INode, Link, @dom.Comment, @dom.Comment)
+  Slot(Instance, @dom.Comment, @dom.Comment)
+}
+
+///|
+struct Instance {
+  cell : &IsCell
+  mut inode : INode?
+  link : Link
+  mut old_childs : Map[InstId, Link]
+  mut new_childs : Map[InstId, Link]
+  id : InstId
+}
+
+///|
+fn Instance::new(cell : &IsCell) -> Self {
+  {
+    cell,
+    inode: None,
+    link: { val: None },
+    old_childs: {},
+    new_childs: {},
+    id: InstId::new(),
+  }
 }
 
 ///|
@@ -27,7 +49,7 @@ fn INode::scan_direct_childs(s : Self) -> Array[Link] {
           Array(arr) => tmp.push_iter(arr.iter())
         }
       Frag(xs, _, _) => tmp.push_iter(xs.iter())
-      Cell(_, _, link, _, _) => result.push(link)
+      Slot(inst, _, _) => result.push(inst.link)
     }
   }
   return result
@@ -37,7 +59,7 @@ fn INode::scan_direct_childs(s : Self) -> Array[Link] {
 fn INode::start(s : Self) -> @dom.Node {
   match s {
     Elem(_, _, _, e, ..) | Text(_, e) => e.as_node()
-    Frag(_, s, _) | Cell(_, _, _, s, _) => s.as_node()
+    Frag(_, s, _) | Slot(_, s, _) => s.as_node()
   }
 }
 
@@ -45,21 +67,21 @@ fn INode::start(s : Self) -> @dom.Node {
 fn INode::end(s : Self) -> @dom.Node {
   match s {
     Elem(_, _, _, e, ..) | Text(_, e) => e.as_node()
-    Frag(_, _, e) | Cell(_, _, _, _, e) => e.as_node()
+    Frag(_, _, e) | Slot(_, _, e) => e.as_node()
   }
 }
 
 ///|
 fn INode::remove(self : Self, sandbox : Sandbox, parent : @dom.Node) -> Unit {
   for link in self.scan_direct_childs() {
-    if link.val is Some(c) {
-      sandbox.drop_live_subtree(c)
+    if link.val is Some(inst) {
+      sandbox.drop_live_subtree(inst)
     }
     link.detach()
   }
   match self {
     Elem(_, _, _, e, ..) | Text(_, e) => parent.remove_child(e.as_node())
-    Frag(_, s, e) | Cell(_, _, _, s, e) => {
+    Frag(_, s, e) | Slot(_, s, e) => {
       let s = s.as_node()
       let e = e.as_node()
       // guard s.get_parent_node().to_option() is Some(a) &&
@@ -83,7 +105,7 @@ fn INode::relocate(
   match self {
     Elem(_, _, _, e, ..) | Text(_, e) =>
       parent.insert_before(e.as_node(), before)
-    Frag(_, s, e) | Cell(_, _, _, s, e) => {
+    Frag(_, s, e) | Slot(_, s, e) => {
       {
         guard s.get_parent_node().to_option() is Some(a)
         guard e.get_parent_node().to_option() is Some(b)
@@ -107,7 +129,7 @@ fn INode::relocate(
 fn VNode::insert(
   self : Self,
   sandbox : Sandbox,
-  cell : &Cell,
+  parent_inst : Instance,
   parent : @dom.Node,
   before : @js.Nullable[@dom.Node],
 ) -> INode {
@@ -120,35 +142,40 @@ fn VNode::insert(
     // if c.dirty_flag() {
     //   c.refersh()
     // } 
-    Cell(c) => {
+    Slot(cell) => {
       // sandbox.subscribe(cell, c)
-      let state = c.state()
-      if state.id.value is None {
-        state.id.value = Some(sandbox.next_id)
-        sandbox.next_id += 1
-      }
-      state.attach_count += 1
-      sandbox.live_map[state.id] = c
-      let link = Link::new(c)
-      cell.state().new_childs[state.id] = link
+      let flags = cell.flags()
+      flags.attach_count += 1
       let start = @dom.document().create_comment("")
       let end = @dom.document().create_comment("")
       let fragment = @dom.document().create_document_fragment()
       fragment.insert_before(start.as_node(), null())
-      let inter = match c.state().inode {
-        None => {
-          let inter = c.view().insert(sandbox, c, fragment.as_node(), null())
-          c.state().inode = Some(inter)
-          inter
-        }
-        Some(inter) => {
-          inter.relocate(fragment.as_node(), null())
-          inter
-        }
+      // let inter = 
+      // match c.data().inode {
+      //   None => {
+      let inst = Instance::new(cell)
+      let inode = cell.view().insert(sandbox, inst, fragment.as_node(), null())
+      inst.inode = Some(inode)
+      match sandbox.live_map.get(flags.id) {
+        None =>
+          sandbox.live_map[flags.id] = (
+            inst.cell,
+            Map::from_array([(inst.id, inst)]),
+          )
+        Some((_, map)) => map[inst.id] = inst
       }
+      inst.link.val = Some(inst)
+      parent_inst.new_childs[inst.id] = inst.link
+      //     inter
+      //   }
+      //   Some(inter) => {
+      //     inter.relocate(fragment.as_node(), null())
+      //     inter
+      //   }
+      // }
       fragment.insert_before(end.as_node(), null())
       parent.insert_before(fragment.as_node(), before)
-      Cell(c, inter, link, start, end)
+      Slot(inst, start, end)
     }
     Frag(childs) => {
       let doc = @dom.document()
@@ -157,7 +184,7 @@ fn VNode::insert(
       let end = doc.create_comment("end")
       fragment.append_child(start.as_node())
       let childs = childs.map(fn(x) {
-        x.insert(sandbox, cell, fragment.as_node(), null())
+        x.insert(sandbox, parent_inst, fragment.as_node(), null())
       })
       fragment.append_child(end.as_node())
       parent.insert_before(fragment.as_node(), before)
@@ -191,11 +218,12 @@ fn VNode::insert(
       }
       let n = element.as_node()
       let childs = match childs {
-        Array(xs) => Array(xs.map(x => x.insert(sandbox, cell, n, null())))
+        Array(xs) =>
+          Array(xs.map(x => x.insert(sandbox, parent_inst, n, null())))
         Map(mp) => {
           let imp = {}
           for k, v in mp {
-            imp[k] = v.insert(sandbox, cell, n, null())
+            imp[k] = v.insert(sandbox, parent_inst, n, null())
           }
           Map(imp)
         }
@@ -235,8 +263,8 @@ pub fn VNode::link(
 }
 
 ///|
-pub fn VNode::cell(cell : &Cell) -> VNode {
-  Cell(cell)
+pub fn VNode::slot(cell : &IsCell) -> VNode {
+  Slot(cell)
 }
 
 ///|
@@ -293,7 +321,7 @@ fn diff_node(
   sandbox : Sandbox,
   parent : @dom.Node,
   anchor : @js.Nullable[@dom.Node],
-  cell : &Cell,
+  parent_inst : Instance,
 ) -> INode {
   match (old, new) {
     (
@@ -302,7 +330,7 @@ fn diff_node(
     ) =>
       if tag1 != tag2 || ns1 != ns2 {
         old.remove(sandbox, parent.as_node())
-        new.insert(sandbox, cell, parent.as_node(), anchor)
+        new.insert(sandbox, parent_inst, parent.as_node(), anchor)
       } else {
         diff_props(props1, props2, sandbox, e)
         let childs = diff_children(
@@ -311,7 +339,7 @@ fn diff_node(
           sandbox,
           e.as_node(),
           null(),
-          cell,
+          parent_inst,
         )
         Elem(tag2, props2, childs, namespace_uri=ns2, e)
       }
@@ -328,21 +356,21 @@ fn diff_node(
         sandbox,
         parent.as_node(),
         nullable(e.as_node()),
-        cell,
+        parent_inst,
       )
       guard childs is Array(childs)
       Frag(childs, s, e)
     }
-    (Cell(c1, inter, link, s, e), Cell(c2)) =>
-      if c1.state().id != c2.state().id {
+    (Slot(inst, _s, _e), Slot(c2)) =>
+      if inst.cell.flags().id != c2.flags().id {
         old.remove(sandbox, parent.as_node())
-        new.insert(sandbox, cell, parent.as_node(), anchor)
+        new.insert(sandbox, parent_inst, parent.as_node(), anchor)
       } else {
-        Cell(c2, inter, link, s, e)
+        old
       }
     (_, _) => {
       old.remove(sandbox, parent.as_node())
-      new.insert(sandbox, cell, parent.as_node(), anchor)
+      new.insert(sandbox, parent_inst, parent.as_node(), anchor)
     }
   }
 }
@@ -423,7 +451,7 @@ fn diff_children(
   sandbox : Sandbox,
   parent : @dom.Node,
   anchor : @js.Nullable[@dom.Node],
-  cell : &Cell,
+  parent_inst : Instance,
 ) -> Children[INode] {
   match (old, new) {
     (Array(old), Array(new)) => {
@@ -444,14 +472,21 @@ fn diff_children(
         len2
       } else {
         for i in len2>..len1 {
-          let inode = new[i].insert(sandbox, cell, parent, before)
+          let inode = new[i].insert(sandbox, parent_inst, parent, before)
           acc.push(inode)
           before = nullable(inode.start())
         }
         len1
       }
       for i in len>..0 {
-        let inode = diff_node(old[i], new[i], sandbox, parent, before, cell)
+        let inode = diff_node(
+          old[i],
+          new[i],
+          sandbox,
+          parent,
+          before,
+          parent_inst,
+        )
         acc.push(inode)
         before = nullable(inode.start())
       }
@@ -469,9 +504,9 @@ fn diff_children(
       for i in order.length()>..0 {
         let (k, v2) = order[i]
         let inode = match old.get(k) {
-          None => v2.insert(sandbox, cell, parent, before)
+          None => v2.insert(sandbox, parent_inst, parent, before)
           Some(v1) => {
-            let inode = diff_node(v1, v2, sandbox, parent, before, cell)
+            let inode = diff_node(v1, v2, sandbox, parent, before, parent_inst)
             inode.relocate(parent, before)
             inode
           }
@@ -486,7 +521,7 @@ fn diff_children(
         Map(xs) => xs.each((_, x) => x.remove(sandbox, parent))
         Array(xs) => xs.each(x => x.remove(sandbox, parent))
       }
-      new.map(y => y.insert(sandbox, cell, parent, null()))
+      new.map(y => y.insert(sandbox, parent_inst, parent, null()))
     }
   }
 }

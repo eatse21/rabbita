@@ -1,9 +1,25 @@
 ///|
-struct Id {
-  mut value : Int?
-} derive(Eq, Hash, Compare, Show)
+let global_id_count : Ref[Int] = @ref.new(0)
+
+///|
+struct Id(Int) derive(Eq, Hash, Compare, Show)
+
+///|
+struct InstId(Int) derive(Eq, Hash, Compare, Show)
+
+///|
+fn next_id() -> Int {
+  let id = global_id_count.val
+  global_id_count.val += 1
+  id
+}
 
 ///|
 pub fn Id::new() -> Id {
-  { value: None }
+  next_id()
+}
+
+///|
+pub fn InstId::new() -> InstId {
+  next_id()
 }

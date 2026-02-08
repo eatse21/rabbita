@@ -1,23 +1,35 @@
 ///|
-pub(open) trait Cell {
+pub(open) trait IsCell {
   step(Self, &Scheduler) -> Unit
   view(Self) -> VNode
-  state(Self) -> State
+  flags(Self) -> Flags
 }
 
 ///|
-struct State {
-  mut inode : INode?
-  mut old_childs : Map[Id, Link]
-  mut new_childs : Map[Id, Link]
+struct Flags {
+  id : Id
   mut dirty : Bool
   mut attach_count : Int
-  id : Id
+}
+
+///|
+pub fn Flags::new() -> Flags {
+  { id: Id::new(), dirty: false, attach_count: 0 }
+}
+
+///|
+pub fn Flags::mark_dirty(s : Self) -> Unit {
+  s.dirty = true
+}
+
+///|
+pub fn Flags::id(s : Self) -> Id {
+  s.id
 }
 
 ///|
 priv struct Link {
-  mut val : &Cell?
+  mut val : Instance?
 }
 
 ///|
@@ -26,30 +38,3 @@ fn Link::detach(s : Self) -> Unit {
 }
 
 ///|
-fn Link::new(c : &Cell) -> Link {
-  { val: Some(c) }
-}
-
-///|
-
-///|
-pub fn State::id(s : Self) -> Id {
-  s.id
-}
-
-///|
-pub fn State::mark_dirty(s : Self) -> Unit {
-  s.dirty = true
-}
-
-///|
-pub fn State::new() -> State {
-  {
-    inode: None,
-    new_childs: {},
-    old_childs: {},
-    dirty: true,
-    attach_count: 0,
-    id: Id::new(),
-  }
-}

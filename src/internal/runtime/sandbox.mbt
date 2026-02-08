@@ -13,22 +13,21 @@ using @queue {type Queue}
 /// 3. mount(patch)
 ///      apply patches to real DOM
 pub(all) struct Sandbox {
-  priv live_map : Map[Id, &Cell]
+  priv live_map : Map[Id, (&IsCell, Map[InstId, Instance])]
   priv msg_queue : Queue[Id]
   priv mut drain_scheduled : Bool
   priv dirty_set : Set[Id]
   priv mut paint_scheduled : Bool
-  priv root : &Cell
+  priv root : Instance
   priv captured_link_listener : @dom.Listener
-  priv mut next_id : Int
   mut mount : String
   mut on_url_changed : ((Url) -> Cmd)?
   mut on_url_request : ((UrlRequest) -> Cmd)?
 }
 
 ///|
-pub fn Sandbox::new(root : &Cell) -> Sandbox {
-  root.state().id.value = Some(0)
+pub fn Sandbox::new(root : &IsCell) -> Sandbox {
+  let root = Instance::new(root)
   let mut sandbox : Sandbox? = None
   let captured_link_listener = fn(event : @dom.Event) {
     let mouse_event = event.to_mouse_event().unwrap()
@@ -53,14 +52,16 @@ pub fn Sandbox::new(root : &Cell) -> Sandbox {
       sandbox.unwrap().add_url_request(request)
     }
   }
+  let live_map = Map::from_array([
+    (root.cell.flags().id, (root.cell, Map::from_array([(root.id, root)]))),
+  ])
   sandbox = Some({
     root,
-    live_map: Map::from_array([(root.state().id, root)]),
+    live_map,
     msg_queue: Queue::new(),
     dirty_set: Set::new(),
     on_url_changed: None,
     on_url_request: None,
-    next_id: 1,
     paint_scheduled: false,
     drain_scheduled: false,
     mount: "",
@@ -75,9 +76,9 @@ pub fn Sandbox::drain(self : Self) -> Unit {
   if !self.drain_scheduled {
     self.drain_scheduled = true
     while self.msg_queue.pop() is Some(id) {
-      if self.live_map.get(id) is Some(cell) {
+      if self.live_map.get(id) is Some((cell, _)) {
         cell.step(self)
-        self.dirty_set.add(cell.state().id)
+        self.dirty_set.add(id)
       }
     }
     self.drain_scheduled = false
@@ -89,32 +90,36 @@ pub fn Sandbox::drain(self : Self) -> Unit {
 pub fn Sandbox::initialize(self : Self) -> Unit {
   let root = self.root
   let element = @dom.document().get_element_by_id(self.mount).unwrap() // TODO: handle error
-  self.dirty_set.add(root.state().id)
-  let vnode = root.view()
+  self.dirty_set.add(root.cell.flags().id)
+  let vnode = root.cell.view()
   let inode = vnode.insert(self, root, element.as_node(), null())
-  root.state().inode = Some(inode)
+  self.root.inode = Some(inode)
+  println(self.live_map.keys())
 }
 
 ///|
-fn Sandbox::drop_live_subtree(self : Self, root : &Cell) -> Unit {
+fn Sandbox::drop_live_subtree(self : Self, root : Instance) -> Unit {
   let stack = [root]
-  while stack.pop() is Some(cell) {
-    let state = cell.state()
-    state.attach_count -= 1
-    if state.attach_count <= 0 {
-      self.live_map.remove(state.id)
-      self.dirty_set.remove(state.id)
+  while stack.pop() is Some(inst) {
+    let flags = inst.cell.flags()
+    flags.attach_count -= 1
+    if self.live_map.get(flags.id()) is Some((_, insts)) {
+      insts.remove(inst.id)
+      if insts.is_empty() {
+        self.live_map.remove(flags.id())
+        self.dirty_set.remove(flags.id())
+      }
     }
     // Removal can happen mid-diff; scan both old/new links to avoid leaving orphans.
     // Example: parent replaces child A with B (B goes to new_childs), then the
     // parent subtree is removed before commit. If we only scan old_childs,
     // B would stay live even though its DOM is gone.
-    for _, link in state.old_childs {
+    for _, link in inst.old_childs {
       if link.val is Some(c) {
         stack.push(c)
       }
     }
-    for _, link in state.new_childs {
+    for _, link in inst.new_childs {
       if link.val is Some(c) {
         stack.push(c)
       }
@@ -129,35 +134,35 @@ pub fn Sandbox::flush(self : Self) -> Unit {
     self.paint_scheduled = true
     @dom.window().request_animation_frame(fn(_) {
       let dirty = self.dirty_set.to_array()
-      self.dirty_set.clear()
       for id in dirty {
-        if self.live_map.get(id) is Some(cell) {
-          let state = cell.state()
+        guard self.live_map.get(id) is Some((cell, insts)) && cell.flags().dirty else {
+          continue
+        }
+        let flags = cell.flags()
+        for _, inst in insts {
           // Dirty-set can contain stale ids; skip if already clean.
           // Example: a cell was marked dirty, then got removed or superseded
           // before flush; keeping this guard prevents redundant diff/crash.
-          if !state.dirty {
-            continue
-          }
-          let vnode = cell.view()
+          let vnode = inst.cell.view()
           // The parent cell helps child cells initialize their inodes during vdom diff,
           // so initially child cells are not in the dirty set
-          guard state.inode is Some(inode)
+          guard inst.inode is Some(inode)
           let end = inode.end()
           let parent = end.get_parent_node().unwrap()
           let next_sibling = end.get_next_sibling()
-          let inode = diff_node(inode, vnode, self, parent, next_sibling, cell)
-          state.inode = Some(inode)
-          state.dirty = false
-          for id, link in state.old_childs {
+          let inode = diff_node(inode, vnode, self, parent, next_sibling, inst)
+          inst.inode = Some(inode)
+          for id, link in inst.old_childs {
             if link.val is Some(_) {
-              state.new_childs[id] = link
+              inst.new_childs[id] = link
             }
           }
-          state.old_childs = state.new_childs
-          state.new_childs = Map::new()
+          inst.old_childs = inst.new_childs
+          inst.new_childs = Map::new()
         }
+        flags.dirty = false
       }
+      self.dirty_set.clear()
       // self.root.node().validate()
       self.paint_scheduled = false
     })

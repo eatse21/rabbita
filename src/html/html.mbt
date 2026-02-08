@@ -67,11 +67,6 @@ pub fn nothing() -> Html {
 }
 
 ///|
-pub fn cell(cell : &@runtime.Cell) -> Html {
-  @runtime.VNode::cell(cell)
-}
-
-///|
 pub trait IsChildren {
   to_children(Self) -> @runtime.Children[VNode]
 }

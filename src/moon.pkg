@@ -4,5 +4,6 @@ import {
   "Yoorkin/rabbit-tea/url",
   "Yoorkin/rabbit-tea/dom",
   "moonbitlang/core/queue",
+  "moonbitlang/core/ref",
   "moonbit-community/js-ffi/js",
 }
