@@ -38,20 +38,6 @@ pub fn[C : IsChildren] node(
 }
 
 ///|
-fn[C : IsChildren] common_node(
-  tag : String,
-  attributes : Array[Attribute],
-  extra : Array[Attribute],
-  children : C,
-  style? : Array[String] = [],
-  id? : String,
-  class? : String,
-) -> Html {
-  push_style(style, extra)
-  push_class(class, extra)
-  push_id(id, extra)
-  node(tag, attributes + extra, children)
-}
 
 ///|
 /// Represents an empty element
@@ -131,7 +117,10 @@ pub fn[C : IsChildren] button(
 ) -> Html {
   let extra = []
   push_click(click, extra)
-  common_node("button", attrs, extra, children, style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("button", attrs + extra, children)
 }
 
 ///|
@@ -142,7 +131,11 @@ pub fn[C : IsChildren] h1(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("h1", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("h1", attrs + extra, children)
 }
 
 ///|
@@ -153,7 +146,11 @@ pub fn[C : IsChildren] h2(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("h2", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("h2", attrs + extra, children)
 }
 
 ///|
@@ -164,7 +161,11 @@ pub fn[C : IsChildren] h3(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("h3", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("h3", attrs + extra, children)
 }
 
 ///|
@@ -175,7 +176,11 @@ pub fn[C : IsChildren] h4(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("h4", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("h4", attrs + extra, children)
 }
 
 ///|
@@ -186,7 +191,11 @@ pub fn[C : IsChildren] h5(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("h5", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("h5", attrs + extra, children)
 }
 
 ///|
@@ -197,7 +206,11 @@ pub fn[C : IsChildren] h6(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("h6", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("h6", attrs + extra, children)
 }
 
 // ------ grouping content ------
@@ -213,7 +226,10 @@ pub fn[C : IsChildren] div(
 ) -> Html {
   let extra = []
   push_click(click, extra)
-  common_node("div", attrs, extra, children, style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("div", attrs + extra, children)
 }
 
 ///|
@@ -224,7 +240,11 @@ pub fn[C : IsChildren] p(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("p", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("p", attrs + extra, children)
 }
 
 ///|
@@ -235,7 +255,11 @@ pub fn[C : IsChildren] hr(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("hr", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("hr", attrs + extra, children)
 }
 
 ///|
@@ -246,7 +270,11 @@ pub fn[C : IsChildren] pre(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("pre", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("pre", attrs + extra, children)
 }
 
 ///|
@@ -257,7 +285,11 @@ pub fn[C : IsChildren] blockquote(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("blockquote", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("blockquote", attrs + extra, children)
 }
 
 ///|
@@ -268,7 +300,11 @@ pub fn[C : IsChildren] section(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("section", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("section", attrs + extra, children)
 }
 
 ///|
@@ -279,7 +315,11 @@ pub fn[C : IsChildren] header(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("header", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("header", attrs + extra, children)
 }
 
 ///|
@@ -290,7 +330,11 @@ pub fn[C : IsChildren] footer(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("footer", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("footer", attrs + extra, children)
 }
 
 ///|
@@ -301,7 +345,11 @@ pub fn[C : IsChildren] nav(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("nav", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("nav", attrs + extra, children)
 }
 
 ///|
@@ -312,7 +360,11 @@ pub fn[C : IsChildren] main_(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("main", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("main", attrs + extra, children)
 }
 
 ///|
@@ -323,7 +375,11 @@ pub fn[C : IsChildren] article(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("article", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("article", attrs + extra, children)
 }
 
 ///|
@@ -334,7 +390,11 @@ pub fn[C : IsChildren] aside(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("aside", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("aside", attrs + extra, children)
 }
 
 ///|
@@ -345,7 +405,11 @@ pub fn[C : IsChildren] figure(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("figure", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("figure", attrs + extra, children)
 }
 
 ///|
@@ -356,7 +420,11 @@ pub fn[C : IsChildren] figcaption(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("figcaption", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("figcaption", attrs + extra, children)
 }
 
 ///|
@@ -370,7 +438,10 @@ pub fn[C : IsChildren] details(
 ) -> Html {
   let extra = []
   push_open(open, extra)
-  common_node("details", attrs, extra, children, style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("details", attrs + extra, children)
 }
 
 ///|
@@ -381,7 +452,11 @@ pub fn[C : IsChildren] summary(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("summary", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("summary", attrs + extra, children)
 }
 
 // ---- text ----
@@ -394,7 +469,11 @@ pub fn[C : IsChildren] span(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("span", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("span", attrs + extra, children)
 }
 
 ///|
@@ -405,7 +484,11 @@ pub fn[C : IsChildren] small(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("small", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("small", attrs + extra, children)
 }
 
 ///|
@@ -416,7 +499,11 @@ pub fn[C : IsChildren] mark(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("mark", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("mark", attrs + extra, children)
 }
 
 ///|
@@ -427,7 +514,11 @@ pub fn[C : IsChildren] del(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("del", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("del", attrs + extra, children)
 }
 
 ///|
@@ -438,7 +529,11 @@ pub fn[C : IsChildren] ins(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("ins", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("ins", attrs + extra, children)
 }
 
 ///|
@@ -449,7 +544,11 @@ pub fn[C : IsChildren] s(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("s", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("s", attrs + extra, children)
 }
 
 ///|
@@ -460,7 +559,11 @@ pub fn[C : IsChildren] cite(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("cite", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("cite", attrs + extra, children)
 }
 
 ///|
@@ -471,7 +574,11 @@ pub fn[C : IsChildren] q(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("q", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("q", attrs + extra, children)
 }
 
 ///|
@@ -482,7 +589,11 @@ pub fn[C : IsChildren] abbr(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("abbr", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("abbr", attrs + extra, children)
 }
 
 ///|
@@ -493,7 +604,11 @@ pub fn[C : IsChildren] kbd(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("kbd", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("kbd", attrs + extra, children)
 }
 
 ///|
@@ -504,7 +619,11 @@ pub fn[C : IsChildren] samp(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("samp", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("samp", attrs + extra, children)
 }
 
 ///|
@@ -515,7 +634,11 @@ pub fn[C : IsChildren] var_(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("var", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("var", attrs + extra, children)
 }
 
 ///|
@@ -529,7 +652,10 @@ pub fn[C : IsChildren] time(
 ) -> Html {
   let extra = []
   push_datetime(datetime, extra)
-  common_node("time", attrs, extra, children, style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("time", attrs + extra, children)
 }
 
 ///|
@@ -540,7 +666,11 @@ pub fn[C : IsChildren] address(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("address", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("address", attrs + extra, children)
 }
 
 ///|
@@ -590,7 +720,11 @@ pub fn[C : IsChildren] code(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("code", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("code", attrs + extra, children)
 }
 
 ///|
@@ -601,7 +735,11 @@ pub fn[C : IsChildren] em(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("em", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("em", attrs + extra, children)
 }
 
 ///|
@@ -612,7 +750,11 @@ pub fn[C : IsChildren] strong(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("strong", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("strong", attrs + extra, children)
 }
 
 ///|
@@ -623,7 +765,11 @@ pub fn[C : IsChildren] i(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("i", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("i", attrs + extra, children)
 }
 
 ///|
@@ -634,7 +780,11 @@ pub fn[C : IsChildren] b(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("b", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("b", attrs + extra, children)
 }
 
 ///|
@@ -645,7 +795,11 @@ pub fn[C : IsChildren] u(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("u", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("u", attrs + extra, children)
 }
 
 ///|
@@ -656,7 +810,11 @@ pub fn[C : IsChildren] sub(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("sub", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("sub", attrs + extra, children)
 }
 
 ///|
@@ -667,7 +825,11 @@ pub fn[C : IsChildren] sup(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("sup", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("sup", attrs + extra, children)
 }
 
 ///|
@@ -688,7 +850,10 @@ pub fn[C : IsChildren] ul(
 ) -> Html {
   let extra = []
   push_click(click, extra)
-  common_node("ul", attrs, extra, children, style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("ul", attrs + extra, children)
 }
 
 ///|
@@ -706,7 +871,10 @@ pub fn[C : IsChildren] ol(
   let extra = []
   push_reversed(reversed, extra)
   push_start(start, extra)
-  common_node("ol", attrs, extra, children, style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("ol", attrs + extra, children)
 }
 
 ///|
@@ -722,7 +890,10 @@ pub fn[C : IsChildren] li(
   let extra = []
   push_click(click, extra)
   push_value_attr_int(value, extra)
-  common_node("li", attrs, extra, children, style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("li", attrs + extra, children)
 }
 
 ///|
@@ -733,7 +904,11 @@ pub fn[C : IsChildren] dl(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("dl", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("dl", attrs + extra, children)
 }
 
 ///|
@@ -744,7 +919,11 @@ pub fn[C : IsChildren] dt(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("dt", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("dt", attrs + extra, children)
 }
 
 ///|
@@ -755,7 +934,11 @@ pub fn[C : IsChildren] dd(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("dd", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("dd", attrs + extra, children)
 }
 
 // ---- embbded content ----
@@ -781,7 +964,10 @@ pub fn[C : IsChildren] img(
   push_width(width, extra)
   push_height(height, extra)
   push_border(border, extra)
-  common_node("img", attrs, extra, children, style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("img", attrs + extra, children)
 }
 
 ///|
@@ -800,7 +986,10 @@ pub fn iframe(
   push_title(title, extra)
   push_width(width, extra)
   push_height(height, extra)
-  common_node("iframe", attrs, extra, ([] : Array[Html]), style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("iframe", attrs + extra, ([] : Array[Html]))
 }
 
 // ---- inputs ----
@@ -812,7 +1001,11 @@ pub fn br(
   class? : String,
   attrs? : Array[Attribute] = [],
 ) -> Html {
-  common_node("br", attrs, [], ([] : Array[Html]), style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("br", attrs + extra, ([] : Array[Html]))
 }
 
 ///|
@@ -860,7 +1053,10 @@ pub fn[C : IsChildren] form(
   let extra = []
   push_action(action, extra)
   push_name(name, extra)
-  common_node("form", attrs, extra, children, style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("form", attrs + extra, children)
 }
 
 ///|
@@ -874,7 +1070,10 @@ pub fn[C : IsChildren] label(
 ) -> Html {
   let extra = []
   push_for(for_, extra)
-  common_node("label", attrs, extra, children, style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("label", attrs + extra, children)
 }
 
 ///|
@@ -890,7 +1089,10 @@ pub fn[C : IsChildren] fieldset(
   let extra = []
   push_disabled(disabled, extra)
   push_name(name, extra)
-  common_node("fieldset", attrs, extra, children, style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("fieldset", attrs + extra, children)
 }
 
 ///|
@@ -901,7 +1103,11 @@ pub fn[C : IsChildren] legend(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("legend", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("legend", attrs + extra, children)
 }
 
 ///|
@@ -981,7 +1187,10 @@ pub fn[C : IsChildren] input(
   push_placeholder(placeholder, extra)
   push_change(change, extra)
   push_input(input, extra)
-  common_node("input", attrs, extra, children, style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("input", attrs + extra, children)
 }
 
 ///|
@@ -1015,7 +1224,10 @@ pub fn[C : IsChildren] textarea(
   push_minlength(minlength, extra)
   push_change(change, extra)
   push_input(input, extra)
-  common_node("textarea", attrs, extra, children, style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("textarea", attrs + extra, children)
 }
 
 ///|
@@ -1034,7 +1246,10 @@ pub fn[C : IsChildren] select(
   push_disabled(disabled, extra)
   push_name(name, extra)
   push_change(change, extra)
-  common_node("select", attrs, extra, children, style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("select", attrs + extra, children)
 }
 
 ///|
@@ -1050,7 +1265,10 @@ pub fn[C : IsChildren] optgroup(
   let extra = []
   push_label(label, extra)
   push_disabled(disabled, extra)
-  common_node("optgroup", attrs, extra, children, style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("optgroup", attrs + extra, children)
 }
 
 ///|
@@ -1070,7 +1288,10 @@ pub fn[C : IsChildren] option(
   push_disabled(disabled, extra)
   push_value_attr_string(value, extra)
   extra.push(property("selected", Boolean(selected)))
-  common_node("option", attrs, extra, children, style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("option", attrs + extra, children)
 }
 
 ///|
@@ -1081,7 +1302,11 @@ pub fn[C : IsChildren] datalist(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("datalist", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("datalist", attrs + extra, children)
 }
 
 ///|
@@ -1097,7 +1322,10 @@ pub fn[C : IsChildren] output(
   let extra = []
   push_name(name, extra)
   push_for(for_, extra)
-  common_node("output", attrs, extra, children, style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("output", attrs + extra, children)
 }
 
 ///|
@@ -1113,7 +1341,10 @@ pub fn[C : IsChildren] progress(
   let extra = []
   push_value_attr_int(value, extra)
   push_max(max, extra)
-  common_node("progress", attrs, extra, children, style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("progress", attrs + extra, children)
 }
 
 ///|
@@ -1137,7 +1368,10 @@ pub fn[C : IsChildren] meter(
   push_low(low, extra)
   push_high(high, extra)
   push_optimum(optimum, extra)
-  common_node("meter", attrs, extra, children, style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("meter", attrs + extra, children)
 }
 
 // ///|
@@ -1161,7 +1395,11 @@ pub fn[C : IsChildren] table(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("table", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("table", attrs + extra, children)
 }
 
 ///|
@@ -1172,7 +1410,11 @@ pub fn[C : IsChildren] caption(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("caption", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("caption", attrs + extra, children)
 }
 
 ///|
@@ -1183,7 +1425,11 @@ pub fn[C : IsChildren] thead(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("thead", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("thead", attrs + extra, children)
 }
 
 ///|
@@ -1194,7 +1440,11 @@ pub fn[C : IsChildren] tbody(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("tbody", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("tbody", attrs + extra, children)
 }
 
 ///|
@@ -1208,7 +1458,10 @@ pub fn[C : IsChildren] col(
 ) -> Html {
   let extra = []
   push_span(span, extra)
-  common_node("col", attrs, extra, children, style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("col", attrs + extra, children)
 }
 
 ///|
@@ -1222,7 +1475,10 @@ pub fn[C : IsChildren] colgroup(
 ) -> Html {
   let extra = []
   push_span(span, extra)
-  common_node("colgroup", attrs, extra, children, style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("colgroup", attrs + extra, children)
 }
 
 ///|
@@ -1233,7 +1489,11 @@ pub fn[C : IsChildren] tr(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("tr", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("tr", attrs + extra, children)
 }
 
 ///|
@@ -1251,7 +1511,10 @@ pub fn[C : IsChildren] td(
   push_colspan(colspan, extra)
   push_rowspan(rowspan, extra)
   push_headers(headers, extra)
-  common_node("td", attrs, extra, children, style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("td", attrs + extra, children)
 }
 
 ///|
@@ -1281,7 +1544,10 @@ pub fn[C : IsChildren] th(
   push_headers(headers, extra)
   push_abbr(abbr, extra)
   push_scope(scope, extra)
-  common_node("th", attrs, extra, children, style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("th", attrs + extra, children)
 }
 
 ///|
@@ -1292,7 +1558,11 @@ pub fn[C : IsChildren] tfoot(
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
-  common_node("tfoot", attrs, [], children, style~, id?, class?)
+  let extra = []
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("tfoot", attrs + extra, children)
 }
 
 ///|
@@ -1366,5 +1636,8 @@ pub fn[C : IsChildren] dialog(
   push_open(open, extra)
   push_close(close, extra)
   push_cancel(cancel, extra)
-  common_node("dialog", attrs, extra, children, style~, id?, class?)
+  push_style(style, extra)
+  push_class(class, extra)
+  push_id(id, extra)
+  node("dialog", attrs + extra, children)
 }
