@@ -1,10 +1,10 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Yoorkin/rabbit-tea/internal/runtime"
+package "moonbit-community/rabbita/internal/runtime"
 
 import {
-  "Yoorkin/rabbit-tea/dom",
-  "Yoorkin/rabbit-tea/url",
-  "Yoorkin/rabbit-tea/variant",
+  "moonbit-community/rabbita/dom",
+  "moonbit-community/rabbita/url",
+  "moonbit-community/rabbita/variant",
 }
 
 // Values

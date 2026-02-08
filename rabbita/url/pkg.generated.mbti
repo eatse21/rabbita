@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Yoorkin/rabbit-tea/url"
+package "moonbit-community/rabbita/url"
 
 // Values
 pub fn parse(String) -> Url raise

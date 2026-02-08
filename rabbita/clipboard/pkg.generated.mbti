@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Yoorkin/rabbit-tea/clipboard"
+package "moonbit-community/rabbita/clipboard"
 
 import {
-  "Yoorkin/rabbit-tea/internal/runtime",
+  "moonbit-community/rabbita/internal/runtime",
 }
 
 // Values

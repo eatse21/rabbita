@@ -1,8 +1,8 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "Yoorkin/rabbit-tea/http"
+package "moonbit-community/rabbita/http"
 
 import {
-  "Yoorkin/rabbit-tea/internal/runtime",
+  "moonbit-community/rabbita/internal/runtime",
 }
 
 // Values
