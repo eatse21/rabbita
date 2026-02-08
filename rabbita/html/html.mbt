@@ -269,6 +269,111 @@ pub fn[C : IsChildren] section(
   common_node(style~, class?, id?, "section", [], children)
 }
 
+///|
+pub fn[C : IsChildren] header(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  children : C,
+) -> Html {
+  common_node(style~, class?, id?, "header", [], children)
+}
+
+///|
+pub fn[C : IsChildren] footer(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  children : C,
+) -> Html {
+  common_node(style~, class?, id?, "footer", [], children)
+}
+
+///|
+pub fn[C : IsChildren] nav(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  children : C,
+) -> Html {
+  common_node(style~, class?, id?, "nav", [], children)
+}
+
+///|
+pub fn[C : IsChildren] main_(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  children : C,
+) -> Html {
+  common_node(style~, class?, id?, "main", [], children)
+}
+
+///|
+pub fn[C : IsChildren] article(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  children : C,
+) -> Html {
+  common_node(style~, class?, id?, "article", [], children)
+}
+
+///|
+pub fn[C : IsChildren] aside(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  children : C,
+) -> Html {
+  common_node(style~, class?, id?, "aside", [], children)
+}
+
+///|
+pub fn[C : IsChildren] figure(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  children : C,
+) -> Html {
+  common_node(style~, class?, id?, "figure", [], children)
+}
+
+///|
+pub fn[C : IsChildren] figcaption(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  children : C,
+) -> Html {
+  common_node(style~, class?, id?, "figcaption", [], children)
+}
+
+///|
+pub fn[C : IsChildren] details(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  open? : Bool,
+  children : C,
+) -> Html {
+  let attrs = []
+  if open is Some(open) {
+    attrs.push(property("open", Boolean(open)))
+  }
+  common_node(style~, class?, id?, "details", attrs, children)
+}
+
+///|
+pub fn[C : IsChildren] summary(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  children : C,
+) -> Html {
+  common_node(style~, class?, id?, "summary", [], children)
+}
+
 // ---- text ----
 
 ///|
@@ -279,6 +384,141 @@ pub fn[C : IsChildren] span(
   children : C,
 ) -> Html {
   common_node(style~, class?, id?, "span", [], children)
+}
+
+///|
+pub fn[C : IsChildren] small(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  children : C,
+) -> Html {
+  common_node(style~, class?, id?, "small", [], children)
+}
+
+///|
+pub fn[C : IsChildren] mark(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  children : C,
+) -> Html {
+  common_node(style~, class?, id?, "mark", [], children)
+}
+
+///|
+pub fn[C : IsChildren] del(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  children : C,
+) -> Html {
+  common_node(style~, class?, id?, "del", [], children)
+}
+
+///|
+pub fn[C : IsChildren] ins(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  children : C,
+) -> Html {
+  common_node(style~, class?, id?, "ins", [], children)
+}
+
+///|
+pub fn[C : IsChildren] s(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  children : C,
+) -> Html {
+  common_node(style~, class?, id?, "s", [], children)
+}
+
+///|
+pub fn[C : IsChildren] cite(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  children : C,
+) -> Html {
+  common_node(style~, class?, id?, "cite", [], children)
+}
+
+///|
+pub fn[C : IsChildren] q(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  children : C,
+) -> Html {
+  common_node(style~, class?, id?, "q", [], children)
+}
+
+///|
+pub fn[C : IsChildren] abbr(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  children : C,
+) -> Html {
+  common_node(style~, class?, id?, "abbr", [], children)
+}
+
+///|
+pub fn[C : IsChildren] kbd(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  children : C,
+) -> Html {
+  common_node(style~, class?, id?, "kbd", [], children)
+}
+
+///|
+pub fn[C : IsChildren] samp(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  children : C,
+) -> Html {
+  common_node(style~, class?, id?, "samp", [], children)
+}
+
+///|
+pub fn[C : IsChildren] var_(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  children : C,
+) -> Html {
+  common_node(style~, class?, id?, "var", [], children)
+}
+
+///|
+pub fn[C : IsChildren] time(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  datetime? : String,
+  children : C,
+) -> Html {
+  let attrs = []
+  if datetime is Some(datetime) {
+    attrs.push(attribute("datetime", datetime))
+  }
+  common_node(style~, class?, id?, "time", attrs, children)
+}
+
+///|
+pub fn[C : IsChildren] address(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  children : C,
+) -> Html {
+  common_node(style~, class?, id?, "address", [], children)
 }
 
 ///|
@@ -634,6 +874,35 @@ pub fn[C : IsChildren] label(
 }
 
 ///|
+pub fn[C : IsChildren] fieldset(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  disabled? : Bool,
+  name? : String,
+  children : C,
+) -> Html {
+  let attrs = []
+  if disabled is Some(disabled) {
+    attrs.push(property("disabled", Boolean(disabled)))
+  }
+  if name is Some(name) {
+    attrs.push(attribute("name", name))
+  }
+  common_node(style~, class?, id?, "fieldset", attrs, children)
+}
+
+///|
+pub fn[C : IsChildren] legend(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  children : C,
+) -> Html {
+  common_node(style~, class?, id?, "legend", [], children)
+}
+
+///|
 pub fn[C : IsChildren] input(
   input_type? : InputType = Text,
   name? : String,
@@ -749,6 +1018,61 @@ pub fn[C : IsChildren] input(
 }
 
 ///|
+pub fn[C : IsChildren] textarea(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  name? : String,
+  value? : String,
+  rows? : Int,
+  cols? : Int,
+  placeholder? : String,
+  read_only? : Bool,
+  disabled? : Bool,
+  maxlength? : Int,
+  minlength? : Int,
+  change? : (String) -> Cmd,
+  input? : (String) -> Cmd,
+  children : C,
+) -> Html {
+  let attrs = []
+  if name is Some(name) {
+    attrs.push(attribute("name", name))
+  }
+  if value is Some(value) {
+    attrs.push(property("value", String(value)))
+  }
+  if rows is Some(rows) {
+    attrs.push(attribute("rows", rows.to_string()))
+  }
+  if cols is Some(cols) {
+    attrs.push(attribute("cols", cols.to_string()))
+  }
+  if placeholder is Some(placeholder) {
+    attrs.push(attribute("placeholder", placeholder))
+  }
+  if read_only is Some(read_only) {
+    attrs.push(property("readonly", Boolean(read_only)))
+  }
+  if disabled is Some(disabled) {
+    attrs.push(property("disabled", Boolean(disabled)))
+  }
+  if maxlength is Some(maxlength) {
+    attrs.push(attribute("maxlength", maxlength.to_string()))
+  }
+  if minlength is Some(minlength) {
+    attrs.push(attribute("minlength", minlength.to_string()))
+  }
+  if change is Some(to_msg) {
+    attrs.push(on_change(to_msg))
+  }
+  if input is Some(to_msg) {
+    attrs.push(on_input(to_msg))
+  }
+  common_node(style~, class?, id?, "textarea", attrs, children)
+}
+
+///|
 pub fn[C : IsChildren] select(
   style? : Array[String] = [],
   id? : String,
@@ -782,6 +1106,25 @@ pub fn[C : IsChildren] select(
 }
 
 ///|
+pub fn[C : IsChildren] optgroup(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  label? : String,
+  disabled? : Bool,
+  children : C,
+) -> Html {
+  let attrs = []
+  if label is Some(label) {
+    attrs.push(attribute("label", label))
+  }
+  if disabled is Some(disabled) {
+    attrs.push(property("disabled", Boolean(disabled)))
+  }
+  common_node(style~, class?, id?, "optgroup", attrs, children)
+}
+
+///|
 pub fn[C : IsChildren] option(
   style? : Array[String] = [],
   id? : String,
@@ -811,6 +1154,89 @@ pub fn[C : IsChildren] option(
   }
   attrs.push(property("selected", Boolean(selected)))
   node("option", attrs, children)
+}
+
+///|
+pub fn[C : IsChildren] datalist(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  children : C,
+) -> Html {
+  common_node(style~, class?, id?, "datalist", [], children)
+}
+
+///|
+pub fn[C : IsChildren] output(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  name? : String,
+  for_? : String,
+  children : C,
+) -> Html {
+  let attrs = []
+  if name is Some(name) {
+    attrs.push(attribute("name", name))
+  }
+  if for_ is Some(for_) {
+    attrs.push(attribute("for", for_))
+  }
+  common_node(style~, class?, id?, "output", attrs, children)
+}
+
+///|
+pub fn[C : IsChildren] progress(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  value? : Int,
+  max? : Int,
+  children : C,
+) -> Html {
+  let attrs = []
+  if value is Some(value) {
+    attrs.push(attribute("value", value.to_string()))
+  }
+  if max is Some(max) {
+    attrs.push(attribute("max", max.to_string()))
+  }
+  common_node(style~, class?, id?, "progress", attrs, children)
+}
+
+///|
+pub fn[C : IsChildren] meter(
+  style? : Array[String] = [],
+  id? : String,
+  class? : String,
+  value? : Int,
+  min? : Int,
+  max? : Int,
+  low? : Int,
+  high? : Int,
+  optimum? : Int,
+  children : C,
+) -> Html {
+  let attrs = []
+  if value is Some(value) {
+    attrs.push(attribute("value", value.to_string()))
+  }
+  if min is Some(min) {
+    attrs.push(attribute("min", min.to_string()))
+  }
+  if max is Some(max) {
+    attrs.push(attribute("max", max.to_string()))
+  }
+  if low is Some(low) {
+    attrs.push(attribute("low", low.to_string()))
+  }
+  if high is Some(high) {
+    attrs.push(attribute("high", high.to_string()))
+  }
+  if optimum is Some(optimum) {
+    attrs.push(attribute("optimum", optimum.to_string()))
+  }
+  common_node(style~, class?, id?, "meter", attrs, children)
 }
 
 // ///|

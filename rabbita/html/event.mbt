@@ -76,42 +76,42 @@ pub fn on_change(msg : (String) -> Cmd) -> Attribute {
 }
 
 ///|
-pub fn on_double_click(msg : (Mouse) -> Cmd) -> Attribute {
+pub fn on_dbclick(msg : (Mouse) -> Cmd) -> Attribute {
   on_mouse("dblclick", msg)
 }
 
 ///|
-pub fn on_mouse_down(msg : (Mouse) -> Cmd) -> Attribute {
+pub fn on_mousedown(msg : (Mouse) -> Cmd) -> Attribute {
   on_mouse("mousedown", msg)
 }
 
 ///|
-pub fn on_mouse_up(msg : (Mouse) -> Cmd) -> Attribute {
+pub fn on_mouseup(msg : (Mouse) -> Cmd) -> Attribute {
   on_mouse("mouseup", msg)
 }
 
 ///|
-pub fn on_mouse_move(msg : (Mouse) -> Cmd) -> Attribute {
+pub fn on_mousemove(msg : (Mouse) -> Cmd) -> Attribute {
   on_mouse("mousemove", msg)
 }
 
 ///|
-pub fn on_mouse_enter(msg : (Mouse) -> Cmd) -> Attribute {
+pub fn on_mouseenter(msg : (Mouse) -> Cmd) -> Attribute {
   on_mouse("mouseenter", msg)
 }
 
 ///|
-pub fn on_mouse_over(msg : (Mouse) -> Cmd) -> Attribute {
+pub fn on_mouseover(msg : (Mouse) -> Cmd) -> Attribute {
   on_mouse("mouseover", msg)
 }
 
 ///|
-pub fn on_mouse_leave(msg : (Mouse) -> Cmd) -> Attribute {
+pub fn on_mouseleave(msg : (Mouse) -> Cmd) -> Attribute {
   on_mouse("mouseleave", msg)
 }
 
 ///|
-pub fn on_mouse_out(msg : (Mouse) -> Cmd) -> Attribute {
+pub fn on_mouseout(msg : (Mouse) -> Cmd) -> Attribute {
   on_mouse("mouseout", msg)
 }
 
