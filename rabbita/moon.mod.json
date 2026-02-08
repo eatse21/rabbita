@@ -1,11 +1,11 @@
 {
-  "name": "Yoorkin/rabbit-tea",
+  "name": "moonbit-community/rabbita",
   "version": "0.10.11",
   "deps": {
     "moonbit-community/js-ffi": "0.4.2"
   },
   "readme": "README.md",
-  "repository": "https://github.com/Yoorkin/rabbit-tea",
+  "repository": "https://github.com/moonbit-community/rabbita",
   "license": "Apache-2.0",
   "keywords": [
     "TEA",
@@ -13,6 +13,6 @@
     "UI",
     "web"
   ],
-  "description": "TEA web UI framework for MoonBit",
+  "description": "functional Web UI framework for MoonBit",
   "preferred-target": "js"
 }

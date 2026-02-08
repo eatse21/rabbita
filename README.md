@@ -1,4 +1,4 @@
-# Rabbit-TEA
+# Rabbita (Rabbit-TEA)
 
 A declarative and functional web UI framework inspired by The Elm Architecture.
 
@@ -24,31 +24,29 @@ A declarative and functional web UI framework inspired by The Elm Architecture.
 ## Basic Example
 
 ```moonbit
-typealias Int as Model
-let model = 0
-
-enum Msg {
-  Increment
-  Decrement
-}
-
-fn update(msg : Msg, model : Model) -> (Cmd[Msg], Model) {
-  match msg {
-    Increment => (none(), model + 1)
-    Decrement => (none(), model - 1)
-  }
-}
-
-fn view(model : Model) -> Html[Msg] {
-  div([
-    h1([text(model.to_string())]),
-    button(click=Increment, [text("+")]),
-    button(click=Decrement, [text("-")]),
-  ])
-}
+using @html {div, h1, button}
 
 fn main {
-  @tea.startup(model~, update~, view~)
+  struct Model {
+    count : Int
+  }
+  enum Msg {
+    Inc
+    Dec
+  }
+  let app = cell(
+    model={ count: 0 },
+    update=(_, msg, model) => match msg {
+      Inc => (none, { count: model.count + 1 })
+      Dec => (none, { count: model.count - 1 })
+    },
+    view=(dispatch, model) => div([
+      h1(model.count.to_string()),
+      button(click=dispatch(Inc), "+"),
+      button(click=dispatch(Dec), "-"),
+    ]),
+  )
+  new(app).mount("main")
 }
 ```
 

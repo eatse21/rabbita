@@ -27,26 +27,31 @@ jobs:
 
       - name: moon version
         run: |
+          cd rabbita
           moon version --all
           moonrun --version
 
       - name: moon test
         run: |
+          cd rabbita
           moon update
-          moon install
           moon test --target js --serial --release
           moon test --target js --serial
 
       - name: moon check
-        run: moon check --target js --deny-warn
+        run: |
+          cd rabbita
+          moon check --target js --deny-warn
 
       - name: moon info
         run: |
+          cd rabbita
           moon info --target js
           git diff --exit-code
 
       - name: format diff
         run: |
+          cd rabbita
           moon fmt
           git diff --exit-code
 
@@ -67,5 +72,4 @@ jobs:
 
       - name: check typos
         run: typos
-
 
