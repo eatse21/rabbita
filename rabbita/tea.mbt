@@ -68,3 +68,17 @@ pub fn[Model, Msg] cell(
   let model = @ref.new(model)
   Cell({ view, update, dispatcher, dispatch, model, flags })
 }
+
+///|
+pub fn[Model, Msg] simple_cell(
+  model~ : Model,
+  update~ : (Msg, Model) -> Model,
+  view~ : (Dispatch[Msg], Model) -> Html,
+) -> Cell {
+  cell(model~, update=(_, msg, model) => (none, update(msg, model)), view~)
+}
+
+///|
+pub fn static_cell(html : Html) -> Cell {
+  cell(model=(), update=fn(_, _ : Unit, _ : Unit) { (none, ()) }, view=(_, _) => html)
+}
