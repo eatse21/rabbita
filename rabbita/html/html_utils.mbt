@@ -82,6 +82,18 @@ fn push_keyup(
 }
 
 ///|
+fn push_submit(value : Cmd?, attrs : Array[@attr.Attribute]) -> Unit {
+  if value is Some(v) {
+    attrs.push(
+      @attr.handler("submit", (event, scheduler) => {
+        event.prevent_default()
+        scheduler.add(v)
+      }),
+    )
+  }
+}
+
+///|
 fn push_open(value : Bool?, attrs : Array[@attr.Attribute]) -> Unit {
   if value is Some(v) {
     attrs.push(@attr.property("open", @variant.Boolean(v)))

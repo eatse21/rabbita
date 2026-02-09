@@ -1337,6 +1337,9 @@ pub(all) enum InputType {
 
 ///|
 /// [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form)
+///
+/// `on_submit` will call `prevent_default()` before dispatching the command.
+/// If you need the browser default behavior, use `attrs` with `@attr.on_submit`.
 pub fn[C : IsChildren] form(
   style? : Array[String] = [],
   id? : String,
@@ -1345,6 +1348,7 @@ pub fn[C : IsChildren] form(
   hidden? : Bool,
   action? : String,
   name? : String,
+  on_submit? : Cmd,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
@@ -1353,6 +1357,7 @@ pub fn[C : IsChildren] form(
   push_hidden(hidden, extra)
   push_action(action, extra)
   push_name(name, extra)
+  push_submit(on_submit, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
