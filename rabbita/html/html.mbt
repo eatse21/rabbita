@@ -2,12 +2,20 @@
 using @runtime {type VNode, type Props, type Cmd}
 
 ///|
+using @attr {type Attribute, type Target, type AutoComplete, type Scope}
+
+///|
 #alias(T)
 pub(all) struct Html(@runtime.VNode)
 
 ///|
 pub fn Html::to_virtual_dom(self : Html) -> @runtime.VNode {
   self.0
+}
+
+///|
+pub fn Html::from_vnode(vdom : @runtime.VNode) -> Html {
+  Html(vdom)
 }
 
 ///|
@@ -18,10 +26,10 @@ fn attributes_to_props(attributes : Array[Attribute]) -> Props {
   let styles = {}
   for x in attributes {
     match x {
-      Style(k, v) => styles[k] = v
-      Property(k, v) => props[k] = v
-      Attribute(k, v) => attrs[k] = v
-      Handler(k, v) => handlers[k] = v
+      @attr.Attribute::Style(k, v) => styles[k] = v
+      @attr.Attribute::Property(k, v) => props[k] = v
+      @attr.Attribute::Attribute(k, v) => attrs[k] = v
+      @attr.Attribute::Handler(k, v) => handlers[k] = v
     }
   }
   Props::new(attrs, props, styles, handlers)
@@ -38,59 +46,8 @@ pub fn[C : IsChildren] node(
 }
 
 ///|
-
-///|
 /// Represents an empty element
-pub fn nothing() -> Html {
-  node("div", [], ([] : Array[Html])) //TODO: use frag instead
-}
-
-///|
-pub trait IsChildren {
-  to_children(Self) -> @runtime.Children[VNode]
-}
-
-// ///|
-// pub trait IsHtml {
-//   to_html(Self) -> @runtime.VNode
-// }
-
-// pub impl IsHtml for Html with to_html(self) {
-//   self.0
-// }
-
-// pub impl IsHtml for Unit with to_html(_) {
-//   nothing().0
-// }
-
-///|
-pub impl IsChildren for Html with to_children(html) {
-  Array([html.0])
-}
-
-///|
-pub impl IsChildren for String with to_children(str) {
-  Array([text(str).0])
-}
-
-///|
-pub impl IsChildren for Map[String, Html] with to_children(self) {
-  Map(self.map((_, v) => v.0))
-}
-
-///|
-pub impl IsChildren for Array[Html] with to_children(self) {
-  Array(self.map(x => x.0))
-}
-// ///|
-// pub impl[H : IsHtml] IsChildren for Array[H] with to_children(self) {
-//   Array(self.map(x => x.to_html()))
-// }
-
-///|
-pub impl IsChildren for @runtime.Children[VNode] with to_children(children) {
-  children
-}
+pub let nothing : Html = VNode::fragment([])
 
 ///|
 pub fn[C : IsChildren] fragment(children : C) -> Html {
@@ -904,8 +861,8 @@ pub fn[C : IsChildren] a(
   let extra = []
   push_title(title, extra)
   push_hidden(hidden, extra)
-  extra.push(Attribute("href", href))
-  extra.push(Attribute("target", target.to_string()))
+  extra.push(@attr.attribute("href", href))
+  extra.push(@attr.target(target))
   push_rel(rel, extra)
   push_download(download, extra)
   push_style(style, extra)
@@ -1369,12 +1326,6 @@ pub(all) enum InputType {
 }
 
 ///|
-pub(all) enum AutoComplete {
-  On
-  Off
-}
-
-///|
 /// [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form)
 pub fn[C : IsChildren] form(
   style? : Array[String] = [],
@@ -1534,8 +1485,8 @@ pub fn[C : IsChildren] input(
   push_autofocus(autofocus, extra)
   push_list(list, extra)
   push_inputmode(inputmode, extra)
-  extra.push(attribute("type", input_type))
-  extra.push(attribute("autocomplete", auto_complete))
+  extra.push(@attr.attribute("type", input_type))
+  extra.push(@attr.attribute("autocomplete", auto_complete))
   push_name(name, extra)
   push_value_prop_string(value, extra)
   push_checked(checked, extra)
@@ -1690,7 +1641,7 @@ pub fn[C : IsChildren] option(
   push_label(label, extra)
   push_disabled(disabled, extra)
   push_value_attr_string(value, extra)
-  extra.push(property("selected", Boolean(selected)))
+  extra.push(@attr.property("selected", @variant.Boolean(selected)))
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1978,14 +1929,6 @@ pub fn[C : IsChildren] td(
   push_class(class, extra)
   push_id(id, extra)
   node("td", attrs + extra, children)
-}
-
-///|
-pub(all) enum Scope {
-  Row
-  Col
-  RowGroup
-  ColGroup
 }
 
 ///|

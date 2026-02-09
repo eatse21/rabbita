@@ -2,4 +2,5 @@ import {
   "moonbit-community/rabbita/internal/runtime" as @runtime,
   "moonbit-community/rabbita/dom",
   "moonbit-community/rabbita/variant",
+  "moonbit-community/rabbita/html/attr" as @attr,
 }

@@ -53,7 +53,7 @@ struct Cell(&IsCell)
 
 ///|
 pub fn Cell::view(self : Self) -> Html {
-  @runtime.VNode::slot(self.0)
+  Html::from_vnode(@runtime.VNode::slot(self.0))
 }
 
 ///|

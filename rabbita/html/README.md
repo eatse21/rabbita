@@ -48,7 +48,7 @@ let html = p([text("hello world")])
 There is a special `nothing` element that does not represent an actual HTML element, it simply represents "nothing". This is particularly useful for handling multiple `Option` types in your model:
 
 ```mbt
-fn bar(path : Path, tag : Option[Tag]){
+fn bar(path : Path, tag : Tag?){
   let path = foo(path)
   let tag = match tag {
     None => []
@@ -59,10 +59,10 @@ fn bar(path : Path, tag : Option[Tag]){
 ```
 
 ```mbt
-fn bar(path : Path, tag : Option[Tag]){
+fn bar(path : Path, tag : Tag?){
   let path = foo(path)
   let tag = match tag {
-    None => nothing()
+    None => nothing
     Some(x) => view(x)  
   }
   div([path, tag]) // Use @html.nothing

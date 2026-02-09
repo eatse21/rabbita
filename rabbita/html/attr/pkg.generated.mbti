@@ -1,0 +1,439 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "moonbit-community/rabbita/html/attr"
+
+import {
+  "moonbit-community/rabbita/dom",
+  "moonbit-community/rabbita/internal/runtime",
+  "moonbit-community/rabbita/variant",
+}
+
+// Values
+pub fn abbr(String) -> Attribute
+
+pub fn accept(String) -> Attribute
+
+pub fn accept_charset(String) -> Attribute
+
+pub fn accesskey(String) -> Attribute
+
+pub fn action(String) -> Attribute
+
+pub fn align(String) -> Attribute
+
+pub fn allow(String) -> Attribute
+
+pub fn allowfullscreen(Bool) -> Attribute
+
+pub fn alpha(String) -> Attribute
+
+pub fn alt(String) -> Attribute
+
+pub fn anchor(String) -> Attribute
+
+pub fn aria_activedescendant(String) -> Attribute
+
+pub fn aria_atomic(String) -> Attribute
+
+pub fn aria_autocomplete(String) -> Attribute
+
+pub fn aria_braillelabel(String) -> Attribute
+
+pub fn aria_brailleroledescription(String) -> Attribute
+
+pub fn aria_busy(String) -> Attribute
+
+pub fn aria_checked(String) -> Attribute
+
+pub fn aria_colcount(String) -> Attribute
+
+pub fn aria_colindex(String) -> Attribute
+
+pub fn aria_colindextext(String) -> Attribute
+
+pub fn aria_colspan(String) -> Attribute
+
+pub fn aria_controls(String) -> Attribute
+
+pub fn aria_current(String) -> Attribute
+
+pub fn aria_describedby(String) -> Attribute
+
+pub fn aria_description(String) -> Attribute
+
+pub fn aria_details(String) -> Attribute
+
+pub fn aria_disabled(String) -> Attribute
+
+pub fn aria_dropeffect(String) -> Attribute
+
+pub fn aria_errormessage(String) -> Attribute
+
+pub fn aria_expanded(String) -> Attribute
+
+pub fn aria_flowto(String) -> Attribute
+
+pub fn aria_grabbed(String) -> Attribute
+
+pub fn aria_haspopup(String) -> Attribute
+
+pub fn aria_hidden(String) -> Attribute
+
+pub fn aria_invalid(String) -> Attribute
+
+pub fn aria_keyshortcuts(String) -> Attribute
+
+pub fn aria_label(String) -> Attribute
+
+pub fn aria_labelledby(String) -> Attribute
+
+pub fn aria_level(String) -> Attribute
+
+pub fn aria_live(String) -> Attribute
+
+pub fn aria_modal(String) -> Attribute
+
+pub fn aria_multiline(String) -> Attribute
+
+pub fn aria_multiselectable(String) -> Attribute
+
+pub fn aria_orientation(String) -> Attribute
+
+pub fn aria_owns(String) -> Attribute
+
+pub fn aria_placeholder(String) -> Attribute
+
+pub fn aria_posinset(String) -> Attribute
+
+pub fn aria_pressed(String) -> Attribute
+
+pub fn aria_readonly(String) -> Attribute
+
+pub fn aria_relevant(String) -> Attribute
+
+pub fn aria_required(String) -> Attribute
+
+pub fn aria_roledescription(String) -> Attribute
+
+pub fn aria_rowcount(String) -> Attribute
+
+pub fn aria_rowindex(String) -> Attribute
+
+pub fn aria_rowindextext(String) -> Attribute
+
+pub fn aria_rowspan(String) -> Attribute
+
+pub fn aria_selected(String) -> Attribute
+
+pub fn aria_setsize(String) -> Attribute
+
+pub fn aria_sort(String) -> Attribute
+
+pub fn aria_valuemax(String) -> Attribute
+
+pub fn aria_valuemin(String) -> Attribute
+
+pub fn aria_valuenow(String) -> Attribute
+
+pub fn aria_valuetext(String) -> Attribute
+
+pub fn as_(String) -> Attribute
+
+pub fn async_(Bool) -> Attribute
+
+pub fn attribute(String, String) -> Attribute
+
+pub fn autocapitalize(String) -> Attribute
+
+pub fn autocomplete(AutoComplete) -> Attribute
+
+pub fn autocorrect(String) -> Attribute
+
+pub fn autofocus(Bool) -> Attribute
+
+pub fn autoplay(Bool) -> Attribute
+
+pub fn background(String) -> Attribute
+
+pub fn bgcolor(String) -> Attribute
+
+pub fn border(Int) -> Attribute
+
+pub fn capture(String) -> Attribute
+
+pub fn charset(String) -> Attribute
+
+pub fn checked(Bool) -> Attribute
+
+pub fn cite(String) -> Attribute
+
+pub fn class(String) -> Attribute
+
+pub fn color(String) -> Attribute
+
+pub fn colorspace(String) -> Attribute
+
+pub fn cols(Int) -> Attribute
+
+pub fn colspan(Int) -> Attribute
+
+pub fn content(String) -> Attribute
+
+pub fn contenteditable(String) -> Attribute
+
+pub fn controls(Bool) -> Attribute
+
+pub fn coords(String) -> Attribute
+
+pub fn crossorigin(String) -> Attribute
+
+pub fn csp(String) -> Attribute
+
+pub fn data(String) -> Attribute
+
+pub fn data_set(String, String) -> Attribute
+
+pub fn datetime(String) -> Attribute
+
+pub fn decoding(String) -> Attribute
+
+pub fn default(Bool) -> Attribute
+
+pub fn defer_(Bool) -> Attribute
+
+pub fn dir(String) -> Attribute
+
+pub fn dirname(String) -> Attribute
+
+pub fn disabled(Bool) -> Attribute
+
+pub fn download(String) -> Attribute
+
+pub fn draggable(String) -> Attribute
+
+pub fn elementtiming(String) -> Attribute
+
+pub fn enctype(String) -> Attribute
+
+pub fn enterkeyhint(String) -> Attribute
+
+pub fn exportparts(String) -> Attribute
+
+pub fn fetchpriority(String) -> Attribute
+
+pub fn for_(String) -> Attribute
+
+pub fn form(String) -> Attribute
+
+pub fn formaction(String) -> Attribute
+
+pub fn formenctype(String) -> Attribute
+
+pub fn formmethod(String) -> Attribute
+
+pub fn formnovalidate(Bool) -> Attribute
+
+pub fn formtarget(String) -> Attribute
+
+pub fn handler(String, (@dom.Event, &@runtime.Scheduler) -> Unit) -> Attribute
+
+pub fn headers(String) -> Attribute
+
+pub fn height(Int) -> Attribute
+
+pub fn hidden(Bool) -> Attribute
+
+pub fn high(Int) -> Attribute
+
+pub fn href(String) -> Attribute
+
+pub fn hreflang(String) -> Attribute
+
+pub fn http_equiv(String) -> Attribute
+
+pub fn id(String) -> Attribute
+
+pub fn inert(Bool) -> Attribute
+
+pub fn inputmode(String) -> Attribute
+
+pub fn integrity(String) -> Attribute
+
+pub fn is_(String) -> Attribute
+
+pub fn ismap(Bool) -> Attribute
+
+pub fn itemid(String) -> Attribute
+
+pub fn itemprop(String) -> Attribute
+
+pub fn itemref(String) -> Attribute
+
+pub fn itemscope(Bool) -> Attribute
+
+pub fn itemtype(String) -> Attribute
+
+pub fn kind(String) -> Attribute
+
+pub fn label(String) -> Attribute
+
+pub fn lang(String) -> Attribute
+
+pub fn language(String) -> Attribute
+
+pub fn list(String) -> Attribute
+
+pub fn loading(String) -> Attribute
+
+pub fn loop_(Bool) -> Attribute
+
+pub fn low(Int) -> Attribute
+
+pub fn max(Int) -> Attribute
+
+pub fn maxlength(Int) -> Attribute
+
+pub fn media(String) -> Attribute
+
+pub fn method_(String) -> Attribute
+
+pub fn min(Int) -> Attribute
+
+pub fn minlength(Int) -> Attribute
+
+pub fn multiple(Bool) -> Attribute
+
+pub fn muted(Bool) -> Attribute
+
+pub fn name(String) -> Attribute
+
+pub fn nonce(String) -> Attribute
+
+pub fn novalidate(Bool) -> Attribute
+
+pub fn open(Bool) -> Attribute
+
+pub fn optimum(Int) -> Attribute
+
+pub fn part(String) -> Attribute
+
+pub fn pattern(String) -> Attribute
+
+pub fn ping(String) -> Attribute
+
+pub fn placeholder(String) -> Attribute
+
+pub fn playsinline(Bool) -> Attribute
+
+pub fn popover(String) -> Attribute
+
+pub fn poster(String) -> Attribute
+
+pub fn preload(String) -> Attribute
+
+pub fn property(String, @variant.Variant) -> Attribute
+
+pub fn readonly_(Bool) -> Attribute
+
+pub fn referrerpolicy(String) -> Attribute
+
+pub fn rel(String) -> Attribute
+
+pub fn required(Bool) -> Attribute
+
+pub fn reversed(Bool) -> Attribute
+
+pub fn role(String) -> Attribute
+
+pub fn rows(Int) -> Attribute
+
+pub fn rowspan(Int) -> Attribute
+
+pub fn sandbox(String) -> Attribute
+
+pub fn scope(Scope) -> Attribute
+
+pub fn selected(Bool) -> Attribute
+
+pub fn shape(String) -> Attribute
+
+pub fn size(Int) -> Attribute
+
+pub fn sizes(String) -> Attribute
+
+pub fn slot(String) -> Attribute
+
+pub fn span(Int) -> Attribute
+
+pub fn spellcheck(Bool) -> Attribute
+
+pub fn src(String) -> Attribute
+
+pub fn srcdoc(String) -> Attribute
+
+pub fn srclang(String) -> Attribute
+
+pub fn srcset(String) -> Attribute
+
+pub fn start(Int) -> Attribute
+
+pub fn step(Int) -> Attribute
+
+pub fn style(String, String) -> Attribute
+
+pub fn style_attr(String) -> Attribute
+
+pub fn summary(String) -> Attribute
+
+pub fn tabindex(Int) -> Attribute
+
+pub fn target(Target) -> Attribute
+
+pub fn title(String) -> Attribute
+
+pub fn translate(String) -> Attribute
+
+pub fn type_(String) -> Attribute
+
+pub fn usemap(String) -> Attribute
+
+pub fn value(String) -> Attribute
+
+pub fn value_int(Int) -> Attribute
+
+pub fn value_prop(String) -> Attribute
+
+pub fn width(Int) -> Attribute
+
+pub fn wrap(String) -> Attribute
+
+// Errors
+
+// Types and methods
+pub enum Attribute {
+  Attribute(String, String)
+  Property(String, @variant.Variant)
+  Style(String, String)
+  Handler(String, (@dom.Event, &@runtime.Scheduler) -> Unit)
+}
+
+pub(all) enum AutoComplete {
+  On
+  Off
+}
+
+pub(all) enum Scope {
+  Row
+  Col
+  RowGroup
+  ColGroup
+}
+
+pub(all) enum Target {
+  Self
+  Blank
+}
+
+// Type aliases
+
+// Traits
+

@@ -41,28 +41,28 @@ pub fn Scroll::height(self : Self) -> Int {
 }
 
 ///|
-fn on_mouse(event : String, msg : (Mouse) -> Cmd) -> Attribute {
-  Handler(event, (event, scheduler) => scheduler.add(
+fn on_mouse(event : String, msg : (Mouse) -> Cmd) -> @attr.Attribute {
+  @attr.handler(event, (event, scheduler) => scheduler.add(
     msg(event.to_mouse_event().unwrap()),
   ))
 }
 
 ///|
-pub fn on_click(msg : (Mouse) -> Cmd) -> Attribute {
+pub fn on_click(msg : (Mouse) -> Cmd) -> @attr.Attribute {
   on_mouse("click", msg)
 }
 
 ///|
-pub fn on_input(msg : (String) -> Cmd) -> Attribute {
-  Handler("input", (event, scheduler) => {
+pub fn on_input(msg : (String) -> Cmd) -> @attr.Attribute {
+  @attr.handler("input", (event, scheduler) => {
     let value : String = event.target().to_html_input_element().unwrap().value()
     scheduler.add(msg(value))
   })
 }
 
 ///|
-pub fn on_change(msg : (String) -> Cmd) -> Attribute {
-  Handler("change", (event, scheduler) => {
+pub fn on_change(msg : (String) -> Cmd) -> @attr.Attribute {
+  @attr.handler("change", (event, scheduler) => {
     let target = event.target()
     let value = if target.to_html_input_element() is Some(x) {
       x.value()
@@ -76,48 +76,48 @@ pub fn on_change(msg : (String) -> Cmd) -> Attribute {
 }
 
 ///|
-pub fn on_dbclick(msg : (Mouse) -> Cmd) -> Attribute {
+pub fn on_dbclick(msg : (Mouse) -> Cmd) -> @attr.Attribute {
   on_mouse("dblclick", msg)
 }
 
 ///|
-pub fn on_mousedown(msg : (Mouse) -> Cmd) -> Attribute {
+pub fn on_mousedown(msg : (Mouse) -> Cmd) -> @attr.Attribute {
   on_mouse("mousedown", msg)
 }
 
 ///|
-pub fn on_mouseup(msg : (Mouse) -> Cmd) -> Attribute {
+pub fn on_mouseup(msg : (Mouse) -> Cmd) -> @attr.Attribute {
   on_mouse("mouseup", msg)
 }
 
 ///|
-pub fn on_mousemove(msg : (Mouse) -> Cmd) -> Attribute {
+pub fn on_mousemove(msg : (Mouse) -> Cmd) -> @attr.Attribute {
   on_mouse("mousemove", msg)
 }
 
 ///|
-pub fn on_mouseenter(msg : (Mouse) -> Cmd) -> Attribute {
+pub fn on_mouseenter(msg : (Mouse) -> Cmd) -> @attr.Attribute {
   on_mouse("mouseenter", msg)
 }
 
 ///|
-pub fn on_mouseover(msg : (Mouse) -> Cmd) -> Attribute {
+pub fn on_mouseover(msg : (Mouse) -> Cmd) -> @attr.Attribute {
   on_mouse("mouseover", msg)
 }
 
 ///|
-pub fn on_mouseleave(msg : (Mouse) -> Cmd) -> Attribute {
+pub fn on_mouseleave(msg : (Mouse) -> Cmd) -> @attr.Attribute {
   on_mouse("mouseleave", msg)
 }
 
 ///|
-pub fn on_mouseout(msg : (Mouse) -> Cmd) -> Attribute {
+pub fn on_mouseout(msg : (Mouse) -> Cmd) -> @attr.Attribute {
   on_mouse("mouseout", msg)
 }
 
 ///|
-pub fn on_scroll(msg : (Scroll) -> Cmd) -> Attribute {
-  Handler("scroll", (event, scheduler) => scheduler.add(
+pub fn on_scroll(msg : (Scroll) -> Cmd) -> @attr.Attribute {
+  @attr.handler("scroll", (event, scheduler) => scheduler.add(
     msg(event.target().to_element().unwrap()),
   ))
 }
