@@ -59,6 +59,7 @@ pub struct Props {
   props : Map[String, @variant.Variant]
   styles : Map[String, String]
 }
+pub fn Props::copy(Self) -> Self
 pub fn Props::empty() -> Self
 pub fn Props::new(Map[String, String], Map[String, @variant.Variant], Map[String, String], Map[String, (@dom.Event, &Scheduler) -> Unit]) -> Self
 

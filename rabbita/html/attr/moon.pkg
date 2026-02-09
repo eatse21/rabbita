@@ -1,5 +1,0 @@
-import {
-  "moonbit-community/rabbita/dom",
-  "moonbit-community/rabbita/internal/runtime" as @runtime,
-  "moonbit-community/rabbita/variant",
-}

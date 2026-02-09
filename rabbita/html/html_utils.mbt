@@ -1,59 +1,50 @@
 ///|
-fn push_style(style : Array[String], attrs : Array[@attr.Attribute]) -> Unit {
+fn push_style(style : Array[String], attrs : Attrs) -> Unit {
   if style.length() > 0 {
-    attrs.push(@attr.attribute("style", style.join(";")))
+    ignore(attrs.attribute("style", style.join(";")))
   }
 }
 
 ///|
-fn push_id(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_id(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("id", v))
+    ignore(attrs.attribute("id", v))
   }
 }
 
 ///|
-fn push_class(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_class(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("class", v))
+    ignore(attrs.attribute("class", v))
   }
 }
 
 ///|
-fn push_click(value : Cmd?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_click(value : Cmd?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.on_click(_ => v))
+    ignore(attrs.on_click(_ => v))
   }
 }
 
 ///|
-fn push_mousedown(
-  value : ((Mouse) -> Cmd)?,
-  attrs : Array[@attr.Attribute],
-) -> Unit {
+fn push_mousedown(value : ((Mouse) -> Cmd)?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.on_mousedown(event => v(Mouse(event))))
+    ignore(attrs.on_mousedown(event => v(Mouse(event))))
   }
 }
 
 ///|
-fn push_mouseup(
-  value : ((Mouse) -> Cmd)?,
-  attrs : Array[@attr.Attribute],
-) -> Unit {
+fn push_mouseup(value : ((Mouse) -> Cmd)?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.on_mouseup(event => v(Mouse(event))))
+    ignore(attrs.on_mouseup(event => v(Mouse(event))))
   }
 }
 
 ///|
-fn push_scroll(
-  value : ((Scroll) -> Cmd)?,
-  attrs : Array[@attr.Attribute],
-) -> Unit {
+fn push_scroll(value : ((Scroll) -> Cmd)?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(
-      @attr.on_scroll(event => {
+    ignore(
+      attrs.on_scroll(event => {
         let element = event.target().to_element().unwrap()
         v(Scroll(element))
       }),
@@ -62,30 +53,24 @@ fn push_scroll(
 }
 
 ///|
-fn push_keydown(
-  value : ((Keyboard) -> Cmd)?,
-  attrs : Array[@attr.Attribute],
-) -> Unit {
+fn push_keydown(value : ((Keyboard) -> Cmd)?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.on_keydown(event => v(Keyboard(event))))
+    ignore(attrs.on_keydown(event => v(Keyboard(event))))
   }
 }
 
 ///|
-fn push_keyup(
-  value : ((Keyboard) -> Cmd)?,
-  attrs : Array[@attr.Attribute],
-) -> Unit {
+fn push_keyup(value : ((Keyboard) -> Cmd)?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.on_keyup(event => v(Keyboard(event))))
+    ignore(attrs.on_keyup(event => v(Keyboard(event))))
   }
 }
 
 ///|
-fn push_submit(value : Cmd?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_submit(value : Cmd?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(
-      @attr.handler("submit", (event, scheduler) => {
+    ignore(
+      attrs.handler("submit", (event, scheduler) => {
         event.prevent_default()
         scheduler.add(v)
       }),
@@ -94,236 +79,227 @@ fn push_submit(value : Cmd?, attrs : Array[@attr.Attribute]) -> Unit {
 }
 
 ///|
-fn push_open(value : Bool?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_open(value : Bool?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.property("open", @variant.Boolean(v)))
+    ignore(attrs.property("open", @variant.Boolean(v)))
   }
 }
 
 ///|
-fn push_datetime(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_datetime(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("datetime", v))
+    ignore(attrs.attribute("datetime", v))
   }
 }
 
 ///|
-fn push_reversed(value : Bool?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_reversed(value : Bool?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("reversed", v.to_string()))
+    ignore(attrs.attribute("reversed", v.to_string()))
   }
 }
 
 ///|
-fn push_start(value : Int?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_start(value : Int?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("start", v.to_string()))
+    ignore(attrs.attribute("start", v.to_string()))
   }
 }
 
 ///|
-fn push_value_attr_int(value : Int?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_value_attr_int(value : Int?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("value", v.to_string()))
+    ignore(attrs.attribute("value", v.to_string()))
   }
 }
 
 ///|
-fn push_value_attr_string(
-  value : String?,
-  attrs : Array[@attr.Attribute],
-) -> Unit {
+fn push_value_attr_string(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("value", v))
+    ignore(attrs.attribute("value", v))
   }
 }
 
 ///|
-fn push_value_prop_string(
-  value : String?,
-  attrs : Array[@attr.Attribute],
-) -> Unit {
+fn push_value_prop_string(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.property("value", @variant.String(v)))
+    ignore(attrs.property("value", @variant.String(v)))
   }
 }
 
 ///|
-fn push_src(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_src(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("src", v))
+    ignore(attrs.attribute("src", v))
   }
 }
 
 ///|
-fn push_alt(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_alt(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("alt", v))
+    ignore(attrs.attribute("alt", v))
   }
 }
 
 ///|
-fn push_title(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_title(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("title", v))
+    ignore(attrs.attribute("title", v))
   }
 }
 
 ///|
-fn push_width(value : Int?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_width(value : Int?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("width", v.to_string()))
+    ignore(attrs.attribute("width", v.to_string()))
   }
 }
 
 ///|
-fn push_height(value : Int?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_height(value : Int?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("height", v.to_string()))
+    ignore(attrs.attribute("height", v.to_string()))
   }
 }
 
 ///|
-fn push_action(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_action(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("action", v))
+    ignore(attrs.attribute("action", v))
   }
 }
 
 ///|
-fn push_name(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_name(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("name", v))
+    ignore(attrs.attribute("name", v))
   }
 }
 
 ///|
-fn push_for(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_for(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("for", v))
+    ignore(attrs.attribute("for", v))
   }
 }
 
 ///|
-fn push_disabled(value : Bool?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_disabled(value : Bool?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.property("disabled", @variant.Boolean(v)))
+    ignore(attrs.property("disabled", @variant.Boolean(v)))
   }
 }
 
 ///|
-fn push_label(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_label(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("label", v))
+    ignore(attrs.attribute("label", v))
   }
 }
 
 ///|
-fn push_rows(value : Int?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_rows(value : Int?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("rows", v.to_string()))
+    ignore(attrs.attribute("rows", v.to_string()))
   }
 }
 
 ///|
-fn push_cols(value : Int?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_cols(value : Int?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("cols", v.to_string()))
+    ignore(attrs.attribute("cols", v.to_string()))
   }
 }
 
 ///|
-fn push_placeholder(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_placeholder(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("placeholder", v))
+    ignore(attrs.attribute("placeholder", v))
   }
 }
 
 ///|
-fn push_readonly(value : Bool?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_readonly(value : Bool?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.property("readonly", @variant.Boolean(v)))
+    ignore(attrs.property("readonly", @variant.Boolean(v)))
   }
 }
 
 ///|
-fn push_checked(value : Bool?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_checked(value : Bool?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.property("checked", @variant.Boolean(v)))
+    ignore(attrs.property("checked", @variant.Boolean(v)))
   }
 }
 
 ///|
-fn push_multiple(value : Bool?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_multiple(value : Bool?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.property("multiple", @variant.Boolean(v)))
+    ignore(attrs.property("multiple", @variant.Boolean(v)))
   }
 }
 
 ///|
-fn push_accept(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_accept(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("accept", v))
+    ignore(attrs.attribute("accept", v))
   }
 }
 
 ///|
-fn push_max(value : Int?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_max(value : Int?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("max", v.to_string()))
+    ignore(attrs.attribute("max", v.to_string()))
   }
 }
 
 ///|
-fn push_min(value : Int?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_min(value : Int?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("min", v.to_string()))
+    ignore(attrs.attribute("min", v.to_string()))
   }
 }
 
 ///|
-fn push_step(value : Int?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_step(value : Int?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("step", v.to_string()))
+    ignore(attrs.attribute("step", v.to_string()))
   }
 }
 
 ///|
-fn push_maxlength(value : Int?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_maxlength(value : Int?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("maxlength", v.to_string()))
+    ignore(attrs.attribute("maxlength", v.to_string()))
   }
 }
 
 ///|
-fn push_minlength(value : Int?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_minlength(value : Int?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("minlength", v.to_string()))
+    ignore(attrs.attribute("minlength", v.to_string()))
   }
 }
 
 ///|
-fn push_pattern(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_pattern(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("pattern", v))
+    ignore(attrs.attribute("pattern", v))
   }
 }
 
 ///|
-fn push_size(value : Int?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_size(value : Int?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("size", v.to_string()))
+    ignore(attrs.attribute("size", v.to_string()))
   }
 }
 
 ///|
-fn push_change(
-  value : ((String) -> Cmd)?,
-  attrs : Array[@attr.Attribute],
-) -> Unit {
+fn push_change(value : ((String) -> Cmd)?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(
-      @attr.handler("change", (event, scheduler) => {
+    ignore(
+      attrs.handler("change", (event, scheduler) => {
         let target = event.target()
         let value = if target.to_html_input_element() is Some(x) {
           x.value()
@@ -339,13 +315,10 @@ fn push_change(
 }
 
 ///|
-fn push_input(
-  value : ((String) -> Cmd)?,
-  attrs : Array[@attr.Attribute],
-) -> Unit {
+fn push_input(value : ((String) -> Cmd)?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(
-      @attr.handler("input", (event, scheduler) => {
+    ignore(
+      attrs.handler("input", (event, scheduler) => {
         let value = event.target().to_html_input_element().unwrap().value()
         scheduler.add(v(value))
       }),
@@ -354,42 +327,42 @@ fn push_input(
 }
 
 ///|
-fn push_span(value : Int?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_span(value : Int?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("span", v.to_string()))
+    ignore(attrs.attribute("span", v.to_string()))
   }
 }
 
 ///|
-fn push_colspan(value : Int?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_colspan(value : Int?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("colspan", v.to_string()))
+    ignore(attrs.attribute("colspan", v.to_string()))
   }
 }
 
 ///|
-fn push_rowspan(value : Int?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_rowspan(value : Int?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("rowspan", v.to_string()))
+    ignore(attrs.attribute("rowspan", v.to_string()))
   }
 }
 
 ///|
-fn push_headers(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_headers(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("headers", v))
+    ignore(attrs.attribute("headers", v))
   }
 }
 
 ///|
-fn push_abbr(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_abbr(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("abbr", v))
+    ignore(attrs.attribute("abbr", v))
   }
 }
 
 ///|
-fn push_scope(value : Scope?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_scope(value : Scope?, attrs : Attrs) -> Unit {
   if value is Some(scope) {
     let s = match scope {
       Row => "row"
@@ -397,18 +370,15 @@ fn push_scope(value : Scope?, attrs : Array[@attr.Attribute]) -> Unit {
       RowGroup => "rowgroup"
       ColGroup => "colgroup"
     }
-    attrs.push(@attr.attribute("scope", s))
+    ignore(attrs.attribute("scope", s))
   }
 }
 
 ///|
-fn push_close(
-  value : ((String) -> Cmd)?,
-  attrs : Array[@attr.Attribute],
-) -> Unit {
+fn push_close(value : ((String) -> Cmd)?, attrs : Attrs) -> Unit {
   if value is Some(close) {
-    attrs.push(
-      @attr.handler("close", (event, scheduler) => {
+    ignore(
+      attrs.handler("close", (event, scheduler) => {
         let html_element = event.target().to_html_dialog_element().unwrap()
         scheduler.add(close(html_element.return_value()))
       }),
@@ -417,10 +387,10 @@ fn push_close(
 }
 
 ///|
-fn push_cancel(value : Cmd?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_cancel(value : Cmd?, attrs : Attrs) -> Unit {
   if value is Some(cancel) {
-    attrs.push(
-      @attr.handler("cancel", (event, scheduler) => {
+    ignore(
+      attrs.handler("cancel", (event, scheduler) => {
         event.prevent_default()
         scheduler.add(cancel)
       }),
@@ -429,288 +399,288 @@ fn push_cancel(value : Cmd?, attrs : Array[@attr.Attribute]) -> Unit {
 }
 
 ///|
-fn push_low(value : Int?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_low(value : Int?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("low", v.to_string()))
+    ignore(attrs.attribute("low", v.to_string()))
   }
 }
 
 ///|
-fn push_high(value : Int?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_high(value : Int?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("high", v.to_string()))
+    ignore(attrs.attribute("high", v.to_string()))
   }
 }
 
 ///|
-fn push_optimum(value : Int?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_optimum(value : Int?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("optimum", v.to_string()))
+    ignore(attrs.attribute("optimum", v.to_string()))
   }
 }
 
 ///|
-fn push_lang(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_lang(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("lang", v))
+    ignore(attrs.attribute("lang", v))
   }
 }
 
 ///|
-fn push_dir(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_dir(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("dir", v))
+    ignore(attrs.attribute("dir", v))
   }
 }
 
 ///|
-fn push_hidden(value : Bool?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_hidden(value : Bool?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.property("hidden", @variant.Boolean(v)))
+    ignore(attrs.property("hidden", @variant.Boolean(v)))
   }
 }
 
 ///|
-fn push_rel(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_rel(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("rel", v))
+    ignore(attrs.attribute("rel", v))
   }
 }
 
 ///|
-fn push_href(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_href(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("href", v))
+    ignore(attrs.attribute("href", v))
   }
 }
 
 ///|
-fn push_target(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_target(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("target", v))
+    ignore(attrs.attribute("target", v))
   }
 }
 
 ///|
-fn push_download(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_download(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("download", v))
+    ignore(attrs.attribute("download", v))
   }
 }
 
 ///|
-fn push_media(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_media(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("media", v))
+    ignore(attrs.attribute("media", v))
   }
 }
 
 ///|
-fn push_sizes(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_sizes(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("sizes", v))
+    ignore(attrs.attribute("sizes", v))
   }
 }
 
 ///|
-fn push_charset(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_charset(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("charset", v))
+    ignore(attrs.attribute("charset", v))
   }
 }
 
 ///|
-fn push_content(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_content(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("content", v))
+    ignore(attrs.attribute("content", v))
   }
 }
 
 ///|
-fn push_http_equiv(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_http_equiv(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("http-equiv", v))
+    ignore(attrs.attribute("http-equiv", v))
   }
 }
 
 ///|
-fn push_type(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_type(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("type", v))
+    ignore(attrs.attribute("type", v))
   }
 }
 
 ///|
-fn push_async(value : Bool?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_async(value : Bool?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.property("async", @variant.Boolean(v)))
+    ignore(attrs.property("async", @variant.Boolean(v)))
   }
 }
 
 ///|
-fn push_defer(value : Bool?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_defer(value : Bool?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.property("defer", @variant.Boolean(v)))
+    ignore(attrs.property("defer", @variant.Boolean(v)))
   }
 }
 
 ///|
-fn push_required(value : Bool?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_required(value : Bool?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.property("required", @variant.Boolean(v)))
+    ignore(attrs.property("required", @variant.Boolean(v)))
   }
 }
 
 ///|
-fn push_autofocus(value : Bool?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_autofocus(value : Bool?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.property("autofocus", @variant.Boolean(v)))
+    ignore(attrs.property("autofocus", @variant.Boolean(v)))
   }
 }
 
 ///|
-fn push_list(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_list(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("list", v))
+    ignore(attrs.attribute("list", v))
   }
 }
 
 ///|
-fn push_inputmode(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_inputmode(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("inputmode", v))
+    ignore(attrs.attribute("inputmode", v))
   }
 }
 
 ///|
-fn push_wrap(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_wrap(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("wrap", v))
+    ignore(attrs.attribute("wrap", v))
   }
 }
 
 ///|
-fn push_srcset(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_srcset(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("srcset", v))
+    ignore(attrs.attribute("srcset", v))
   }
 }
 
 ///|
-fn push_loading(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_loading(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("loading", v))
+    ignore(attrs.attribute("loading", v))
   }
 }
 
 ///|
-fn push_decoding(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_decoding(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("decoding", v))
+    ignore(attrs.attribute("decoding", v))
   }
 }
 
 ///|
-fn push_controls(value : Bool?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_controls(value : Bool?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.property("controls", @variant.Boolean(v)))
+    ignore(attrs.property("controls", @variant.Boolean(v)))
   }
 }
 
 ///|
-fn push_autoplay(value : Bool?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_autoplay(value : Bool?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.property("autoplay", @variant.Boolean(v)))
+    ignore(attrs.property("autoplay", @variant.Boolean(v)))
   }
 }
 
 ///|
-fn push_loop(value : Bool?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_loop(value : Bool?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.property("loop", @variant.Boolean(v)))
+    ignore(attrs.property("loop", @variant.Boolean(v)))
   }
 }
 
 ///|
-fn push_muted(value : Bool?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_muted(value : Bool?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.property("muted", @variant.Boolean(v)))
+    ignore(attrs.property("muted", @variant.Boolean(v)))
   }
 }
 
 ///|
-fn push_preload(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_preload(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("preload", v))
+    ignore(attrs.attribute("preload", v))
   }
 }
 
 ///|
-fn push_poster(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_poster(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("poster", v))
+    ignore(attrs.attribute("poster", v))
   }
 }
 
 ///|
-fn push_allow(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_allow(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("allow", v))
+    ignore(attrs.attribute("allow", v))
   }
 }
 
 ///|
-fn push_sandbox(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_sandbox(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("sandbox", v))
+    ignore(attrs.attribute("sandbox", v))
   }
 }
 
 ///|
-fn push_allowfullscreen(value : Bool?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_allowfullscreen(value : Bool?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.property("allowfullscreen", @variant.Boolean(v)))
+    ignore(attrs.property("allowfullscreen", @variant.Boolean(v)))
   }
 }
 
 ///|
-fn push_coords(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_coords(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("coords", v))
+    ignore(attrs.attribute("coords", v))
   }
 }
 
 ///|
-fn push_cite(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_cite(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("cite", v))
+    ignore(attrs.attribute("cite", v))
   }
 }
 
 ///|
-fn push_shape(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_shape(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("shape", v))
+    ignore(attrs.attribute("shape", v))
   }
 }
 
 ///|
-fn push_kind(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_kind(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("kind", v))
+    ignore(attrs.attribute("kind", v))
   }
 }
 
 ///|
-fn push_srclang(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_srclang(value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.attribute("srclang", v))
+    ignore(attrs.attribute("srclang", v))
   }
 }
 
 ///|
-fn push_default(value : Bool?, attrs : Array[@attr.Attribute]) -> Unit {
+fn push_default(value : Bool?, attrs : Attrs) -> Unit {
   if value is Some(v) {
-    attrs.push(@attr.property("default", @variant.Boolean(v)))
+    ignore(attrs.property("default", @variant.Boolean(v)))
   }
 }

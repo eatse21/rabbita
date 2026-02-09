@@ -303,6 +303,26 @@ pub fn Props::empty() -> Props {
 }
 
 ///|
+fn[K : Eq + Hash, V] copy_map(src : Map[K, V]) -> Map[K, V] {
+  let dst = {}
+  for k, v in src {
+    dst[k] = v
+  }
+  dst
+}
+
+///|
+pub fn Props::copy(self : Props) -> Props {
+  {
+    slots: copy_map(self.slots),
+    handlers: copy_map(self.handlers),
+    attrs: copy_map(self.attrs),
+    props: copy_map(self.props),
+    styles: copy_map(self.styles),
+  }
+}
+
+///|
 fn[T] nullable(x : T) -> @js.Nullable[T] {
   @js.Nullable::from_option(Some(x))
 }
