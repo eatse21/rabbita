@@ -1,9 +1,0 @@
-import {
-  "moonbit-community/rabbita/dom",
-  "moonbit-community/js-ffi/js",
-  "moonbit-community/rabbita/html",
-}
-
-options(
-  link: { "js": { "format": "iife" } },
-)

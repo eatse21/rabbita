@@ -1,4 +1,0 @@
-options(
-  "is-main": true,
-  link: { "js": { "format": "iife" } },
-)
