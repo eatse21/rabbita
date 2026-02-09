@@ -7,159 +7,159 @@ import {
 }
 
 // Values
-pub fn[C : IsChildren] a(style? : Array[String], id? : String, class? : String, href~ : String, target? : Target, attrs? : Array[Attribute], C, escape? : Bool) -> Html
+pub fn[C : IsChildren] a(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, href~ : String, target? : Target, rel? : String, download? : String, attrs? : Array[Attribute], C, escape? : Bool) -> Html
 
-pub fn[C : IsChildren] abbr(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] abbr(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] address(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] address(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn area(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute]) -> Html
+pub fn area(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, alt? : String, coords? : String, shape? : String, href? : String, target? : String, attrs? : Array[Attribute]) -> Html
 
-pub fn[C : IsChildren] article(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] article(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] aside(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] aside(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
 pub fn attribute(String, String) -> Attribute
 
-pub fn[C : IsChildren] audio(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] audio(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, src? : String, controls? : Bool, autoplay? : Bool, loop_? : Bool, muted? : Bool, preload? : String, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] b(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] b(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn base(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute]) -> Html
+pub fn base(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, href? : String, target? : String, attrs? : Array[Attribute]) -> Html
 
-pub fn[C : IsChildren] bdi(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] bdi(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] bdo(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] bdo(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] blockquote(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] blockquote(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] body(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] body(style? : Array[String], id? : String, class? : String, title? : String, lang? : String, dir? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn br(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute]) -> Html
+pub fn br(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute]) -> Html
 
-pub fn[C : IsChildren] button(style? : Array[String], id? : String, class? : String, click? : @runtime.Cmd, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] button(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, type_? : String, disabled? : Bool, name? : String, value? : String, autofocus? : Bool, click? : @runtime.Cmd, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] canvas(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] canvas(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] caption(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] caption(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] cite(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] cite(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] code(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] code(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] col(style? : Array[String], id? : String, span? : Int, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] col(style? : Array[String], id? : String, span? : Int, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] colgroup(style? : Array[String], id? : String, span? : Int, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] colgroup(style? : Array[String], id? : String, span? : Int, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] data(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] data(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] datalist(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] datalist(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] dd(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] dd(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] del(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] del(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] details(style? : Array[String], id? : String, class? : String, open? : Bool, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] details(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, open? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] dfn(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] dfn(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] dialog(style? : Array[String], id? : String, class? : String, open? : Bool, close? : (String) -> @runtime.Cmd, cancel? : @runtime.Cmd, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] dialog(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, open? : Bool, close? : (String) -> @runtime.Cmd, cancel? : @runtime.Cmd, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] div(style? : Array[String], id? : String, class? : String, click? : @runtime.Cmd, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] div(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, click? : @runtime.Cmd, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] dl(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] dl(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] dt(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] dt(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] em(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] em(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn embed(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute]) -> Html
+pub fn embed(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute]) -> Html
 
-pub fn fencedframe(style? : Array[String], id? : String, class? : String, src? : String, title? : String, width? : Int, height? : Int, attrs? : Array[Attribute]) -> Html
+pub fn fencedframe(style? : Array[String], id? : String, class? : String, hidden? : Bool, src? : String, title? : String, width? : Int, height? : Int, loading? : String, allow? : String, sandbox? : String, allowfullscreen? : Bool, attrs? : Array[Attribute]) -> Html
 
-pub fn[C : IsChildren] fieldset(style? : Array[String], id? : String, class? : String, disabled? : Bool, name? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] fieldset(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, disabled? : Bool, name? : String, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] figcaption(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] figcaption(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] figure(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] figure(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] footer(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] footer(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] form(style? : Array[String], id? : String, class? : String, action? : String, name? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] form(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, action? : String, name? : String, attrs? : Array[Attribute], C) -> Html
 
 pub fn[C : IsChildren] fragment(C) -> Html
 
-pub fn[C : IsChildren] geolocation(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] geolocation(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] h1(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] h1(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, cite? : String, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] h2(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] h2(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] h3(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] h3(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] h4(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] h4(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] h5(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] h5(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] h6(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] h6(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] head(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] head(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] header(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] header(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] hgroup(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] hgroup(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] hr(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] hr(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
 pub fn href(String) -> Attribute
 
-pub fn[C : IsChildren] html(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] html(style? : Array[String], id? : String, class? : String, title? : String, lang? : String, dir? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] i(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] i(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn iframe(style? : Array[String], id? : String, class? : String, src? : String, title? : String, width? : Int, height? : Int, attrs? : Array[Attribute]) -> Html
+pub fn iframe(style? : Array[String], id? : String, class? : String, hidden? : Bool, src? : String, title? : String, width? : Int, height? : Int, loading? : String, allow? : String, sandbox? : String, allowfullscreen? : Bool, attrs? : Array[Attribute]) -> Html
 
-pub fn[C : IsChildren] img(style? : Array[String], id? : String, class? : String, src? : String, alt? : String, title? : String, width? : Int, height? : Int, border? : Int, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] img(style? : Array[String], id? : String, class? : String, hidden? : Bool, src? : String, alt? : String, title? : String, width? : Int, height? : Int, srcset? : String, sizes? : String, loading? : String, decoding? : String, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] input(input_type? : InputType, name? : String, value? : String, checked? : Bool, read_only? : Bool, multiple? : Bool, accept? : String, placeholder? : String, auto_complete? : AutoComplete, style? : Array[String], max? : Int, min? : Int, step? : Int, maxlength? : Int, minlength? : Int, pattern? : String, size? : Int, width? : Int, height? : Int, id? : String, class? : String, change? : (String) -> @runtime.Cmd, input? : (String) -> @runtime.Cmd, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] input(input_type? : InputType, name? : String, value? : String, checked? : Bool, read_only? : Bool, multiple? : Bool, accept? : String, placeholder? : String, auto_complete? : AutoComplete, style? : Array[String], max? : Int, min? : Int, step? : Int, maxlength? : Int, minlength? : Int, pattern? : String, size? : Int, width? : Int, height? : Int, id? : String, class? : String, title? : String, hidden? : Bool, required? : Bool, autofocus? : Bool, list? : String, inputmode? : String, change? : (String) -> @runtime.Cmd, input? : (String) -> @runtime.Cmd, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] ins(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] ins(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] kbd(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] kbd(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] label(style? : Array[String], id? : String, class? : String, for_? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] label(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, for_? : String, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] legend(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] legend(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] li(style? : Array[String], value? : Int, id? : String, class? : String, click? : @runtime.Cmd, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] li(style? : Array[String], value? : Int, id? : String, class? : String, title? : String, hidden? : Bool, click? : @runtime.Cmd, attrs? : Array[Attribute], C) -> Html
 
-pub fn link(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute]) -> Html
+pub fn link(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, href? : String, rel? : String, type_? : String, media? : String, sizes? : String, attrs? : Array[Attribute]) -> Html
 
-pub fn[C : IsChildren] main_(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] main_(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] map(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] map(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, name? : String, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] mark(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] mark(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] math(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] math(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] menu(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] menu(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn meta(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute]) -> Html
+pub fn meta(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, charset? : String, name? : String, content? : String, http_equiv? : String, attrs? : Array[Attribute]) -> Html
 
-pub fn[C : IsChildren] meter(style? : Array[String], id? : String, class? : String, value? : Int, min? : Int, max? : Int, low? : Int, high? : Int, optimum? : Int, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] meter(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, value? : Int, min? : Int, max? : Int, low? : Int, high? : Int, optimum? : Int, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] nav(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] nav(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
 pub fn[C : IsChildren] node(String, Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] noscript(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] noscript(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
 pub fn nothing() -> Html
 
-pub fn[C : IsChildren] object(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] object(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] ol(style? : Array[String], reversed? : Bool, start? : Int, id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] ol(style? : Array[String], reversed? : Bool, start? : Int, id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
 pub fn on_change((String) -> @runtime.Cmd) -> Attribute
 
@@ -185,103 +185,103 @@ pub fn on_mouseup((Mouse) -> @runtime.Cmd) -> Attribute
 
 pub fn on_scroll((Scroll) -> @runtime.Cmd) -> Attribute
 
-pub fn[C : IsChildren] optgroup(style? : Array[String], id? : String, class? : String, label? : String, disabled? : Bool, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] optgroup(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, label? : String, disabled? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] option(style? : Array[String], id? : String, class? : String, disabled? : Bool, value? : String, selected? : Bool, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] option(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, label? : String, disabled? : Bool, value? : String, selected? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] output(style? : Array[String], id? : String, class? : String, name? : String, for_? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] output(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, name? : String, for_? : String, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] p(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] p(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] picture(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] picture(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] pre(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] pre(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] progress(style? : Array[String], id? : String, class? : String, value? : Int, max? : Int, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] progress(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, value? : Int, max? : Int, attrs? : Array[Attribute], C) -> Html
 
 pub fn property(String, @variant.Variant) -> Attribute
 
-pub fn[C : IsChildren] q(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] q(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] rp(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] rp(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] rt(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] rt(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] ruby(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] ruby(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] s(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] s(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] samp(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] samp(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] script(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] script(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, src? : String, type_? : String, async_? : Bool, defer_? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] search(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] search(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] section(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] section(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] select(style? : Array[String], id? : String, class? : String, disabled? : Bool, name? : String, change? : (String) -> @runtime.Cmd, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] select(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, disabled? : Bool, name? : String, multiple? : Bool, size? : Int, required? : Bool, autofocus? : Bool, change? : (String) -> @runtime.Cmd, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] selectedcontent(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] selectedcontent(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] slot(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] slot(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] small(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] small(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn source(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute]) -> Html
+pub fn source(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, src? : String, srcset? : String, media? : String, type_? : String, sizes? : String, attrs? : Array[Attribute]) -> Html
 
-pub fn[C : IsChildren] span(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] span(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] strong(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] strong(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
 pub fn style(String, String) -> Attribute
 
-pub fn[C : IsChildren] style_tag(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] style_tag(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] sub(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] sub(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] summary(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] summary(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] sup(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] sup(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] svg(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] svg(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] table(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] table(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
 pub fn target(Target) -> Attribute
 
-pub fn[C : IsChildren] tbody(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] tbody(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] td(style? : Array[String], id? : String, colspan? : Int, rowspan? : Int, headers? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] td(style? : Array[String], id? : String, colspan? : Int, rowspan? : Int, headers? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] template(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] template(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
 pub fn text(String) -> Html
 
-pub fn[C : IsChildren] textarea(style? : Array[String], id? : String, class? : String, name? : String, value? : String, rows? : Int, cols? : Int, placeholder? : String, read_only? : Bool, disabled? : Bool, maxlength? : Int, minlength? : Int, change? : (String) -> @runtime.Cmd, input? : (String) -> @runtime.Cmd, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] textarea(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, name? : String, value? : String, rows? : Int, cols? : Int, placeholder? : String, read_only? : Bool, disabled? : Bool, maxlength? : Int, minlength? : Int, required? : Bool, autofocus? : Bool, wrap? : String, change? : (String) -> @runtime.Cmd, input? : (String) -> @runtime.Cmd, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] tfoot(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] tfoot(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] th(style? : Array[String], id? : String, abbr? : String, colspan? : Int, rowspan? : Int, headers? : String, scope? : Scope, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] th(style? : Array[String], id? : String, abbr? : String, colspan? : Int, rowspan? : Int, headers? : String, scope? : Scope, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] thead(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] thead(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] time(style? : Array[String], id? : String, class? : String, datetime? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] time(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, datetime? : String, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] title(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] title(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] tr(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] tr(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn track(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute]) -> Html
+pub fn track(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, kind? : String, srclang? : String, label? : String, default? : Bool, src? : String, attrs? : Array[Attribute]) -> Html
 
-pub fn[C : IsChildren] u(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] u(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] ul(style? : Array[String], id? : String, class? : String, click? : @runtime.Cmd, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] ul(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, click? : @runtime.Cmd, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] var_(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] var_(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute], C) -> Html
 
-pub fn[C : IsChildren] video(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute], C) -> Html
+pub fn[C : IsChildren] video(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, src? : String, controls? : Bool, autoplay? : Bool, loop_? : Bool, muted? : Bool, preload? : String, poster? : String, attrs? : Array[Attribute], C) -> Html
 
-pub fn wbr(style? : Array[String], id? : String, class? : String, attrs? : Array[Attribute]) -> Html
+pub fn wbr(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Array[Attribute]) -> Html
 
 // Errors
 

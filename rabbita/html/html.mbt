@@ -112,11 +112,25 @@ pub fn[C : IsChildren] button(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
+  type_? : String,
+  disabled? : Bool,
+  name? : String,
+  value? : String,
+  autofocus? : Bool,
   click? : Cmd,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
+  push_type(type_, extra)
+  push_disabled(disabled, extra)
+  push_name(name, extra)
+  push_value_attr_string(value, extra)
+  push_autofocus(autofocus, extra)
   push_click(click, extra)
   push_style(style, extra)
   push_class(class, extra)
@@ -130,10 +144,16 @@ pub fn[C : IsChildren] h1(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
+  cite? : String,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
+  push_cite(cite, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -146,10 +166,14 @@ pub fn[C : IsChildren] h2(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -162,10 +186,14 @@ pub fn[C : IsChildren] h3(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -178,10 +206,14 @@ pub fn[C : IsChildren] h4(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -194,10 +226,14 @@ pub fn[C : IsChildren] h5(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -210,10 +246,14 @@ pub fn[C : IsChildren] h6(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -228,11 +268,15 @@ pub fn[C : IsChildren] div(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   click? : Cmd,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_click(click, extra)
   push_style(style, extra)
   push_class(class, extra)
@@ -246,10 +290,14 @@ pub fn[C : IsChildren] p(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -262,10 +310,14 @@ pub fn[C : IsChildren] hr(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -278,10 +330,14 @@ pub fn[C : IsChildren] pre(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -294,10 +350,14 @@ pub fn[C : IsChildren] blockquote(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -310,10 +370,14 @@ pub fn[C : IsChildren] section(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -326,10 +390,14 @@ pub fn[C : IsChildren] header(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -342,10 +410,14 @@ pub fn[C : IsChildren] footer(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -358,10 +430,14 @@ pub fn[C : IsChildren] nav(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -374,10 +450,14 @@ pub fn[C : IsChildren] main_(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -390,10 +470,14 @@ pub fn[C : IsChildren] article(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -406,10 +490,14 @@ pub fn[C : IsChildren] aside(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -422,10 +510,14 @@ pub fn[C : IsChildren] figure(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -438,10 +530,14 @@ pub fn[C : IsChildren] figcaption(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -454,11 +550,15 @@ pub fn[C : IsChildren] details(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   open? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_open(open, extra)
   push_style(style, extra)
   push_class(class, extra)
@@ -472,10 +572,14 @@ pub fn[C : IsChildren] summary(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -490,10 +594,14 @@ pub fn[C : IsChildren] span(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -506,10 +614,14 @@ pub fn[C : IsChildren] small(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -522,10 +634,14 @@ pub fn[C : IsChildren] mark(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -538,10 +654,14 @@ pub fn[C : IsChildren] del(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -554,10 +674,14 @@ pub fn[C : IsChildren] ins(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -570,10 +694,14 @@ pub fn[C : IsChildren] s(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -586,10 +714,14 @@ pub fn[C : IsChildren] cite(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -602,10 +734,14 @@ pub fn[C : IsChildren] q(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -618,10 +754,14 @@ pub fn[C : IsChildren] abbr(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -634,10 +774,14 @@ pub fn[C : IsChildren] kbd(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -650,10 +794,14 @@ pub fn[C : IsChildren] samp(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -666,10 +814,14 @@ pub fn[C : IsChildren] var_(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -682,11 +834,15 @@ pub fn[C : IsChildren] time(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   datetime? : String,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_datetime(datetime, extra)
   push_style(style, extra)
   push_class(class, extra)
@@ -700,10 +856,14 @@ pub fn[C : IsChildren] address(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -731,15 +891,23 @@ pub fn[C : IsChildren] a(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   href~ : String,
   target? : Target = Self,
+  rel? : String,
+  download? : String,
   attrs? : Array[Attribute] = [],
   children : C,
   escape? : Bool = false,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   extra.push(Attribute("href", href))
   extra.push(Attribute("target", target.to_string()))
+  push_rel(rel, extra)
+  push_download(download, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -756,10 +924,14 @@ pub fn[C : IsChildren] code(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -772,10 +944,14 @@ pub fn[C : IsChildren] em(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -788,10 +964,14 @@ pub fn[C : IsChildren] strong(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -804,10 +984,14 @@ pub fn[C : IsChildren] i(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -820,10 +1004,14 @@ pub fn[C : IsChildren] b(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -836,10 +1024,14 @@ pub fn[C : IsChildren] u(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -852,10 +1044,14 @@ pub fn[C : IsChildren] sub(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -868,10 +1064,14 @@ pub fn[C : IsChildren] sup(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -891,11 +1091,15 @@ pub fn[C : IsChildren] ul(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   click? : Cmd,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_click(click, extra)
   push_style(style, extra)
   push_class(class, extra)
@@ -913,10 +1117,14 @@ pub fn[C : IsChildren] ol(
   start? : Int,
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_reversed(reversed, extra)
   push_start(start, extra)
   push_style(style, extra)
@@ -932,11 +1140,15 @@ pub fn[C : IsChildren] li(
   value? : Int,
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   click? : Cmd,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_click(click, extra)
   push_value_attr_int(value, extra)
   push_style(style, extra)
@@ -951,10 +1163,14 @@ pub fn[C : IsChildren] dl(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -967,10 +1183,14 @@ pub fn[C : IsChildren] dt(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -983,10 +1203,14 @@ pub fn[C : IsChildren] dd(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1001,22 +1225,30 @@ pub fn[C : IsChildren] img(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  hidden? : Bool,
   src? : String,
   alt? : String,
   title? : String,
   width? : Int,
   height? : Int,
-  border? : Int,
+  srcset? : String,
+  sizes? : String,
+  loading? : String,
+  decoding? : String,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_hidden(hidden, extra)
   push_src(src, extra)
   push_alt(alt, extra)
   push_title(title, extra)
   push_width(width, extra)
   push_height(height, extra)
-  push_border(border, extra)
+  push_srcset(srcset, extra)
+  push_sizes(sizes, extra)
+  push_loading(loading, extra)
+  push_decoding(decoding, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1029,17 +1261,27 @@ pub fn iframe(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  hidden? : Bool,
   src? : String,
   title? : String,
   width? : Int,
   height? : Int,
+  loading? : String,
+  allow? : String,
+  sandbox? : String,
+  allowfullscreen? : Bool,
   attrs? : Array[Attribute] = [],
 ) -> Html {
   let extra = []
+  push_hidden(hidden, extra)
   push_src(src, extra)
   push_title(title, extra)
   push_width(width, extra)
   push_height(height, extra)
+  push_loading(loading, extra)
+  push_allow(allow, extra)
+  push_sandbox(sandbox, extra)
+  push_allowfullscreen(allowfullscreen, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1052,17 +1294,27 @@ pub fn fencedframe(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  hidden? : Bool,
   src? : String,
   title? : String,
   width? : Int,
   height? : Int,
+  loading? : String,
+  allow? : String,
+  sandbox? : String,
+  allowfullscreen? : Bool,
   attrs? : Array[Attribute] = [],
 ) -> Html {
   let extra = []
+  push_hidden(hidden, extra)
   push_src(src, extra)
   push_title(title, extra)
   push_width(width, extra)
   push_height(height, extra)
+  push_loading(loading, extra)
+  push_allow(allow, extra)
+  push_sandbox(sandbox, extra)
+  push_allowfullscreen(allowfullscreen, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1077,9 +1329,13 @@ pub fn br(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1124,12 +1380,16 @@ pub fn[C : IsChildren] form(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   action? : String,
   name? : String,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_action(action, extra)
   push_name(name, extra)
   push_style(style, extra)
@@ -1144,11 +1404,15 @@ pub fn[C : IsChildren] label(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   for_? : String,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_for(for_, extra)
   push_style(style, extra)
   push_class(class, extra)
@@ -1162,12 +1426,16 @@ pub fn[C : IsChildren] fieldset(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   disabled? : Bool,
   name? : String,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_disabled(disabled, extra)
   push_name(name, extra)
   push_style(style, extra)
@@ -1182,10 +1450,14 @@ pub fn[C : IsChildren] legend(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1216,6 +1488,12 @@ pub fn[C : IsChildren] input(
   height? : Int,
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
+  required? : Bool,
+  autofocus? : Bool,
+  list? : String,
+  inputmode? : String,
   change? : (String) -> Cmd,
   input? : (String) -> Cmd,
   attrs? : Array[Attribute] = [],
@@ -1250,6 +1528,12 @@ pub fn[C : IsChildren] input(
     _ => "off"
   }
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
+  push_required(required, extra)
+  push_autofocus(autofocus, extra)
+  push_list(list, extra)
+  push_inputmode(inputmode, extra)
   extra.push(attribute("type", input_type))
   extra.push(attribute("autocomplete", auto_complete))
   push_name(name, extra)
@@ -1282,6 +1566,8 @@ pub fn[C : IsChildren] textarea(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   name? : String,
   value? : String,
   rows? : Int,
@@ -1291,12 +1577,17 @@ pub fn[C : IsChildren] textarea(
   disabled? : Bool,
   maxlength? : Int,
   minlength? : Int,
+  required? : Bool,
+  autofocus? : Bool,
+  wrap? : String,
   change? : (String) -> Cmd,
   input? : (String) -> Cmd,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_name(name, extra)
   push_value_prop_string(value, extra)
   push_rows(rows, extra)
@@ -1306,6 +1597,9 @@ pub fn[C : IsChildren] textarea(
   push_disabled(disabled, extra)
   push_maxlength(maxlength, extra)
   push_minlength(minlength, extra)
+  push_required(required, extra)
+  push_autofocus(autofocus, extra)
+  push_wrap(wrap, extra)
   push_change(change, extra)
   push_input(input, extra)
   push_style(style, extra)
@@ -1320,16 +1614,28 @@ pub fn[C : IsChildren] select(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   disabled? : Bool,
   name? : String,
+  multiple? : Bool,
+  size? : Int,
+  required? : Bool,
+  autofocus? : Bool,
   change? : (String) -> Cmd,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   // TODO: support more attribute for select tag
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_disabled(disabled, extra)
   push_name(name, extra)
+  push_multiple(multiple, extra)
+  push_size(size, extra)
+  push_required(required, extra)
+  push_autofocus(autofocus, extra)
   push_change(change, extra)
   push_style(style, extra)
   push_class(class, extra)
@@ -1343,12 +1649,16 @@ pub fn[C : IsChildren] optgroup(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   label? : String,
   disabled? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_label(label, extra)
   push_disabled(disabled, extra)
   push_style(style, extra)
@@ -1363,6 +1673,9 @@ pub fn[C : IsChildren] option(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
+  label? : String,
   disabled? : Bool,
   value? : String,
   selected? : Bool = false,
@@ -1372,6 +1685,9 @@ pub fn[C : IsChildren] option(
   // TODO: support more attribute for option tag
 
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
+  push_label(label, extra)
   push_disabled(disabled, extra)
   push_value_attr_string(value, extra)
   extra.push(property("selected", Boolean(selected)))
@@ -1387,10 +1703,14 @@ pub fn[C : IsChildren] datalist(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1403,12 +1723,16 @@ pub fn[C : IsChildren] output(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   name? : String,
   for_? : String,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_name(name, extra)
   push_for(for_, extra)
   push_style(style, extra)
@@ -1423,12 +1747,16 @@ pub fn[C : IsChildren] progress(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   value? : Int,
   max? : Int,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_value_attr_int(value, extra)
   push_max(max, extra)
   push_style(style, extra)
@@ -1443,6 +1771,8 @@ pub fn[C : IsChildren] meter(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   value? : Int,
   min? : Int,
   max? : Int,
@@ -1453,6 +1783,8 @@ pub fn[C : IsChildren] meter(
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_value_attr_int(value, extra)
   push_min(min, extra)
   push_max(max, extra)
@@ -1484,10 +1816,14 @@ pub fn[C : IsChildren] table(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1500,10 +1836,14 @@ pub fn[C : IsChildren] caption(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1516,10 +1856,14 @@ pub fn[C : IsChildren] thead(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1532,10 +1876,14 @@ pub fn[C : IsChildren] tbody(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1549,10 +1897,14 @@ pub fn[C : IsChildren] col(
   id? : String,
   span? : Int,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_span(span, extra)
   push_style(style, extra)
   push_class(class, extra)
@@ -1567,10 +1919,14 @@ pub fn[C : IsChildren] colgroup(
   id? : String,
   span? : Int,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_span(span, extra)
   push_style(style, extra)
   push_class(class, extra)
@@ -1584,10 +1940,14 @@ pub fn[C : IsChildren] tr(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1603,10 +1963,14 @@ pub fn[C : IsChildren] td(
   rowspan? : Int,
   headers? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_colspan(colspan, extra)
   push_rowspan(rowspan, extra)
   push_headers(headers, extra)
@@ -1635,10 +1999,14 @@ pub fn[C : IsChildren] th(
   headers? : String,
   scope? : Scope,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_colspan(colspan, extra)
   push_rowspan(rowspan, extra)
   push_headers(headers, extra)
@@ -1656,10 +2024,14 @@ pub fn[C : IsChildren] tfoot(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1728,6 +2100,8 @@ pub fn[C : IsChildren] dialog(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   open? : Bool,
   close? : (String) -> Cmd,
   cancel? : Cmd,
@@ -1735,6 +2109,8 @@ pub fn[C : IsChildren] dialog(
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_open(open, extra)
   push_close(close, extra)
   push_cancel(cancel, extra)
@@ -1752,10 +2128,18 @@ pub fn[C : IsChildren] html(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  lang? : String,
+  dir? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_lang(lang, extra)
+  push_dir(dir, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1768,10 +2152,14 @@ pub fn[C : IsChildren] head(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1784,10 +2172,18 @@ pub fn[C : IsChildren] body(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  lang? : String,
+  dir? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_lang(lang, extra)
+  push_dir(dir, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1800,10 +2196,14 @@ pub fn[C : IsChildren] title(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1816,9 +2216,17 @@ pub fn base(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
+  href? : String,
+  target? : String,
   attrs? : Array[Attribute] = [],
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
+  push_href(href, extra)
+  push_target(target, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1831,9 +2239,21 @@ pub fn meta(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
+  charset? : String,
+  name? : String,
+  content? : String,
+  http_equiv? : String,
   attrs? : Array[Attribute] = [],
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
+  push_charset(charset, extra)
+  push_name(name, extra)
+  push_content(content, extra)
+  push_http_equiv(http_equiv, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1846,9 +2266,23 @@ pub fn link(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
+  href? : String,
+  rel? : String,
+  type_? : String,
+  media? : String,
+  sizes? : String,
   attrs? : Array[Attribute] = [],
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
+  push_href(href, extra)
+  push_rel(rel, extra)
+  push_type(type_, extra)
+  push_media(media, extra)
+  push_sizes(sizes, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1861,10 +2295,14 @@ pub fn[C : IsChildren] style_tag(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1877,10 +2315,22 @@ pub fn[C : IsChildren] script(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
+  src? : String,
+  type_? : String,
+  async_? : Bool,
+  defer_? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
+  push_src(src, extra)
+  push_type(type_, extra)
+  push_async(async_, extra)
+  push_defer(defer_, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1893,10 +2343,14 @@ pub fn[C : IsChildren] noscript(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1909,10 +2363,14 @@ pub fn[C : IsChildren] template(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1925,10 +2383,14 @@ pub fn[C : IsChildren] slot(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1943,10 +2405,14 @@ pub fn[C : IsChildren] data(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1959,10 +2425,14 @@ pub fn[C : IsChildren] dfn(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1975,10 +2445,14 @@ pub fn[C : IsChildren] bdi(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1991,10 +2465,14 @@ pub fn[C : IsChildren] bdo(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -2007,10 +2485,14 @@ pub fn[C : IsChildren] ruby(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -2023,10 +2505,14 @@ pub fn[C : IsChildren] rt(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -2039,10 +2525,14 @@ pub fn[C : IsChildren] rp(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -2055,9 +2545,13 @@ pub fn wbr(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -2072,10 +2566,14 @@ pub fn[C : IsChildren] hgroup(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -2088,10 +2586,14 @@ pub fn[C : IsChildren] menu(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -2106,10 +2608,14 @@ pub fn[C : IsChildren] canvas(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -2122,10 +2628,14 @@ pub fn[C : IsChildren] svg(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -2138,10 +2648,14 @@ pub fn[C : IsChildren] math(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -2154,10 +2668,14 @@ pub fn[C : IsChildren] picture(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -2170,10 +2688,26 @@ pub fn[C : IsChildren] audio(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
+  src? : String,
+  controls? : Bool,
+  autoplay? : Bool,
+  loop_? : Bool,
+  muted? : Bool,
+  preload? : String,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
+  push_src(src, extra)
+  push_controls(controls, extra)
+  push_autoplay(autoplay, extra)
+  push_loop(loop_, extra)
+  push_muted(muted, extra)
+  push_preload(preload, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -2186,10 +2720,28 @@ pub fn[C : IsChildren] video(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
+  src? : String,
+  controls? : Bool,
+  autoplay? : Bool,
+  loop_? : Bool,
+  muted? : Bool,
+  preload? : String,
+  poster? : String,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
+  push_src(src, extra)
+  push_controls(controls, extra)
+  push_autoplay(autoplay, extra)
+  push_loop(loop_, extra)
+  push_muted(muted, extra)
+  push_preload(preload, extra)
+  push_poster(poster, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -2202,10 +2754,16 @@ pub fn[C : IsChildren] map(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
+  name? : String,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
+  push_name(name, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -2218,9 +2776,23 @@ pub fn area(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
+  alt? : String,
+  coords? : String,
+  shape? : String,
+  href? : String,
+  target? : String,
   attrs? : Array[Attribute] = [],
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
+  push_alt(alt, extra)
+  push_coords(coords, extra)
+  push_shape(shape, extra)
+  push_href(href, extra)
+  push_target(target, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -2233,9 +2805,23 @@ pub fn source(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
+  src? : String,
+  srcset? : String,
+  media? : String,
+  type_? : String,
+  sizes? : String,
   attrs? : Array[Attribute] = [],
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
+  push_src(src, extra)
+  push_srcset(srcset, extra)
+  push_media(media, extra)
+  push_type(type_, extra)
+  push_sizes(sizes, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -2248,9 +2834,23 @@ pub fn track(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
+  kind? : String,
+  srclang? : String,
+  label? : String,
+  default? : Bool,
+  src? : String,
   attrs? : Array[Attribute] = [],
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
+  push_kind(kind, extra)
+  push_srclang(srclang, extra)
+  push_label(label, extra)
+  push_default(default, extra)
+  push_src(src, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -2263,10 +2863,14 @@ pub fn[C : IsChildren] object(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -2279,9 +2883,13 @@ pub fn embed(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -2296,10 +2904,14 @@ pub fn[C : IsChildren] search(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -2312,10 +2924,14 @@ pub fn[C : IsChildren] selectedcontent(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -2328,10 +2944,14 @@ pub fn[C : IsChildren] geolocation(
   style? : Array[String] = [],
   id? : String,
   class? : String,
+  title? : String,
+  hidden? : Bool,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
+  push_title(title, extra)
+  push_hidden(hidden, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
