@@ -70,6 +70,19 @@ pub fn[Model, Msg] cell(
 }
 
 ///|
+pub fn[Model, Msg] cell_with_dispatch(
+  model~ : Model,
+  update~ : (Dispatch[Msg], Msg, Model) -> (Cmd, Model),
+  view~ : (Dispatch[Msg], Model) -> Html,
+) -> (Dispatch[Msg], Cell) {
+  let flags = @runtime.Flags::new()
+  let dispatcher = { id: flags.id(), inbox: @queue.new() }
+  let dispatch = m => dispatcher.message(m)
+  let model = @ref.new(model)
+  (dispatch, Cell({ view, update, dispatcher, dispatch, model, flags }))
+}
+
+///|
 pub fn[Model, Msg] simple_cell(
   model~ : Model,
   update~ : (Msg, Model) -> Model,

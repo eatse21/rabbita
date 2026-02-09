@@ -14,6 +14,8 @@ pub fn batch(Array[@runtime.Cmd]) -> @runtime.Cmd
 
 pub fn[Model, Msg] cell(model~ : Model, update~ : ((Msg) -> @runtime.Cmd, Msg, Model) -> (@runtime.Cmd, Model), view~ : ((Msg) -> @runtime.Cmd, Model) -> @html.Html) -> Cell
 
+pub fn[Model, Msg] cell_with_dispatch(model~ : Model, update~ : ((Msg) -> @runtime.Cmd, Msg, Model) -> (@runtime.Cmd, Model), view~ : ((Msg) -> @runtime.Cmd, Model) -> @html.Html) -> ((Msg) -> @runtime.Cmd, Cell)
+
 pub fn new(Cell) -> App
 
 pub let none : @runtime.Cmd
