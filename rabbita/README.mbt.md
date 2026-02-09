@@ -25,8 +25,8 @@ fn main {
     },
     view=(dispatch, model) => div([
       h1(model.count.to_string()),
-      button(click=dispatch(Inc), "+"),
-      button(click=dispatch(Dec), "-"),
+      button(on_click=dispatch(Inc), "+"),
+      button(on_click=dispatch(Dec), "-"),
     ]),
   )
   new(app).mount("main")

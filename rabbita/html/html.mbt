@@ -76,7 +76,7 @@ pub fn[C : IsChildren] button(
   name? : String,
   value? : String,
   autofocus? : Bool,
-  click? : Cmd,
+  on_click? : Cmd,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
@@ -88,7 +88,7 @@ pub fn[C : IsChildren] button(
   push_name(name, extra)
   push_value_attr_string(value, extra)
   push_autofocus(autofocus, extra)
-  push_click(click, extra)
+  push_click(on_click, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -227,14 +227,24 @@ pub fn[C : IsChildren] div(
   class? : String,
   title? : String,
   hidden? : Bool,
-  click? : Cmd,
+  on_click? : Cmd,
+  on_mousedown? : (Mouse) -> Cmd,
+  on_mouseup? : (Mouse) -> Cmd,
+  on_scroll? : (Scroll) -> Cmd,
+  on_keydown? : (Keyboard) -> Cmd,
+  on_keyup? : (Keyboard) -> Cmd,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
   push_title(title, extra)
   push_hidden(hidden, extra)
-  push_click(click, extra)
+  push_click(on_click, extra)
+  push_mousedown(on_mousedown, extra)
+  push_mouseup(on_mouseup, extra)
+  push_scroll(on_scroll, extra)
+  push_keydown(on_keydown, extra)
+  push_keyup(on_keyup, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1050,14 +1060,14 @@ pub fn[C : IsChildren] ul(
   class? : String,
   title? : String,
   hidden? : Bool,
-  click? : Cmd,
+  on_click? : Cmd,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
   push_title(title, extra)
   push_hidden(hidden, extra)
-  push_click(click, extra)
+  push_click(on_click, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1099,14 +1109,14 @@ pub fn[C : IsChildren] li(
   class? : String,
   title? : String,
   hidden? : Bool,
-  click? : Cmd,
+  on_click? : Cmd,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
   push_title(title, extra)
   push_hidden(hidden, extra)
-  push_click(click, extra)
+  push_click(on_click, extra)
   push_value_attr_int(value, extra)
   push_style(style, extra)
   push_class(class, extra)
@@ -1445,8 +1455,8 @@ pub fn[C : IsChildren] input(
   autofocus? : Bool,
   list? : String,
   inputmode? : String,
-  change? : (String) -> Cmd,
-  input? : (String) -> Cmd,
+  on_change? : (String) -> Cmd,
+  on_input? : (String) -> Cmd,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
@@ -1503,8 +1513,8 @@ pub fn[C : IsChildren] input(
   push_width(width, extra)
   push_height(height, extra)
   push_placeholder(placeholder, extra)
-  push_change(change, extra)
-  push_input(input, extra)
+  push_change(on_change, extra)
+  push_input(on_input, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1531,8 +1541,8 @@ pub fn[C : IsChildren] textarea(
   required? : Bool,
   autofocus? : Bool,
   wrap? : String,
-  change? : (String) -> Cmd,
-  input? : (String) -> Cmd,
+  on_change? : (String) -> Cmd,
+  on_input? : (String) -> Cmd,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
@@ -1551,8 +1561,8 @@ pub fn[C : IsChildren] textarea(
   push_required(required, extra)
   push_autofocus(autofocus, extra)
   push_wrap(wrap, extra)
-  push_change(change, extra)
-  push_input(input, extra)
+  push_change(on_change, extra)
+  push_input(on_input, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -1573,7 +1583,7 @@ pub fn[C : IsChildren] select(
   size? : Int,
   required? : Bool,
   autofocus? : Bool,
-  change? : (String) -> Cmd,
+  on_change? : (String) -> Cmd,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
@@ -1587,7 +1597,7 @@ pub fn[C : IsChildren] select(
   push_size(size, extra)
   push_required(required, extra)
   push_autofocus(autofocus, extra)
-  push_change(change, extra)
+  push_change(on_change, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -2029,11 +2039,11 @@ pub fn[C : IsChildren] tfoot(
 /// fn view(model : Model) -> Html {
 ///   div([
 ///     h1([text(model)]),
-///     button(click=Msg::Open, [text("open")]),
-///     dialog(id="confirm", close=Msg::Closed, [
+///     button(on_click=Msg::Open, [text("open")]),
+///     dialog(id="confirm", on_close=Msg::Closed, [
 ///       p([text("Are you sure?")]),
-///       button(click=YesNo(true), [text("Yes")]),
-///       button(click=YesNo(false), [text("No")]),
+///       button(on_click=YesNo(true), [text("Yes")]),
+///       button(on_click=YesNo(false), [text("No")]),
 ///     ]),
 ///   ])
 /// }
@@ -2046,8 +2056,8 @@ pub fn[C : IsChildren] dialog(
   title? : String,
   hidden? : Bool,
   open? : Bool,
-  close? : (String) -> Cmd,
-  cancel? : Cmd,
+  on_close? : (String) -> Cmd,
+  on_cancel? : Cmd,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
@@ -2055,8 +2065,8 @@ pub fn[C : IsChildren] dialog(
   push_title(title, extra)
   push_hidden(hidden, extra)
   push_open(open, extra)
-  push_close(close, extra)
-  push_cancel(cancel, extra)
+  push_close(on_close, extra)
+  push_cancel(on_cancel, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -2119,6 +2129,9 @@ pub fn[C : IsChildren] body(
   lang? : String,
   dir? : String,
   hidden? : Bool,
+  on_scroll? : (Scroll) -> Cmd,
+  on_keydown? : (Keyboard) -> Cmd,
+  on_keyup? : (Keyboard) -> Cmd,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
@@ -2127,6 +2140,9 @@ pub fn[C : IsChildren] body(
   push_lang(lang, extra)
   push_dir(dir, extra)
   push_hidden(hidden, extra)
+  push_scroll(on_scroll, extra)
+  push_keydown(on_keydown, extra)
+  push_keyup(on_keyup, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)
@@ -2553,12 +2569,22 @@ pub fn[C : IsChildren] canvas(
   class? : String,
   title? : String,
   hidden? : Bool,
+  on_mousedown? : (Mouse) -> Cmd,
+  on_mouseup? : (Mouse) -> Cmd,
+  on_scroll? : (Scroll) -> Cmd,
+  on_keydown? : (Keyboard) -> Cmd,
+  on_keyup? : (Keyboard) -> Cmd,
   attrs? : Array[Attribute] = [],
   children : C,
 ) -> Html {
   let extra = []
   push_title(title, extra)
   push_hidden(hidden, extra)
+  push_mousedown(on_mousedown, extra)
+  push_mouseup(on_mouseup, extra)
+  push_scroll(on_scroll, extra)
+  push_keydown(on_keydown, extra)
+  push_keyup(on_keyup, extra)
   push_style(style, extra)
   push_class(class, extra)
   push_id(id, extra)

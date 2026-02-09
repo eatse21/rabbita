@@ -310,6 +310,72 @@ pub fn nonce(String) -> Attribute
 
 pub fn novalidate(Bool) -> Attribute
 
+pub fn on_blur((@dom.FocusEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_change((@dom.InputEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_click((@dom.MouseEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_compositionend((@dom.CompositionEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_compositionstart((@dom.CompositionEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_compositionupdate((@dom.CompositionEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_contextmenu((@dom.MouseEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_copy((@dom.ClipboardEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_cut((@dom.ClipboardEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_dbclick((@dom.MouseEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_dblclick((@dom.MouseEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_dragend((@dom.DragEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_dragenter((@dom.DragEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_dragleave((@dom.DragEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_dragover((@dom.DragEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_dragstart((@dom.DragEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_drop((@dom.DragEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_focus((@dom.FocusEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_input((@dom.InputEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_keydown((@dom.KeyboardEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_keyup((@dom.KeyboardEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_mousedown((@dom.MouseEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_mouseenter((@dom.MouseEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_mouseleave((@dom.MouseEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_mousemove((@dom.MouseEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_mouseout((@dom.MouseEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_mouseover((@dom.MouseEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_mouseup((@dom.MouseEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_paste((@dom.ClipboardEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_reset((@dom.Event) -> @runtime.Cmd) -> Attribute
+
+pub fn on_scroll((@dom.UIEvent) -> @runtime.Cmd) -> Attribute
+
+pub fn on_submit((@dom.Event) -> @runtime.Cmd) -> Attribute
+
+pub fn on_wheel((@dom.WheelEvent) -> @runtime.Cmd) -> Attribute
+
 pub fn open(Bool) -> Attribute
 
 pub fn optimum(Int) -> Attribute

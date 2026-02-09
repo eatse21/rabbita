@@ -22,7 +22,62 @@ fn push_class(value : String?, attrs : Array[@attr.Attribute]) -> Unit {
 ///|
 fn push_click(value : Cmd?, attrs : Array[@attr.Attribute]) -> Unit {
   if value is Some(v) {
-    attrs.push(on_click(_ => v))
+    attrs.push(@attr.on_click(_ => v))
+  }
+}
+
+///|
+fn push_mousedown(
+  value : ((Mouse) -> Cmd)?,
+  attrs : Array[@attr.Attribute],
+) -> Unit {
+  if value is Some(v) {
+    attrs.push(@attr.on_mousedown(event => v(Mouse(event))))
+  }
+}
+
+///|
+fn push_mouseup(
+  value : ((Mouse) -> Cmd)?,
+  attrs : Array[@attr.Attribute],
+) -> Unit {
+  if value is Some(v) {
+    attrs.push(@attr.on_mouseup(event => v(Mouse(event))))
+  }
+}
+
+///|
+fn push_scroll(
+  value : ((Scroll) -> Cmd)?,
+  attrs : Array[@attr.Attribute],
+) -> Unit {
+  if value is Some(v) {
+    attrs.push(
+      @attr.on_scroll(event => {
+        let element = event.target().to_element().unwrap()
+        v(Scroll(element))
+      }),
+    )
+  }
+}
+
+///|
+fn push_keydown(
+  value : ((Keyboard) -> Cmd)?,
+  attrs : Array[@attr.Attribute],
+) -> Unit {
+  if value is Some(v) {
+    attrs.push(@attr.on_keydown(event => v(Keyboard(event))))
+  }
+}
+
+///|
+fn push_keyup(
+  value : ((Keyboard) -> Cmd)?,
+  attrs : Array[@attr.Attribute],
+) -> Unit {
+  if value is Some(v) {
+    attrs.push(@attr.on_keyup(event => v(Keyboard(event))))
   }
 }
 
@@ -255,7 +310,19 @@ fn push_change(
   attrs : Array[@attr.Attribute],
 ) -> Unit {
   if value is Some(v) {
-    attrs.push(on_change(v))
+    attrs.push(
+      @attr.handler("change", (event, scheduler) => {
+        let target = event.target()
+        let value = if target.to_html_input_element() is Some(x) {
+          x.value()
+        } else if target.to_html_select_element() is Some(x) {
+          x.value()
+        } else {
+          panic() // TODO: check for other HTMLElement types
+        }
+        scheduler.add(v(value))
+      }),
+    )
   }
 }
 
@@ -265,7 +332,12 @@ fn push_input(
   attrs : Array[@attr.Attribute],
 ) -> Unit {
   if value is Some(v) {
-    attrs.push(on_input(v))
+    attrs.push(
+      @attr.handler("input", (event, scheduler) => {
+        let value = event.target().to_html_input_element().unwrap().value()
+        scheduler.add(v(value))
+      }),
+    )
   }
 }
 
