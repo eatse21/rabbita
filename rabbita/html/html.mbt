@@ -24,7 +24,7 @@ pub fn[C : IsChildren] node(tag : String, attrs : Attrs, children : C) -> Html {
 ///|
 fn resolve_attrs(attrs : Attrs?) -> Attrs {
   match attrs {
-    Some(Attrs(props)) => Attrs(props.copy())
+    Some(a) => a.copy()
     None => Attrs::build()
   }
 }

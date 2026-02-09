@@ -21,6 +21,11 @@ pub fn Attrs::to_props(self : Attrs) -> Props {
 }
 
 ///|
+fn Attrs::copy(self : Attrs) -> Attrs {
+  Attrs(self.0.copy())
+}
+
+///|
 /// Set a raw attribute.
 pub fn Attrs::attribute(self : Attrs, key : String, value : String) -> Attrs {
   self.0.attrs[key] = value
