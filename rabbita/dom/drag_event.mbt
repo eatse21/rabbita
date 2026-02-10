@@ -12,7 +12,7 @@ pub impl IsMouseEvent for DragEvent
 
 ///|
 pub impl @js.Cast for DragEvent with into(value) {
-  value |> ffi_to_drag_event |> _.to_option()
+  value |> ffi_to_drag_event |> y => { y.to_option() }
 }
 
 ///|

@@ -10,7 +10,7 @@ pub impl IsUIEvent for KeyboardEvent
 
 ///|
 pub impl @js.Cast for KeyboardEvent with into(value) {
-  value |> ffi_to_keyboard_event |> _.to_option()
+  value |> ffi_to_keyboard_event |> y => { y.to_option() }
 }
 
 ///|

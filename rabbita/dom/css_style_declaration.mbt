@@ -11,7 +11,7 @@ type CSSRule
 
 ///|
 pub impl @js.Cast for CSSStyleDeclaration with into(value) {
-  value |> ffi_to_css_style_declaration |> _.to_option()
+  value |> ffi_to_css_style_declaration |> y => { y.to_option() }
 }
 
 ///|

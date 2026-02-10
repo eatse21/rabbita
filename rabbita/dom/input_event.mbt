@@ -10,7 +10,7 @@ pub impl IsUIEvent for InputEvent
 
 ///|
 pub impl @js.Cast for InputEvent with into(value) {
-  value |> ffi_to_input_event |> _.to_option()
+  value |> ffi_to_input_event |> y => { y.to_option() }
 }
 
 ///|

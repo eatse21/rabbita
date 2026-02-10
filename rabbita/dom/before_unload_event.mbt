@@ -7,7 +7,7 @@ pub impl IsEvent for BeforeUnloadEvent
 
 ///|
 pub impl @js.Cast for BeforeUnloadEvent with into(value) {
-  value |> ffi_to_before_unload_event |> _.to_option()
+  value |> ffi_to_before_unload_event |> y => { y.to_option() }
 }
 
 ///|

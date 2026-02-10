@@ -4,7 +4,7 @@ type ImageBitmap
 
 ///|
 pub impl @js.Cast for ImageBitmap with into(value) {
-  value |> ffi_to_image_bitmap |> _.to_option()
+  value |> ffi_to_image_bitmap |> y => { y.to_option() }
 }
 
 ///|

@@ -7,7 +7,7 @@ pub impl IsEventTarget for HTMLDialogElement
 
 ///|
 pub impl @js.Cast for HTMLDialogElement with into(value) {
-  value |> ffi_to_html_dialog_element |> _.to_option()
+  value |> ffi_to_html_dialog_element |> y => { y.to_option() }
 }
 
 ///|

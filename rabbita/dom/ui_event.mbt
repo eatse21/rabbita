@@ -20,7 +20,7 @@ pub impl IsUIEvent for UIEvent
 
 ///|
 pub impl @js.Cast for UIEvent with into(value) {
-  value |> ffi_to_ui_event |> _.to_option()
+  value |> ffi_to_ui_event |> y => { y.to_option() }
 }
 
 ///|

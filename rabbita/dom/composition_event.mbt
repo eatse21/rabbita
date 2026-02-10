@@ -10,7 +10,7 @@ pub impl IsUIEvent for CompositionEvent
 
 ///|
 pub impl @js.Cast for CompositionEvent with into(value) {
-  value |> ffi_to_composition_event |> _.to_option()
+  value |> ffi_to_composition_event |> y => { y.to_option() }
 }
 
 ///|

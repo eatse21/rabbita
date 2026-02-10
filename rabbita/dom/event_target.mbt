@@ -37,7 +37,7 @@ pub impl IsEventTarget for EventTarget
 
 ///|
 pub impl @js.Cast for EventTarget with into(value) {
-  value |> ffi_to_event_target |> _.to_option()
+  value |> ffi_to_event_target |> y => { y.to_option() }
 }
 
 ///|
@@ -67,97 +67,97 @@ impl IsEventTarget with as_event_target(s) {
 
 ///|
 impl IsEventTarget with to_clipboard(s) {
-  s |> js_identity |> ffi_to_clipboard |> _.to_option()
+  s |> js_identity |> ffi_to_clipboard |> y => { y.to_option() }
 }
 
 ///|
 impl IsEventTarget with to_node(s) {
-  s |> js_identity |> ffi_to_node |> _.to_option()
+  s |> js_identity |> ffi_to_node |> y => { y.to_option() }
 }
 
 ///|
 impl IsEventTarget with to_document(s) {
-  s |> js_identity |> ffi_to_document |> _.to_option()
+  s |> js_identity |> ffi_to_document |> y => { y.to_option() }
 }
 
 ///|
 impl IsEventTarget with to_document_fragment(s) {
-  s |> js_identity |> ffi_to_document_fragment |> _.to_option()
+  s |> js_identity |> ffi_to_document_fragment |> y => { y.to_option() }
 }
 
 ///|
 impl IsEventTarget with to_element(s) {
-  s |> js_identity |> ffi_to_element |> _.to_option()
+  s |> js_identity |> ffi_to_element |> y => { y.to_option() }
 }
 
 ///|
 impl IsEventTarget with to_html_element(s) {
-  s |> js_identity |> ffi_to_html_element |> _.to_option()
+  s |> js_identity |> ffi_to_html_element |> y => { y.to_option() }
 }
 
 ///|
 impl IsEventTarget with to_html_canvas_element(s) {
-  s |> js_identity |> ffi_to_html_canvas_element |> _.to_option()
+  s |> js_identity |> ffi_to_html_canvas_element |> y => { y.to_option() }
 }
 
 ///|
 impl IsEventTarget with to_html_input_element(s) {
-  s |> js_identity |> ffi_to_html_input_element |> _.to_option()
+  s |> js_identity |> ffi_to_html_input_element |> y => { y.to_option() }
 }
 
 ///|
 impl IsEventTarget with to_html_dialog_element(s) {
-  s |> js_identity |> ffi_to_html_dialog_element |> _.to_option()
+  s |> js_identity |> ffi_to_html_dialog_element |> y => { y.to_option() }
 }
 
 ///|
 impl IsEventTarget with to_html_image_element(s) {
-  s |> js_identity |> ffi_to_html_image_element |> _.to_option()
+  s |> js_identity |> ffi_to_html_image_element |> y => { y.to_option() }
 }
 
 ///|
 impl IsEventTarget with to_html_select_element(s) {
-  s |> js_identity |> ffi_to_html_select_element |> _.to_option()
+  s |> js_identity |> ffi_to_html_select_element |> y => { y.to_option() }
 }
 
 ///|
 impl IsEventTarget with to_text(s) {
-  s |> js_identity |> ffi_to_text |> _.to_option()
+  s |> js_identity |> ffi_to_text |> y => { y.to_option() }
 }
 
 ///|
 impl IsEventTarget with to_comment(s) {
-  s |> js_identity |> ffi_to_comment |> _.to_option()
+  s |> js_identity |> ffi_to_comment |> y => { y.to_option() }
 }
 
 ///|
 impl IsEventTarget with to_svg_element(s) {
-  s |> js_identity |> ffi_to_svg_element |> _.to_option()
+  s |> js_identity |> ffi_to_svg_element |> y => { y.to_option() }
 }
 
 ///|
 impl IsEventTarget with to_svg_graphics_element(s) {
-  s |> js_identity |> ffi_to_svg_graphics_element |> _.to_option()
+  s |> js_identity |> ffi_to_svg_graphics_element |> y => { y.to_option() }
 }
 
 ///|
 impl IsEventTarget with to_svg_image_element(s) {
-  s |> js_identity |> ffi_to_svg_image_element |> _.to_option()
+  s |> js_identity |> ffi_to_svg_image_element |> y => { y.to_option() }
 }
 
 ///|
 impl IsEventTarget with to_html_media_element(s) {
-  s |> js_identity |> ffi_to_html_media_element |> _.to_option()
+  s |> js_identity |> ffi_to_html_media_element |> y => { y.to_option() }
 }
 
 ///|
 impl IsEventTarget with to_html_video_element(s) {
-  s |> js_identity |> ffi_to_html_video_element |> _.to_option()
+  s |> js_identity |> ffi_to_html_video_element |> y => { y.to_option() }
 }
 
 ///|
 impl IsEventTarget with to_window(s) {
-  s |> js_identity |> ffi_to_window |> _.to_option()
+  s |> js_identity |> ffi_to_window |> y => { y.to_option() }
 }
 
 ///|

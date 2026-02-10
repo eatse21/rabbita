@@ -6,7 +6,7 @@ pub impl IsEventTarget for Window
 
 ///|
 pub impl @js.Cast for Window with into(value) {
-  value |> ffi_to_window |> _.to_option()
+  value |> ffi_to_window |> x => { x.to_option() }
 }
 
 ///|

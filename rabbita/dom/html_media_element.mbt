@@ -116,7 +116,7 @@ pub trait IsHTMLMediaElement: IsHtmlElement {
 
 ///|
 pub impl @js.Cast for HTMLMediaElement with into(value) {
-  value |> ffi_to_html_media_element |> _.to_option()
+  value |> ffi_to_html_media_element |> y => { y.to_option() }
 }
 
 ///|

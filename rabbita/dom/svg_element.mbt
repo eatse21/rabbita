@@ -41,7 +41,7 @@ pub trait IsSVGElement: IsElement {
 
 ///|
 pub impl @js.Cast for SVGElement with into(value) {
-  value |> ffi_to_svg_element |> _.to_option()
+  value |> ffi_to_svg_element |> y => { y.to_option() }
 }
 
 ///|
@@ -86,7 +86,7 @@ impl IsSVGElement with set_nonce(s, value) {
 
 ///|
 impl IsSVGElement with get_owner_svg_element(s) {
-  s |> js_identity |> get_owner_svg_element |> _.to_option()
+  s |> js_identity |> get_owner_svg_element |> y => { y.to_option() }
 }
 
 ///|
@@ -111,7 +111,7 @@ impl IsSVGElement with set_tab_index(s, value) {
 
 ///|
 impl IsSVGElement with get_viewport_element(s) {
-  s |> js_identity |> get_viewport_element |> _.to_option()
+  s |> js_identity |> get_viewport_element |> y => { y.to_option() }
 }
 
 ///|

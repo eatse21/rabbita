@@ -4,7 +4,7 @@ type Comment
 
 ///|
 pub impl @js.Cast for Comment with into(value) {
-  value |> ffi_to_comment |> _.to_option()
+  value |> ffi_to_comment |> y => { y.to_option() }
 }
 
 ///|

@@ -4,7 +4,7 @@ type DocumentFragment
 
 ///|
 pub impl @js.Cast for DocumentFragment with into(value) {
-  value |> ffi_to_document_fragment |> _.to_option()
+  value |> ffi_to_document_fragment |> y => { y.to_option() }
 }
 
 ///|

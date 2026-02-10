@@ -7,7 +7,7 @@ pub impl IsEventTarget for HTMLInputElement
 
 ///|
 pub impl @js.Cast for HTMLInputElement with into(value) {
-  value |> ffi_to_html_input_element |> _.to_option()
+  value |> ffi_to_html_input_element |> y => { y.to_option() }
 }
 
 ///|

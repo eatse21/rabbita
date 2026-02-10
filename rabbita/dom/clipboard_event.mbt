@@ -7,7 +7,7 @@ pub impl IsEvent for ClipboardEvent
 
 ///|
 pub impl @js.Cast for ClipboardEvent with into(value) {
-  value |> ffi_to_clipboard_event |> _.to_option()
+  value |> ffi_to_clipboard_event |> y => { y.to_option() }
 }
 
 ///|

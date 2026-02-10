@@ -28,7 +28,7 @@ pub impl IsEventTarget for Element
 
 ///|
 pub impl @js.Cast for Element with into(value) {
-  value |> ffi_to_element |> _.to_option()
+  value |> ffi_to_element |> y => { y.to_option() }
 }
 
 ///|

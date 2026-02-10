@@ -4,7 +4,7 @@ type Text
 
 ///|
 pub impl @js.Cast for Text with into(value) {
-  value |> ffi_to_text |> _.to_option()
+  value |> ffi_to_text |> y => { y.to_option() }
 }
 
 ///|

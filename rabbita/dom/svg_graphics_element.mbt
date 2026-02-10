@@ -30,7 +30,7 @@ pub trait IsSVGGraphicsElement: IsSVGElement {
 
 ///|
 pub impl @js.Cast for SVGGraphicsElement with into(value) {
-  value |> ffi_to_svg_graphics_element |> _.to_option()
+  value |> ffi_to_svg_graphics_element |> y => { y.to_option() }
 }
 
 ///|

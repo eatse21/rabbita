@@ -10,7 +10,7 @@ pub impl IsUIEvent for FocusEvent
 
 ///|
 pub impl @js.Cast for FocusEvent with into(value) {
-  value |> ffi_to_focus_event |> _.to_option()
+  value |> ffi_to_focus_event |> y => { y.to_option() }
 }
 
 ///|

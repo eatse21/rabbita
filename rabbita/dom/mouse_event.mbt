@@ -38,7 +38,7 @@ pub impl IsMouseEvent for MouseEvent
 
 ///|
 pub impl @js.Cast for MouseEvent with into(value) {
-  value |> ffi_to_mouse_event |> _.to_option()
+  value |> ffi_to_mouse_event |> y => { y.to_option() }
 }
 
 ///|

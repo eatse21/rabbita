@@ -7,7 +7,7 @@ pub impl IsEvent for CloseEvent
 
 ///|
 pub impl @js.Cast for CloseEvent with into(value) {
-  value |> ffi_to_close_event |> _.to_option()
+  value |> ffi_to_close_event |> y => { y.to_option() }
 }
 
 ///|

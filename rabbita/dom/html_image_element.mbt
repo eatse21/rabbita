@@ -8,7 +8,7 @@ pub impl IsEventTarget for HTMLImageElement
 
 ///|
 pub impl @js.Cast for HTMLImageElement with into(value) {
-  value |> ffi_to_html_image_element |> _.to_option()
+  value |> ffi_to_html_image_element |> y => { y.to_option() }
 }
 
 ///|
