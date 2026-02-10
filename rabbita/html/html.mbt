@@ -34,17 +34,8 @@ fn resolve_attrs(attrs : Attrs?) -> Attrs {
 pub let nothing : Html = VNode::fragment([])
 
 ///|
-pub fn[C : IsChildren] fragment(children : C) -> Html {
-  match children.to_children() {
-    Array(nodes) => @runtime.VNode::fragment(nodes)
-    Map(nodes) => {
-      let values = []
-      for _, node in nodes {
-        values.push(node)
-      }
-      @runtime.VNode::fragment(values)
-    }
-  }
+pub fn fragment(children : Array[Html]) -> Html {
+  @runtime.VNode::fragment(children.map(x => x.0))
 }
 
 ///|

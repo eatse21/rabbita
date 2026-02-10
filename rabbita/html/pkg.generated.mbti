@@ -4,7 +4,6 @@ package "moonbit-community/rabbita/html"
 import {
   "moonbit-community/rabbita/dom",
   "moonbit-community/rabbita/internal/runtime",
-  "moonbit-community/rabbita/variant",
   "moonbitlang/core/debug",
 }
 
@@ -87,7 +86,7 @@ pub fn[C : IsChildren] footer(style? : Array[String], id? : String, class? : Str
 
 pub fn[C : IsChildren] form(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, action? : String, name? : String, on_submit? : @runtime.Cmd, attrs? : Attrs, C) -> Html
 
-pub fn[C : IsChildren] fragment(C) -> Html
+pub fn fragment(Array[Html]) -> Html
 
 pub fn[C : IsChildren] geolocation(style? : Array[String], id? : String, class? : String, title? : String, hidden? : Bool, attrs? : Attrs, C) -> Html
 
@@ -321,7 +320,6 @@ pub fn Attrs::aria_valuenow(Self, String) -> Self
 pub fn Attrs::aria_valuetext(Self, String) -> Self
 pub fn Attrs::as_(Self, String) -> Self
 pub fn Attrs::async_(Self, Bool) -> Self
-pub fn Attrs::attribute(Self, String, String) -> Self
 pub fn Attrs::autocapitalize(Self, String) -> Self
 pub fn Attrs::autocomplete(Self, AutoComplete) -> Self
 pub fn Attrs::autocorrect(Self, String) -> Self
@@ -379,6 +377,7 @@ pub fn Attrs::hreflang(Self, String) -> Self
 pub fn Attrs::http_equiv(Self, String) -> Self
 pub fn Attrs::id(Self, String) -> Self
 pub fn Attrs::inert(Self, Bool) -> Self
+pub fn Attrs::inner_html(Self, String) -> Self
 pub fn Attrs::inputmode(Self, String) -> Self
 pub fn Attrs::integrity(Self, String) -> Self
 pub fn Attrs::is_(Self, String) -> Self
@@ -450,7 +449,6 @@ pub fn Attrs::playsinline(Self, Bool) -> Self
 pub fn Attrs::popover(Self, String) -> Self
 pub fn Attrs::poster(Self, String) -> Self
 pub fn Attrs::preload(Self, String) -> Self
-pub fn Attrs::property(Self, String, @variant.Variant) -> Self
 pub fn Attrs::readonly_(Self, Bool) -> Self
 pub fn Attrs::referrerpolicy(Self, String) -> Self
 pub fn Attrs::rel(Self, String) -> Self
@@ -480,7 +478,6 @@ pub fn Attrs::summary(Self, String) -> Self
 pub fn Attrs::tabindex(Self, Int) -> Self
 pub fn Attrs::target(Self, Target) -> Self
 pub fn Attrs::title(Self, String) -> Self
-pub fn Attrs::to_props(Self) -> @runtime.Props
 pub fn Attrs::translate(Self, String) -> Self
 pub fn Attrs::type_(Self, String) -> Self
 pub fn Attrs::usemap(Self, String) -> Self

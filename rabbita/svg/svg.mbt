@@ -74,13 +74,6 @@ pub fn svg(
 }
 
 ///|
-/// Create an SVG element from a svg string.
-pub fn from_string(svg : String) -> @html.Html {
-  let attrs = Attrs::build().property("innerHTML", @variant.String(svg))
-  node("svg", attrs, []).to_html()
-}
-
-///|
 fn push_attr_string(name : String, value : String?, attrs : Attrs) -> Unit {
   if value is Some(v) {
     ignore(attrs.attribute(name, v))

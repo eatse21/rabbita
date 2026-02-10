@@ -16,22 +16,36 @@ pub fn Attrs::build() -> Attrs {
 }
 
 ///|
-pub fn Attrs::to_props(self : Attrs) -> Props {
+fn Attrs::to_props(self : Attrs) -> Props {
   self.0
 }
 
 ///|
 /// Set a raw attribute.
-pub fn Attrs::attribute(self : Attrs, key : String, value : String) -> Attrs {
+fn Attrs::attribute(self : Attrs, key : String, value : String) -> Attrs {
   self.0.attrs[key] = value
   self
 }
 
 ///|
 /// Set a property.
-pub fn Attrs::property(self : Attrs, key : String, value : Variant) -> Attrs {
+fn Attrs::property(self : Attrs, key : String, value : Variant) -> Attrs {
   self.0.props[key] = value
   self
+}
+
+///|
+/// Sets raw HTML and bypasses normal escaping.
+/// 
+/// # Vulnerability Warning
+///
+/// This is **XSS‑prone** and should
+/// only be used with trusted or sanitized input. It affects both HTML and SVG
+/// content since the browser will parse the string into DOM nodes.
+#internal(xss_vulnerable, "This function may cause xss attack.")
+pub fn Attrs::inner_html(self : Attrs, html : String) -> Attrs {
+  self.0.attrs["innerHTML"] = html
+  self.0
 }
 
 ///|

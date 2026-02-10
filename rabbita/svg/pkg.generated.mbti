@@ -5,7 +5,6 @@ import {
   "moonbit-community/rabbita/dom",
   "moonbit-community/rabbita/html",
   "moonbit-community/rabbita/internal/runtime",
-  "moonbit-community/rabbita/variant",
 }
 
 // Values
@@ -81,8 +80,6 @@ pub fn filter(id? : String, class? : String, style? : Array[String], attrs? : At
 
 pub fn foreign_object(id? : String, class? : String, style? : Array[String], attrs? : Attrs, Array[Svg]) -> Svg
 
-pub fn from_string(String) -> @html.Html
-
 pub fn g(id? : String, class? : String, style? : Array[String], fill? : String, stroke? : String, transform? : String, opacity? : String, attrs? : Attrs, Array[Svg]) -> Svg
 
 pub fn image(id? : String, class? : String, style? : Array[String], href~ : String, x~ : Int, y~ : Int, width? : Int, height? : Int, preserve_aspect_ratio? : String, transform? : String, opacity? : String, attrs? : Attrs) -> Svg
@@ -149,7 +146,6 @@ pub fn Attrs::accumulate(Self, String) -> Self
 pub fn Attrs::additive(Self, String) -> Self
 pub fn Attrs::alignment_baseline(Self, String) -> Self
 pub fn Attrs::amplitude(Self, String) -> Self
-pub fn Attrs::attribute(Self, String, String) -> Self
 pub fn Attrs::attribute_name(Self, String) -> Self
 pub fn Attrs::attribute_type(Self, String) -> Self
 pub fn Attrs::autofocus(Self, String) -> Self
@@ -220,6 +216,7 @@ pub fn Attrs::id(Self, String) -> Self
 pub fn Attrs::image_rendering(Self, String) -> Self
 pub fn Attrs::in2(Self, String) -> Self
 pub fn Attrs::in_(Self, String) -> Self
+pub fn Attrs::inner_html(Self, String) -> Self
 pub fn Attrs::intercept(Self, String) -> Self
 pub fn Attrs::k1(Self, String) -> Self
 pub fn Attrs::k2(Self, String) -> Self
@@ -272,7 +269,6 @@ pub fn Attrs::points_at_z(Self, String) -> Self
 pub fn Attrs::preserve_alpha(Self, String) -> Self
 pub fn Attrs::preserve_aspect_ratio(Self, String) -> Self
 pub fn Attrs::primitive_units(Self, String) -> Self
-pub fn Attrs::property(Self, String, @variant.Variant) -> Self
 pub fn Attrs::r(Self, String) -> Self
 pub fn Attrs::radius(Self, String) -> Self
 pub fn Attrs::ref_x(Self, String) -> Self
@@ -325,7 +321,6 @@ pub fn Attrs::text_length(Self, String) -> Self
 pub fn Attrs::text_overflow(Self, String) -> Self
 pub fn Attrs::text_rendering(Self, String) -> Self
 pub fn Attrs::to(Self, String) -> Self
-pub fn Attrs::to_props(Self) -> @runtime.Props
 pub fn Attrs::transform(Self, String) -> Self
 pub fn Attrs::transform_origin(Self, String) -> Self
 pub fn Attrs::type_(Self, String) -> Self
