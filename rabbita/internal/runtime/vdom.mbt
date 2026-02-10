@@ -212,9 +212,15 @@ fn VNode::insert(
       for n, val in props {
         element.set_property(n, variant_to_js_value(val))
       }
-      let style_sheet = element.to_html_element().unwrap().get_style()
+      let sheet = if element.to_html_element() is Some(html) {
+        html.get_style()
+      } else if element.to_svg_element() is Some(svg) {
+        svg.get_style()
+      } else {
+        panic()
+      }
       for n, val in styles {
-        style_sheet.set_property(n, val)
+        sheet.set_property(n, val)
       }
       let n = element.as_node()
       let childs = match childs {
