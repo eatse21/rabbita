@@ -5,6 +5,7 @@ import {
   "moonbit-community/rabbita/dom",
   "moonbit-community/rabbita/internal/runtime",
   "moonbit-community/rabbita/variant",
+  "moonbitlang/core/debug",
 }
 
 // Values
@@ -547,6 +548,8 @@ pub(all) struct Pos {
   x : Int
   y : Int
 }
+pub impl Show for Pos
+pub impl @debug.Debug for Pos
 
 pub(all) enum Scope {
   Row

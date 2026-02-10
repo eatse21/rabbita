@@ -5,7 +5,7 @@ struct Mouse(@dom.MouseEvent)
 pub(all) struct Pos {
   x : Int
   y : Int
-}
+} derive(Show, Debug)
 
 ///|
 pub fn Mouse::screen_pos(self : Mouse) -> Pos {
