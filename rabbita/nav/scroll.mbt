@@ -14,9 +14,11 @@ pub fn scroll_by_pos(x : Int, y : Int) -> @runtime.Cmd {
 /// Create a command to scroll the window to a specific element.
 /// The element is specified by its id.
 pub fn scroll_to(element : String) -> @runtime.Cmd {
-  Effect(_ => match @dom.document().get_element_by_id(element).to_option() {
-    Some(e) => e.scroll_into_view()
-    None => ()
+  Effect(_ => {
+    match @dom.document().get_element_by_id(element).to_option() {
+      Some(e) => e.scroll_into_view()
+      None => ()
+    }
   })
 }
 

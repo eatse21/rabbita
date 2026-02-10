@@ -37,12 +37,14 @@ pub fn[A, E : Error] attempt(
   msg : (Result[A, E]) -> Cmd,
   f : async () -> A raise E,
 ) -> Cmd {
-  Effect(scheduler => @js.async_run(() => {
-    let msg = try f() catch {
-      e => msg(Err(e))
-    } noraise {
-      r => msg(Ok(r))
-    }
-    scheduler.add(msg)
-  }))
+  Effect(scheduler => {
+    @js.async_run(() => {
+      let msg = try f() catch {
+        e => msg(Err(e))
+      } noraise {
+        r => msg(Ok(r))
+      }
+      scheduler.add(msg)
+    })
+  })
 }

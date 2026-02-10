@@ -4,9 +4,9 @@ fn Attrs::on_mouse_event(
   event : String,
   msg : (@dom.MouseEvent) -> Cmd,
 ) -> Attrs {
-  self.handler(event, (event, scheduler) => scheduler.add(
-    msg(event.to_mouse_event().unwrap()),
-  ))
+  self.handler(event, (event, scheduler) => {
+    scheduler.add(msg(event.to_mouse_event().unwrap()))
+  })
 }
 
 ///|
@@ -15,9 +15,9 @@ fn Attrs::on_keyboard_event(
   event : String,
   msg : (@dom.KeyboardEvent) -> Cmd,
 ) -> Attrs {
-  self.handler(event, (event, scheduler) => scheduler.add(
-    msg(event.to_keyboard_event().unwrap()),
-  ))
+  self.handler(event, (event, scheduler) => {
+    scheduler.add(msg(event.to_keyboard_event().unwrap()))
+  })
 }
 
 ///|
@@ -26,9 +26,9 @@ fn Attrs::on_focus_event(
   event : String,
   msg : (@dom.FocusEvent) -> Cmd,
 ) -> Attrs {
-  self.handler(event, (event, scheduler) => scheduler.add(
-    msg(event.to_focus_event().unwrap()),
-  ))
+  self.handler(event, (event, scheduler) => {
+    scheduler.add(msg(event.to_focus_event().unwrap()))
+  })
 }
 
 ///|
@@ -37,9 +37,9 @@ fn Attrs::on_drag_event(
   event : String,
   msg : (@dom.DragEvent) -> Cmd,
 ) -> Attrs {
-  self.handler(event, (event, scheduler) => scheduler.add(
-    msg(event.to_drag_event().unwrap()),
-  ))
+  self.handler(event, (event, scheduler) => {
+    scheduler.add(msg(event.to_drag_event().unwrap()))
+  })
 }
 
 ///|
@@ -48,9 +48,9 @@ fn Attrs::on_clipboard_event(
   event : String,
   msg : (@dom.ClipboardEvent) -> Cmd,
 ) -> Attrs {
-  self.handler(event, (event, scheduler) => scheduler.add(
-    msg(event.to_clipboard_event().unwrap()),
-  ))
+  self.handler(event, (event, scheduler) => {
+    scheduler.add(msg(event.to_clipboard_event().unwrap()))
+  })
 }
 
 ///|
@@ -59,9 +59,9 @@ fn Attrs::on_composition_event(
   event : String,
   msg : (@dom.CompositionEvent) -> Cmd,
 ) -> Attrs {
-  self.handler(event, (event, scheduler) => scheduler.add(
-    msg(event.to_composition_event().unwrap()),
-  ))
+  self.handler(event, (event, scheduler) => {
+    scheduler.add(msg(event.to_composition_event().unwrap()))
+  })
 }
 
 ///|
@@ -70,9 +70,9 @@ fn Attrs::on_wheel_event(
   event : String,
   msg : (@dom.WheelEvent) -> Cmd,
 ) -> Attrs {
-  self.handler(event, (event, scheduler) => scheduler.add(
-    msg(event.to_wheel_event().unwrap()),
-  ))
+  self.handler(event, (event, scheduler) => {
+    scheduler.add(msg(event.to_wheel_event().unwrap()))
+  })
 }
 
 ///|
@@ -156,9 +156,9 @@ pub fn Attrs::on_contextmenu(
 
 ///|
 pub fn Attrs::on_scroll(self : Attrs, msg : (@dom.UIEvent) -> Cmd) -> Attrs {
-  self.handler("scroll", (event, scheduler) => scheduler.add(
-    msg(event.to_ui_event().unwrap()),
-  ))
+  self.handler("scroll", (event, scheduler) => {
+    scheduler.add(msg(event.to_ui_event().unwrap()))
+  })
 }
 
 ///|
@@ -168,16 +168,16 @@ pub fn Attrs::on_wheel(self : Attrs, msg : (@dom.WheelEvent) -> Cmd) -> Attrs {
 
 ///|
 pub fn Attrs::on_input(self : Attrs, msg : (@dom.InputEvent) -> Cmd) -> Attrs {
-  self.handler("input", (event, scheduler) => scheduler.add(
-    msg(event.to_input_event().unwrap()),
-  ))
+  self.handler("input", (event, scheduler) => {
+    scheduler.add(msg(event.to_input_event().unwrap()))
+  })
 }
 
 ///|
 pub fn Attrs::on_change(self : Attrs, msg : (@dom.InputEvent) -> Cmd) -> Attrs {
-  self.handler("change", (event, scheduler) => scheduler.add(
-    msg(event.to_input_event().unwrap()),
-  ))
+  self.handler("change", (event, scheduler) => {
+    scheduler.add(msg(event.to_input_event().unwrap()))
+  })
 }
 
 ///|

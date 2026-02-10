@@ -93,5 +93,10 @@ pub fn[Model, Msg] simple_cell(
 
 ///|
 pub fn static_cell(html : Html) -> Cell {
-  cell(model=(), update=fn(_, _ : Unit, _ : Unit) { (none, ()) }, view=(_, _) => html)
+  cell(model=(), update=fn(_, _ : Unit, _ : Unit) { (none, ()) }, view=fn(
+    _,
+    _,
+  ) {
+    html
+  })
 }
