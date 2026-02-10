@@ -442,7 +442,7 @@ fn diff_props(
   }
   // patch properties
   for k, _ in old.props {
-    if !new.attrs.contains(k) {
+    if !new.props.contains(k) {
       parent.remove_property(k)
     }
   }
@@ -456,7 +456,13 @@ fn diff_props(
     }
   }
   // patch styles
-  let stylesheet = parent.to_html_element().unwrap().get_style()
+  let stylesheet = if parent.to_html_element() is Some(html) {
+    html.get_style()
+  } else if parent.to_svg_element() is Some(svg) {
+    svg.get_style()
+  } else {
+    panic()
+  }
   for k, _ in old.styles {
     if !new.styles.contains(k) {
       stylesheet.remove_property(k) |> ignore

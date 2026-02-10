@@ -329,7 +329,12 @@ pub fn Attrs::dirname(self : Attrs, value : String) -> Attrs {
 ///|
 /// [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/disabled)
 pub fn Attrs::disabled(self : Attrs, value : Bool) -> Attrs {
-  self.property("disabled", @variant.Boolean(value))
+  // Note: `disabled` is a DOM property; removing it using `remove_property` does not work.
+  // Treat it as an attribute to ensure it is correctly removed by vdom diff.
+  if value {
+    self.attrs["disabled"] = "disabled"
+  }
+  self
 }
 
 ///|
