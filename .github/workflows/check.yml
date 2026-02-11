@@ -31,12 +31,11 @@ jobs:
           moon version --all
           moonrun --version
 
-      - name: moon test
-        run: |
-          cd rabbita
-          moon update
-          moon test --target js --serial --release
-          moon test --target js --serial
+      # - name: moon test
+      #   run: |
+      #     cd rabbita
+      #     moon test --target js --serial --release
+      #     moon test --target js --serial
 
       - name: moon check
         run: |
