@@ -5,6 +5,7 @@ import {
   "moonbit-community/rabbita/dom",
   "moonbit-community/rabbita/internal/runtime",
   "moonbitlang/core/debug",
+  "moonbitlang/core/list",
 }
 
 // Values
@@ -575,4 +576,5 @@ pub impl IsChildren for String
 pub impl IsChildren for @runtime.Children[@runtime.VNode]
 pub impl IsChildren for Array[Html]
 pub impl IsChildren for Map[String, Html]
+pub impl IsChildren for @list.List[Html]
 

@@ -22,6 +22,12 @@ pub impl IsChildren for Map[String, Html] with to_children(self) {
 pub impl IsChildren for Array[Html] with to_children(self) {
   Array(self.map(x => x.0))
 }
+
+///|
+pub impl IsChildren for @list.List[Html] with to_children(self) {
+  Array(self.map(x => x.0).to_array())
+}
+
 // ///|
 // pub impl[H : IsHtml] IsChildren for Array[H] with to_children(self) {
 //   Array(self.map(x => x.to_html()))
