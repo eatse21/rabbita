@@ -1,6 +1,6 @@
 {
   "name": "moonbit-community/rabbita",
-  "version": "0.10.11",
+  "version": "0.11.0",
   "deps": {
     "moonbit-community/js-ffi": "0.4.2"
   },
@@ -8,10 +8,11 @@
   "repository": "https://github.com/moonbit-community/rabbita",
   "license": "Apache-2.0",
   "keywords": [
-    "TEA",
+    "functional",
     "html",
     "UI",
-    "web"
+    "web",
+    "TEA"
   ],
   "description": "functional Web UI framework for MoonBit",
   "preferred-target": "js"
