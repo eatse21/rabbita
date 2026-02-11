@@ -3,6 +3,7 @@ import {
   "moonbit-community/rabbita/dom",
   "moonbit-community/rabbita/variant",
   "moonbitlang/core/debug",
+  "moonbitlang/core/list",
 }
 
 import {

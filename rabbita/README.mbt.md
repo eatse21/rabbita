@@ -2,7 +2,7 @@
 
 A declarative, functional web UI framework inspired by The Elm Architecture.
 
-This project was previously named `Rabbit-TEA` and is now renamed to `rabbita`.
+This project was previously named `Rabbit-TEA` and is now renamed to `rabbita` .
 
 ## Features
 
@@ -22,7 +22,9 @@ This project was previously named `Rabbit-TEA` and is now renamed to `rabbita`.
 
   Use `Cell` to split logic and reuse stateful views. Skip diff and patching for non-dirty cells.
 
-## Example
+## Examples
+
+### Counter 
 
 ```mbt check
 ///|
@@ -57,3 +59,98 @@ fn init {
   new(app).mount("main")
 }
 ```
+
+### Multiple cells
+
+Each cell maintains its own model, view, and update logic, and only dirty cells
+need VDOM diffing and patching.
+
+```moonbit check
+///|
+using @html {fragment, input, nothing, ul, li, p}
+
+///|
+using @list {type List, empty}
+
+///|
+/// The todo plan
+fn plan(name : String) -> Cell {
+  struct Model {
+    value : String
+    items : Map[String, Bool]
+  }
+  enum Msg {
+    Add
+    Change(String)
+    Done(String)
+  }
+  @rabbita.simple_cell(
+    model={ value: "", items: {} },
+    update=(msg, model) => {
+      let { value, items } = model
+      match msg {
+        Add => { value: "", items: items..set(value, false) }
+        Done(key) => { ..model, items: items..set(key, true) }
+        Change(value) => { ..model, value, }
+      }
+    },
+    view=(dispatch, model) => {
+      let { value, items } = model
+      let items = items.map((todo, done) => {
+        let text_style = if done { "text-decoration: line-through" } else { "" }
+        li(style=[text_style], [
+          p(todo),
+          button(on_click=dispatch(Done(todo)), "done"),
+        ])
+      })
+      div(style=["border: 1px solid black", "padding: 1em"], [
+        h1(name),
+        ul(items),
+        input(
+          input_type=Text,
+          value~,
+          on_change=s => dispatch(Change(s)),
+          nothing,
+        ),
+        button(on_click=dispatch(Add), "add"),
+      ])
+    },
+  )
+}
+
+///|
+/// Main app
+fn init {
+  struct Model {
+    plans : List[Cell]
+  }
+  enum Msg {
+    NewPlan
+  }
+  let app = @rabbita.simple_cell(
+    model={ plans: empty() },
+    update=(msg, model) => {
+      let id = model.plans.length()
+      match msg {
+        NewPlan => { plans: model.plans.add(plan("plan \{id}")) }
+      }
+    },
+    view=(dispatch, model) => {
+      fragment([
+        div(model.plans.map(x => x.view())),
+        button(on_click=dispatch(NewPlan), "new plan"),
+      ])
+    },
+  )
+  @rabbita.new(app).mount("app")
+}
+```
+
+`Cell` is an opaque model: it is still managed by the outer model, but internal 
+details are hidden. `Cell::view()` is a pure function that maps state to HTML. 
+
+Unlike the hooks-style mental model, a cell's lifecycle is explicit: 
+if its view is not present in the real DOM, the cell is inactive and messages to
+it are ignored. If the model is removed from the outer model, the cell is destroyed
+by the garbage collector.
+

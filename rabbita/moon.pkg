@@ -7,3 +7,7 @@ import {
   "moonbitlang/core/ref",
   "moonbit-community/js-ffi/js",
 }
+
+import {
+  "moonbitlang/core/list",
+} for "test"
