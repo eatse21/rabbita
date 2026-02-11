@@ -1,15 +1,35 @@
 # Rabbita
 
-A declarative and functional web UI framework inspired by The Elm Architecture.
+A declarative, functional web UI framework inspired by The Elm Architecture.
+
+This project was previously named `Rabbit-TEA` and is now renamed to `rabbita`.
+
+## Features
+
+* Predictable flow 
+
+  State changes follow a single, predictable update path, with explicit side‑effect management.
+
+* Strict Types
+
+  Rigorous types. No `Any` sprawl. No stringly-typed APIs.
+
+* Balanced bundle size
+
+  ~15 KB min+gzip, includes streaming VDOM diff and the MoonBit standard library (DCE via moonc).
+
+* Modular
+
+  Use `Cell` to split logic and reuse stateful views. Skip diff and patching for non-dirty cells.
 
 ## Example
 
-```moonbit nocheck
+```mbt check
 ///|
 using @html {div, h1, button}
 
 ///|
-fn main {
+fn init {
   struct Model {
     count : Int
   }
@@ -17,17 +37,18 @@ fn main {
     Inc
     Dec
   }
-  let app = cell(
+  let app = @rabbita.simple_cell(
     model={ count: 0 },
-    update=(_, msg, model) => {
+    update=(msg, model) => {
+      let { count } = model
       match msg {
-        Inc => (none, { count: model.count + 1 })
-        Dec => (none, { count: model.count - 1 })
+        Inc => { count: count + 1 }
+        Dec => { count: count - 1 }
       }
     },
     view=(dispatch, model) => {
       div([
-        h1(model.count.to_string()),
+        h1("\{model.count}"),
         button(on_click=dispatch(Inc), "+"),
         button(on_click=dispatch(Dec), "-"),
       ])
@@ -36,4 +57,3 @@ fn main {
   new(app).mount("main")
 }
 ```
-

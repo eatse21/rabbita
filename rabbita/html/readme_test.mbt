@@ -34,3 +34,6 @@ test {
   ignore(html1)
   ignore(html2)
 }
+
+///|
+type Model2 = Unit

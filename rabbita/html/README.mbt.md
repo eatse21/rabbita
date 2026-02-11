@@ -86,8 +86,9 @@ Example:
 ```mbt check
 ///|
 let html : Html = ul({
-  "todo-1": li([text("Buy milk")]),
-  "todo-2": li([text("Write docs")]),
+  "todo-1": li("Buy milk"),
+  "todo-2": li("Write docs"),
+  "todo-3": li("Write code"),
 })
 ```
 
@@ -104,16 +105,15 @@ Example:
 
 ```moonbit check
 ///|
-fn update2(msg : Msg2, model : Model) -> Model {
+fn update2(msg : Msg2, _ : Model2) -> Model2 {
   match msg {
     StartDraw(mouse) => println("start at \{mouse.offset_pos()}")
     EndDraw(mouse) => println("end at \{mouse.offset_pos()}")
   }
-  model
 }
 
 ///|
-fn view2(dispatch : Dispatch[Msg2], _ : Model) -> Html {
+fn view2(dispatch : Dispatch[Msg2], _ : Model2) -> Html {
   canvas(
     on_mousedown=m => dispatch(StartDraw(m)),
     on_mouseup=m => dispatch(EndDraw(m)),
@@ -137,10 +137,7 @@ Example:
 ```mbt check
 ///|
 let html1 : Html = div(
-  attrs=@html.Attrs::build()
-    .class("card")
-    .style("gap", "12px")
-    .attribute("data-role", "hero"),
+  attrs=Attrs::build().class("card").style("gap", "12px").data("..."),
   [text("Hello")],
 )
 ```
@@ -153,10 +150,7 @@ The wrapper functions and properties provided here may not cover all possible us
 ///|
 let html2 : Html = node(
   "div",
-  @html.Attrs::build()
-  .class("card")
-  .style("gap", "12px")
-  .attribute("data-role", "hero"),
+  Attrs::build().class("card").style("gap", "12px").data("..."),
   [p("text1"), p("text2")],
 )
 ```
