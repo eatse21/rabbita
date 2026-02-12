@@ -95,7 +95,7 @@ fn[Model] request(
         )
     }
   }
-  @runtime.effect(launch)
+  @runtime.effect(kind=Immediately, launch)
 }
 
 ///|

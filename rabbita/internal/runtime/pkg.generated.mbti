@@ -10,7 +10,7 @@ import {
 // Values
 pub fn batch(Array[Cmd]) -> Cmd
 
-pub fn effect((&Scheduler) -> Unit) -> Cmd
+pub fn effect((&Scheduler) -> Unit, kind~ : EffectKind) -> Cmd
 
 pub fn message(Id, () -> Unit) -> Cmd
 
@@ -25,6 +25,11 @@ pub(all) enum Children[T] {
 }
 
 type Cmd
+
+pub(all) enum EffectKind {
+  Immediately
+  AfterRender
+}
 
 type Flags
 pub fn Flags::id(Self) -> Id

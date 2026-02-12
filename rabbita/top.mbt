@@ -1,4 +1,7 @@
 ///|
+pub using @cmd {type Cmd, none, batch, perform, attempt, delay}
+
+///|
 pub using @html {type Html}
 
 ///|

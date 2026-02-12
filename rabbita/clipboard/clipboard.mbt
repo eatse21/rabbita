@@ -11,7 +11,7 @@ pub(all) enum Item {
 /// - `copied` is triggered if the copy operation is successful.
 /// - `failed` is triggered with the error message if the copy operation fails.
 pub fn copy(item : Item, copied? : Cmd, failed? : (String) -> Cmd) -> Cmd {
-  @runtime.effect(scheduler => {
+  @runtime.effect(kind=Immediately, scheduler => {
     @js.async_run(() => {
       try {
         guard item is Text(text)  //TODO: support other formats
@@ -38,7 +38,7 @@ pub fn copy(item : Item, copied? : Cmd, failed? : (String) -> Cmd) -> Cmd {
 /// - `pasted` is triggered with the pasted item if the paste operation is successful.
 /// - `failed` is triggered with the error message if the paste operation fails.
 pub fn paste(pasted~ : (Item) -> Cmd, failed? : (String) -> Cmd) -> Cmd {
-  @runtime.effect(scheduler => {
+  @runtime.effect(kind=Immediately, scheduler => {
     @js.async_run(() => {
       try {
         // TODO: support other formats

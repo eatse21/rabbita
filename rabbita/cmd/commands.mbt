@@ -1,5 +1,5 @@
 ///|
-pub using @runtime {trait Scheduler}
+pub using @runtime {trait Scheduler, type EffectKind}
 
 ///|
 /// A deferred command handled by the Rabbita runtime.
@@ -26,9 +26,16 @@ pub fn batch(cmds : Array[Cmd]) -> Cmd {
 /// `@dialog.show()` in app code.**
 /// 
 /// This function allows you to write wrappers that encapsulate FFI in a
-/// command when the functionality is not provided by Rabbita yet. The callback 
-/// receives the runtime `Scheduler`, so it can enqueue follow-up commands 
-/// (for example, after an async callback).
+/// command when the functionality is not provided by Rabbita yet. 
+/// 
+/// Parameters:
+/// 
+/// - `callback`: receives the runtime `Scheduler`, so it can enqueue follow-up
+///   commands (for example, after an async callback).
+/// 
+/// - `kind`: determines when the effect runs.
+///   - `Immediately`: run as soon as the runtime receives it.
+///   - `AfterRender`: run after DOM patching for the current flush completes.
 /// 
 /// Example: 
 /// 
@@ -40,8 +47,11 @@ pub fn batch(cmds : Array[Cmd]) -> Cmd {
 /// }
 /// ```
 #inline
-pub fn raw_effect(f : (&Scheduler) -> Unit) -> Cmd {
-  @runtime.effect(f)
+pub fn raw_effect(
+  callback : (&Scheduler) -> Unit,
+  kind? : EffectKind = Immediately,
+) -> Cmd {
+  @runtime.effect(callback, kind~)
 }
 
 ///|

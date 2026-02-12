@@ -15,6 +15,7 @@ using @queue {type Queue}
 pub(all) struct Sandbox {
   priv live_map : Map[Id, (&IsCell, Map[InstId, Instance])]
   priv msg_queue : Queue[Id]
+  priv after_render_queue : Queue[(&Scheduler) -> Unit]
   priv mut drain_scheduled : Bool
   priv dirty_set : Set[Id]
   priv mut paint_scheduled : Bool
@@ -66,6 +67,7 @@ pub fn Sandbox::new(root : &IsCell) -> Sandbox {
     drain_scheduled: false,
     mount: "",
     captured_link_listener,
+    after_render_queue: Queue::new(),
   })
   sandbox.unwrap()
 }
@@ -165,6 +167,9 @@ pub fn Sandbox::flush(self : Self) -> Unit {
       self.dirty_set.clear()
       // self.root.node().validate()
       self.paint_scheduled = false
+      while self.after_render_queue.pop() is Some(effect) {
+        effect(self)
+      }
     })
     |> ignore
   }
@@ -176,7 +181,8 @@ pub impl Scheduler for Sandbox with add(self, cmd) {
   match cmd {
     Empty => ()
     Batch(xs) => xs.each(x => self.add(x))
-    Effect(effect) => effect(self)
+    Effect(effect, Immediately) => effect(self)
+    Effect(effect, AfterRender) => self.after_render_queue.push(effect)
     Message(id, send_message) => {
       send_message()
       self.msg_queue.push(id)

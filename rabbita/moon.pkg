@@ -3,6 +3,7 @@ import {
   "moonbit-community/rabbita/internal/runtime",
   "moonbit-community/rabbita/url",
   "moonbit-community/rabbita/dom",
+  "moonbit-community/rabbita/cmd",
   "moonbitlang/core/queue",
   "moonbitlang/core/ref",
   "moonbit-community/js-ffi/js",
