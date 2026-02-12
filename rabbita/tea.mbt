@@ -12,6 +12,10 @@ priv struct TypedCell[Model, Msg] {
 }
 
 ///|
+/// Message dispatcher type used by a `Cell`.
+///
+/// Calling `dispatch(msg)` returns a `Cmd` that enqueues `msg` into the cell's
+/// update loop.
 pub type Dispatch[Msg] = (Msg) -> Cmd
 
 ///|
@@ -49,14 +53,70 @@ fn[Msg] Dispatcher::message(self : Self[Msg], msg : Msg) -> Cmd {
 }
 
 ///|
+/// A cell that encapsulates model, update, and view.
 struct Cell(&IsCell)
 
 ///|
+/// Render this cell as `Html`.
 pub fn Cell::view(self : Self) -> Html {
   Html::from_vnode(@runtime.VNode::slot(self.0))
 }
 
 ///|
+/// Create a stateful cell with full `model`/`update`/`view` functionality.
+///
+/// Type parameters:
+///
+/// - `Model`: a custom type you need to defiend, represent the state of this cell.
+/// - `Msg`: a custom `enum` you need to defined, represent the events of this cell. 
+///
+/// Parameters:
+///
+/// - `model : Model`:
+///    initial `Model` value of the cell.
+/// 
+/// - `update : (Dispatch[Msg], Msg,Model) -> (Cmd,Model)`:
+///    Describe how to compute new `Model` from `Msg` and old `Model`. 
+///    This callback also receives a `Dispatch[Msg]`, which converts a `Msg`
+///    into a `Cmd`.
+/// 
+/// - `view : (Dispatch[Msg], Model) -> Html`:
+///    Describe how to compute `Html` from `Model`.
+///    This callback also receives a `Dispatch[Msg]`, which converts a `Msg`
+///    into a `Cmd`.
+///
+/// ## The update loop
+///
+/// ```text
+/// ┌─────────────────┐
+/// │                 ▼
+/// │            ┌──────────┐
+/// │            │   user   │
+/// │            └────┬─────┘
+/// │                 │ msg,model
+/// │                 ▼
+/// │           ┌────────────┐   msg,model
+/// │           │  update()  │◄────────────┐
+/// │           └──┬───────┬─┘             │
+/// │    none,model│       │               │
+/// │              ▼       │               │
+/// │         ┌────────┐   │cmd,model      │
+/// │         │ view() │   │               │
+/// │         └────┬───┘   │               │
+/// │              │       │               │
+/// │          html│       ▼               │
+/// │              │   ┌─────────┐         │
+/// └──────────────┘   │ runtime │─────────┘
+///                    └─────────┘
+/// ```
+/// 
+/// This update loop is a bit more complex than `simple_cell`, but follows the
+/// same `model -> update -> view` flow.
+///
+/// The difference is that `update` also returns a command representing a managed
+/// side effect. That side effect is executed by the runtime and may produce
+/// another message.
+///
 pub fn[Model, Msg] cell(
   model~ : Model,
   update~ : (Dispatch[Msg], Msg, Model) -> (Cmd, Model),
@@ -70,6 +130,62 @@ pub fn[Model, Msg] cell(
 }
 
 ///|
+/// Create a cell and also return its `Dispatch`.
+///
+/// This is useful when messages need to be sent from outside.
+/// 
+/// Type parameters:
+///
+/// - `Model`: a custom type you need to defiend, represent the state of this cell.
+/// - `Msg`: a custom `enum` you need to defined, represent the events of this cell. 
+///
+/// Parameters:
+///
+/// - `model : Model`:
+///    initial `Model` value of the cell.
+/// 
+/// - `update : (Dispatch[Msg], Msg,Model) -> (Cmd,Model)`:
+///    Describe how to compute new `Model` from `Msg` and old `Model`. 
+///    This callback also receives a `Dispatch[Msg]`, which converts a `Msg`
+///    into a `Cmd`.
+/// 
+/// - `view : (Dispatch[Msg], Model) -> Html`:
+///    Describe how to compute `Html` from `Model`.
+///    This callback also receives a `Dispatch[Msg]`, which converts a `Msg`
+///    into a `Cmd`.
+///
+/// ## The update loop
+///
+/// ```text
+/// ┌─────────────────┐
+/// │                 ▼
+/// │            ┌──────────┐
+/// │            │   user   │
+/// │            └────┬─────┘
+/// │                 │ msg,model
+/// │                 ▼
+/// │           ┌────────────┐   msg,model
+/// │           │  update()  │◄────────────┐
+/// │           └──┬───────┬─┘             │
+/// │    none,model│       │               │
+/// │              ▼       │               │
+/// │         ┌────────┐   │cmd,model      │
+/// │         │ view() │   │               │
+/// │         └────┬───┘   │               │
+/// │              │       │               │
+/// │          html│       ▼               │
+/// │              │   ┌─────────┐         │
+/// └──────────────┘   │ runtime │─────────┘
+///                    └─────────┘
+/// ```
+/// 
+/// This update loop is a bit more complex than `simple_cell`, but follows the
+/// same `model -> update -> view` flow.
+///
+/// The difference is that `update` also returns a command representing a managed
+/// side effect. That side effect is executed by the runtime and may produce
+/// another message.
+///
 pub fn[Model, Msg] cell_with_dispatch(
   model~ : Model,
   update~ : (Dispatch[Msg], Msg, Model) -> (Cmd, Model),
@@ -83,6 +199,77 @@ pub fn[Model, Msg] cell_with_dispatch(
 }
 
 ///|
+/// Create a cell with simplified `model`/`update`/`view`.
+/// 
+/// Type parameters:
+/// 
+/// - `Model`: a custom type you need to defiend, represent the state of this cell.
+/// - `Msg`: a custom `enum` you need to defined, represent the events of this cell. 
+/// 
+/// Parameters:
+/// 
+/// - `model : Model`: initial Model value of the cell.
+/// - `update : (Msg, Model) -> Model`: describe how to compute new Model from Msg and old Model.
+/// - `view : (Dispatch[Msg], Model) -> Html`: describes how to render Html from Model.
+///   This callback also receives a dispatch argument, which converts a Msg
+///   into a Cmd.
+/// 
+/// ## The update loop
+///
+/// ```text
+///    ┌──────┐
+///    │ user │◀─────────┐
+///    └──────┘          │
+///        │ msg, model  │
+///        ▼             │
+///  ┌──────────┐        │
+///  │ update() │        │ html
+///  └──────────┘        │
+///        │ model       │
+///        ▼             │
+///   ┌────────┐         │
+///   │ view() │─────────┘
+///   └────────┘
+/// ```
+/// 
+/// At startup, the initial `model` is rendered as `Html` by `view`. The rendered 
+/// HTML can include message-producing command, for example:
+/// 
+/// ```moonbit nocheck
+/// button(on_click=dispatch(MyMsg), "click me")
+/// ```
+///
+/// When the user clicks the button, `MyMsg` is sent to `update` with the current
+/// model. `update` then computes the next model from that message, and the new
+/// model is rendered again by `view`.
+/// 
+/// ## Example 
+/// 
+/// ```moonbit check
+/// test "counter" {
+///   struct Model {
+///     count : Int
+///   }
+///   enum Msg {
+///     Click
+///   }
+///   let app = @rabbita.simple_cell(
+///     model={ count: 0 },
+///     update=(msg, model) => {
+///       match msg {
+///         Click => { count: model.count + 1 }
+///       }
+///     },
+///     view=(dispatch, model) => {
+///       div([
+///         h1("You clicked \{model.count} times."),
+///         button(on_click=dispatch(Click), "+"),
+///       ])
+///     },
+///   )
+///   new(app).mount("main")
+/// }
+/// ```
 pub fn[Model, Msg] simple_cell(
   model~ : Model,
   update~ : (Msg, Model) -> Model,
@@ -92,6 +279,15 @@ pub fn[Model, Msg] simple_cell(
 }
 
 ///|
+/// Create a static cell that always renders the same `Html`.
+///
+/// Rather than use `static_cell`, it's recommend to wrap a function that return html directly:
+/// 
+/// ```moonbit nocheck
+/// fn button(text : String, on_click~ : Cmd) -> Html {
+///   @html.button(style=["..."], on_click~, text)
+/// }
+/// ```
 pub fn static_cell(html : Html) -> Cell {
   cell(model=(), update=fn(_, _ : Unit, _ : Unit) { (none, ()) }, view=fn(
     _,
