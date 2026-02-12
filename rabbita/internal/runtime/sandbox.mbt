@@ -94,7 +94,7 @@ pub fn Sandbox::initialize(self : Self) -> Unit {
   let vnode = root.cell.view()
   let inode = vnode.insert(self, root, element.as_node(), null())
   self.root.inode = Some(inode)
-  println(self.live_map.keys())
+  // println(self.live_map.keys())
 }
 
 ///|

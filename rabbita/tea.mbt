@@ -45,7 +45,7 @@ priv struct Dispatcher[Msg] {
 ///|
 fn[Msg] Dispatcher::message(self : Self[Msg], msg : Msg) -> Cmd {
   // carry the drain (which own model and update) in message will cause memeory leak in RC
-  Message(self.id, () => self.inbox.push(msg))
+  @runtime.message(self.id, () => self.inbox.push(msg))
 }
 
 ///|

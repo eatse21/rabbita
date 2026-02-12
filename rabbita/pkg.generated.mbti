@@ -16,11 +16,15 @@ pub fn[Model, Msg] cell(model~ : Model, update~ : ((Msg) -> @runtime.Cmd, Msg, M
 
 pub fn[Model, Msg] cell_with_dispatch(model~ : Model, update~ : ((Msg) -> @runtime.Cmd, Msg, Model) -> (@runtime.Cmd, Model), view~ : ((Msg) -> @runtime.Cmd, Model) -> @html.Html) -> ((Msg) -> @runtime.Cmd, Cell)
 
+pub fn delay(@runtime.Cmd, Int) -> @runtime.Cmd
+
 pub fn new(Cell) -> App
 
 pub let none : @runtime.Cmd
 
 pub fn[A] perform((A) -> @runtime.Cmd, async () -> A noraise) -> @runtime.Cmd
+
+pub fn raw_effect((&@runtime.Scheduler) -> Unit) -> @runtime.Cmd
 
 pub fn[Model, Msg] simple_cell(model~ : Model, update~ : (Msg, Model) -> Model, view~ : ((Msg) -> @runtime.Cmd, Model) -> @html.Html) -> Cell
 
@@ -42,6 +46,8 @@ pub using @runtime {type Cmd}
 pub type Dispatch[Msg] = (Msg) -> @runtime.Cmd
 
 pub using @html {type Html}
+
+pub using @runtime {trait Scheduler}
 
 // Traits
 

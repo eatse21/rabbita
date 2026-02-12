@@ -8,13 +8,13 @@ import {
 }
 
 // Values
-pub fn[A, E : Error] attempt((Result[A, E]) -> Cmd, async () -> A raise E) -> Cmd
-
 pub fn batch(Array[Cmd]) -> Cmd
 
-pub let none : Cmd
+pub fn effect((&Scheduler) -> Unit) -> Cmd
 
-pub fn[A] perform((A) -> Cmd, async () -> A noraise) -> Cmd
+pub fn message(Id, () -> Unit) -> Cmd
+
+pub let none : Cmd
 
 // Errors
 
@@ -24,12 +24,7 @@ pub(all) enum Children[T] {
   Map(Map[String, T])
 }
 
-pub(all) enum Cmd {
-  Effect((&Scheduler) -> Unit)
-  Message(Id, () -> Unit)
-  Batch(Array[Cmd])
-  Empty
-}
+type Cmd
 
 type Flags
 pub fn Flags::id(Self) -> Id

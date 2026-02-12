@@ -95,7 +95,7 @@ fn[Model] request(
         )
     }
   }
-  Effect(launch)
+  @runtime.effect(launch)
 }
 
 ///|
