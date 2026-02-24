@@ -1,0 +1,8 @@
+
+import {
+  "moonbit-community/rabbita",
+  "moonbit-community/rabbita/url",
+  "moonbit-community/rabbita/nav",
+  "moonbit-community/rabbita/html",
+} for "test"
+
