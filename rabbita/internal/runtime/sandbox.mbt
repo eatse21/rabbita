@@ -31,8 +31,10 @@ pub fn Sandbox::new(root : &IsCell) -> Sandbox {
   let root = Instance::new(root)
   let mut sandbox : Sandbox? = None
   let captured_link_listener = fn(event : @dom.Event) {
-    let mouse_event = event.to_mouse_event().unwrap()
-    if not(mouse_event.get_meta_key() || mouse_event.get_ctrl_key()) {
+    if event.to_mouse_event() is Some(mouse_event) &&
+      sandbox is Some(sandbox) &&
+      sandbox.on_url_request is Some(_) &&
+      !(mouse_event.get_meta_key() || mouse_event.get_ctrl_key()) {
       event.prevent_default()
       let href = event
         .current_target()
@@ -50,7 +52,7 @@ pub fn Sandbox::new(root : &IsCell) -> Sandbox {
       } else {
         External(href)
       }
-      sandbox.unwrap().add_url_request(request)
+      sandbox.add_url_request(request)
     }
   }
   let live_map = Map::from_array([

@@ -829,6 +829,9 @@ pub fn[C : IsChildren] address(
 /// 
 /// If the user holds the `ctrl` key (or the command key on macOS) while clicking the link,
 /// the click event will be handled by the browser, and the `UrlRequest` will not be triggered either.
+///
+/// If `App::with_route(url_request=...)` is not configured, browser native navigation
+/// is used as well.
 pub fn[C : IsChildren] a(
   style? : Array[String] = [],
   id? : String,

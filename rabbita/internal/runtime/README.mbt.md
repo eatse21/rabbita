@@ -63,7 +63,9 @@ At insert time it becomes an actual `<a>` element. The listener classifies URLs:
 - same origin -> `@url.Internal(url)`
 - different origin -> `@url.External(href)`
 
-Then it dispatches `add_url_request`, which can be wired by `App::with_route`.
+When `App::with_route(url_request=...)` is configured, it dispatches
+`add_url_request`. Without that callback, the listener keeps native `<a>`
+navigation behavior (no interception).
 
 ## Design Notes
 
@@ -72,7 +74,6 @@ Then it dispatches `add_url_request`, which can be wired by `App::with_route`.
 - Async work is represented as `Cmd` and re-enters the loop as messages.
 - Rendering is batched to animation frames to avoid repeated DOM work within a
   burst of updates.
-
 
 
 
