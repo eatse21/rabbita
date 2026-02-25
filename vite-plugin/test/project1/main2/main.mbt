@@ -1,0 +1,49 @@
+///|
+pub(all) enum Message {
+  /// adsfadsf
+  /// adsadsfasdf
+  /// adsfasdf
+  Increment
+  /// asdfasdf
+  /// asdfasdfasdf
+  /// adfadsfasd
+  Decrement
+  // Ubc(Int, Bool)
+}
+
+///|
+struct Model {
+  count : Int
+}
+
+///|
+fn update(msg : Message, model : Model) -> Model {
+  match msg {
+    Increment => { count: model.count + 1 }
+    Decrement => {
+      let next = model.count - 1
+      { count: if next < 0 { 0 } else { next } }
+    }
+  }
+}
+
+///|
+fn view(dispatch : @rabbita.Dispatch[Message], model : Model) -> @rabbita.Html {
+  div(class="w-[600px] h-[100px] m-10", [
+    h1(class="text-2xl font-bold text-center select-none", [
+      text("\{model.count}"),
+    ]),
+    div(class="flex justify-center gap-8 m-8", [
+      @views.button("+", on_click=dispatch(Increment)),
+      @views.button("-", on_click=dispatch(Decrement)),
+    ]),
+  ])
+}
+
+///|
+/// NOTE: This program is only available in the js backend, 
+/// see README.md to getting started.
+fn main {
+  let app = @rabbita.simple_cell(model={ count: 0 }, update~, view~)
+  @rabbita.new(app).mount("app")
+}

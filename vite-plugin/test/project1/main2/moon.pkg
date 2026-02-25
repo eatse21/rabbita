@@ -1,0 +1,9 @@
+import {
+  "moonbit-community/rabbita",
+  "moonbit-community/rabbita/html",
+  "username/rabbita-tailwind/views",
+}
+
+options(
+  "is-main": true,
+)

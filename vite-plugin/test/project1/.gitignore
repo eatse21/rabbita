@@ -1,0 +1,9 @@
+target/
+_build/
+.mooncakes/
+node_modules/
+package-lock.json
+bun.lock
+main.js
+main.js.map
+dist

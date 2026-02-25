@@ -1,0 +1,8 @@
+import {
+  "moonbit-community/rabbita",
+  "moonbit-community/rabbita/html",
+}
+
+options(
+  link: { "js": { "exports": [ "button", "on", "send" ], "format": "esm" } },
+)
