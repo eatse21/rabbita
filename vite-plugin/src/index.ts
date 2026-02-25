@@ -247,6 +247,14 @@ export function rabbita(options: RabbitaOptions = {}): Plugin {
   const modConfig = probeMoonBitModule();
   let isBuild = false;
   let latestOutput: JsOutput | undefined = undefined;
+  let rebuildTimer: ReturnType<typeof setTimeout> | undefined = undefined;
+  const watchTargets = [
+    path.join(cwd, '**/*.mbt'),
+    path.join(cwd, '**/*.mbti'),
+    path.join(cwd, '**/moon.pkg'),
+    path.join(cwd, '**/moon.pkg.json'),
+    path.join(cwd, 'moon.mod.json'),
+  ];
 
   function runMoonbitBuild(): JsOutput {
     const primaryMode: BuildMode = isBuild ? 'release' : 'debug';
@@ -300,6 +308,27 @@ export function rabbita(options: RabbitaOptions = {}): Plugin {
     });
   }
 
+  function scheduleRebuild(server: ViteDevServer, filePath: string): void {
+    if (!shouldRebuildForFile(filePath)) {
+      return;
+    }
+
+    if (rebuildTimer) {
+      clearTimeout(rebuildTimer);
+    }
+
+    rebuildTimer = setTimeout(() => {
+      rebuildTimer = undefined;
+      try {
+        runMoonbitBuild();
+        server.moduleGraph.invalidateAll();
+        server.ws.send({ type: 'full-reload' });
+      } catch (err: any) {
+        reportError(err.toString(), server);
+      }
+    }, 10);
+  }
+
   return {
     name: 'vite-plugin-rabbita',
     enforce: 'pre',
@@ -314,6 +343,16 @@ export function rabbita(options: RabbitaOptions = {}): Plugin {
       } catch (err: any) {
         console.log('buildStart error', err);
       }
+    },
+
+    configureServer(server) {
+      server.watcher.add(watchTargets);
+      const onFsChange = (filePath: string) => {
+        scheduleRebuild(server, filePath);
+      };
+      server.watcher.on('add', onFsChange);
+      server.watcher.on('change', onFsChange);
+      server.watcher.on('unlink', onFsChange);
     },
 
     resolveId(source) {
@@ -356,15 +395,8 @@ export function rabbita(options: RabbitaOptions = {}): Plugin {
       if (!shouldRebuildForFile(file)) {
         return modules;
       }
-
-      try {
-        runMoonbitBuild();
-        server.ws.send({ type: 'full-reload', path: '*' });
-        return [];
-      } catch (err: any) {
-        reportError(err.toString(), server);
-        return [];
-      }
+      scheduleRebuild(server, file);
+      return [];
     },
   };
 }
