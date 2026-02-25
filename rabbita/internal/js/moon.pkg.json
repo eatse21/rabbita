@@ -1,0 +1,13 @@
+{
+  "targets": {
+    "*": [
+      "js"
+    ]
+  },
+  "import": [
+    "moonbitlang/core/json"
+  ],
+  "test-import": [
+    "moonbitlang/core/json"
+  ]
+}

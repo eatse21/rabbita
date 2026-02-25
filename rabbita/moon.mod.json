@@ -1,9 +1,7 @@
 {
   "name": "moonbit-community/rabbita",
   "version": "0.11.4",
-  "deps": {
-    "moonbit-community/js-ffi": "0.4.2"
-  },
+  "deps": {},
   "readme": "README.md",
   "repository": "https://github.com/moonbit-community/rabbita",
   "license": "Apache-2.0",
