@@ -22,6 +22,10 @@ This project was previously named `Rabbit-TEA` and is now renamed to `rabbita` .
 
   Use `Cell` to split logic and reuse stateful views. Skip diff and patching for non-dirty cells.
 
+## Quick Start
+
+Use the [rabbita-template](https://github.com/moonbit-community/rabbita-template) to get started quickly.
+
 ## Examples
 
 ### Counter 
@@ -34,6 +38,7 @@ using @html {div, h1, button}
 fn init {
   struct Model {
     count : Int
+
   }
   enum Msg {
     Inc
