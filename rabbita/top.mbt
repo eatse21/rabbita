@@ -61,6 +61,7 @@ pub fn App::with_route(
 ///
 /// This initializes the runtime and schedules the first render flush.
 /// If routing is configured, the current URL is also dispatched on mount.
+#cfg(target="js")
 pub fn App::mount(self : Self, element_id : String) -> Unit {
   self.sandbox.mount = element_id
   self.trigger_initial_url_changed()

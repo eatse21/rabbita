@@ -1,13 +1,16 @@
 ///|
+#cfg(target="js")
 /// https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection
 #external
 type HTMLCollection
 
 ///|
+#cfg(target="js")
 /// https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection/length
 pub extern "js" fn HTMLCollection::get_length(self : Self) -> Double = "(self) => self.length"
 
 ///|
+#cfg(target="js")
 /// https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection/item
 pub extern "js" fn HTMLCollection::item(
   self : Self,
@@ -15,6 +18,7 @@ pub extern "js" fn HTMLCollection::item(
 ) -> @js.Nullable[Element] = "(self,index) => self.item(index)"
 
 ///|
+#cfg(target="js")
 /// https://developer.mozilla.org/en-US/docs/Web/API/HTMLCollection/namedItem
 pub extern "js" fn HTMLCollection::named_item(
   self : Self,

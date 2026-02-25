@@ -1,13 +1,16 @@
 ///|
+#cfg(target="js")
 /// https://developer.mozilla.org/en-US/docs/Web/API/NodeList
 #external
 type NodeList
 
 ///|
+#cfg(target="js")
 /// https://developer.mozilla.org/en-US/docs/Web/API/NodeList/length
 pub extern "js" fn NodeList::get_length(self : Self) -> Double = "(self) => self.length"
 
 ///|
+#cfg(target="js")
 /// https://developer.mozilla.org/en-US/docs/Web/API/NodeList/item
 pub extern "js" fn NodeList::item(
   self : Self,

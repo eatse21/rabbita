@@ -1,4 +1,5 @@
 ///|
+#cfg(target="js")
 #external
 pub type Clipboard
 
@@ -19,6 +20,7 @@ pub type Clipboard
 //   #| (self) => self.read()
 
 ///|
+#cfg(target="js")
 pub extern "js" fn Clipboard::write_text(
   self : Clipboard,
   text : String,
@@ -26,5 +28,6 @@ pub extern "js" fn Clipboard::write_text(
   #| (self,text) => self.writeText(text)
 
 ///|
+#cfg(target="js")
 pub extern "js" fn Clipboard::read_text(self : Clipboard) -> @js.Promise =
   #| (self) => self.readText()

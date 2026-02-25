@@ -38,7 +38,6 @@ using @html {div, h1, button}
 fn init {
   struct Model {
     count : Int
-
   }
   enum Msg {
     Inc
