@@ -1,4 +1,5 @@
 ///|
+#cfg(target="js")
 let json : Json = {
   "_id": "67a6c712bc218526d5e1b516",
   "index": 0,
@@ -29,6 +30,7 @@ let json : Json = {
 }
 
 ///|
+#cfg(target="js")
 let json_str_pretty =
   #|{
   #|  "_id": "67a6c712bc218526d5e1b516",
@@ -60,9 +62,11 @@ let json_str_pretty =
   #|}
 
 ///|
+#cfg(target="js")
 let json_val : @js.Value = try! @js.Value::from_json_string(json_str_pretty)
 
 ///|
+#cfg(target="js")
 test "Value::to_json_string" {
   inspect(
     json_val.to_json_string(),
@@ -73,11 +77,13 @@ test "Value::to_json_string" {
 }
 
 ///|
+#cfg(target="js")
 test "Value::to_json" {
   assert_eq(json_val.to_json(), json)
 }
 
 ///|
+#cfg(target="js")
 test "Value::from_json" {
   assert_eq(
     @js.Value::from_json(json).to_json_string(),

@@ -1,6 +1,6 @@
 ///|
-#cfg(target="js")
 /// https://developer.mozilla.org/en-US/docs/Web/API/SVGElement
+#cfg(target="js")
 type SVGElement
 
 ///|

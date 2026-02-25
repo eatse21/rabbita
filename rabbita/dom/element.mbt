@@ -200,38 +200,38 @@ extern "js" fn ffi_element_get_property(
 ) -> @js.Optional[String] = "(self,prop) => self[prop]"
 
 ///|
-#cfg(target="js")
 /// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
+#cfg(target="js")
 extern "js" fn ffi_element_scroll_into_view(x : @js.Value) = "(self) => self.scrollIntoView()"
 
 ///|
-#cfg(target="js")
 /// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollTop
+#cfg(target="js")
 extern "js" fn ffi_element_get_scroll_top(x : @js.Value) -> Double = "(self) => self.scrollTop"
 
 ///|
-#cfg(target="js")
 /// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollTop
+#cfg(target="js")
 extern "js" fn ffi_element_set_scroll_top(x : @js.Value, value : Double) = "(s,v) => s.scrollTop = v"
 
 ///|
-#cfg(target="js")
 /// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft
+#cfg(target="js")
 extern "js" fn ffi_element_get_scroll_left(x : @js.Value) -> Double = "(self) => self.scrollLeft"
 
 ///|
-#cfg(target="js")
 /// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft
+#cfg(target="js")
 extern "js" fn ffi_element_set_scroll_left(x : @js.Value, value : Double) = "(s,v) => s.scrollLeft = v"
 
 ///|
-#cfg(target="js")
 /// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollWidth
+#cfg(target="js")
 extern "js" fn ffi_element_get_scroll_width(x : @js.Value) -> Double = "(self) => self.scrollWidth"
 
 ///|
-#cfg(target="js")
 /// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollHeight
+#cfg(target="js")
 extern "js" fn ffi_element_get_scroll_height(x : @js.Value) -> Double = "(self) => self.scrollHeight"
 
 ///|

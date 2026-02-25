@@ -14,6 +14,7 @@ Using it may reduce cross-platform compatibility.
 
 ```mbt check
 ///|
+#cfg(target="js")
 test {
   let doc = @dom.document()
   if doc.get_element_by_id("hero").to_option() is Some(el) {
@@ -26,6 +27,7 @@ test {
 
 ```mbt check
 ///|
+#cfg(target="js")
 test {
   if @dom.document().get_element_by_id("btn").to_option() is Some(el) {
     el.add_event_listener("click", event => {

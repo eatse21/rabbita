@@ -2,7 +2,7 @@
 package "moonbit-community/rabbita/dom"
 
 import {
-  "moonbit-community/js-ffi/js",
+  "moonbit-community/rabbita/internal/js",
 }
 
 // Values
@@ -33,14 +33,14 @@ type AnimationEvent
 pub fn AnimationEvent::get_animation_name(Self) -> String
 pub fn AnimationEvent::get_elapsed_time(Self) -> Double
 pub fn AnimationEvent::get_pseudo_element(Self) -> String
-pub impl @js.Cast for AnimationEvent
 pub impl IsEvent for AnimationEvent
+pub impl @js.Cast for AnimationEvent
 
 type AudioTrackList
 
 type BeforeUnloadEvent
-pub impl @js.Cast for BeforeUnloadEvent
 pub impl IsEvent for BeforeUnloadEvent
+pub impl @js.Cast for BeforeUnloadEvent
 
 type Blob
 
@@ -48,8 +48,8 @@ type BlobEvent
 pub fn BlobEvent::get_data(Self) -> Blob
 pub fn BlobEvent::get_timecode(Self) -> Double
 pub fn BlobEvent::new() -> Self
-pub impl @js.Cast for BlobEvent
 pub impl IsEvent for BlobEvent
+pub impl @js.Cast for BlobEvent
 
 type CSSRule
 
@@ -154,34 +154,34 @@ pub fn Clipboard::write_text(Self, String) -> @js.Promise
 
 type ClipboardEvent
 pub fn ClipboardEvent::clipboard_data(Self) -> DataTransfer
-pub impl @js.Cast for ClipboardEvent
 pub impl IsEvent for ClipboardEvent
+pub impl @js.Cast for ClipboardEvent
 
 type CloseEvent
 pub fn CloseEvent::get_code(Self) -> Int
 pub fn CloseEvent::get_reason(Self) -> String
 pub fn CloseEvent::get_was_clean(Self) -> Bool
-pub impl @js.Cast for CloseEvent
 pub impl IsEvent for CloseEvent
+pub impl @js.Cast for CloseEvent
 
 type Comment
 pub fn Comment::to_node(Self) -> Node
-pub impl @js.Cast for Comment
 pub impl IsEventTarget for Comment
 pub impl IsNode for Comment
+pub impl @js.Cast for Comment
 
 type CompositionEvent
 pub fn CompositionEvent::get_data(Self) -> String
 pub fn CompositionEvent::new() -> Self
-pub impl @js.Cast for CompositionEvent
 pub impl IsEvent for CompositionEvent
 pub impl IsUIEvent for CompositionEvent
+pub impl @js.Cast for CompositionEvent
 
 type CustomEvent
 pub fn CustomEvent::get_detail(Self) -> @js.Value
 pub fn CustomEvent::new(String, detail? : @js.Optional[@js.Value]) -> Self
-pub impl @js.Cast for CustomEvent
 pub impl IsEvent for CustomEvent
+pub impl @js.Cast for CustomEvent
 
 type DOMException
 pub fn DOMException::get_message(Self) -> String
@@ -238,40 +238,40 @@ pub fn Document::to_node(Self) -> Node
 
 type DocumentFragment
 pub fn DocumentFragment::to_node(Self) -> Node
-pub impl @js.Cast for DocumentFragment
 pub impl IsEventTarget for DocumentFragment
 pub impl IsNode for DocumentFragment
+pub impl @js.Cast for DocumentFragment
 
 type DragEvent
 pub fn DragEvent::get_data_transfer(Self) -> DataTransfer
-pub impl @js.Cast for DragEvent
 pub impl IsEvent for DragEvent
 pub impl IsMouseEvent for DragEvent
 pub impl IsUIEvent for DragEvent
+pub impl @js.Cast for DragEvent
 
 type EditContext
 
 type Element
-pub impl @js.Cast for Element
 pub impl IsElement for Element
 pub impl IsEventTarget for Element
 pub impl IsNode for Element
+pub impl @js.Cast for Element
 
 type ElementInternals
 
 type Event
-pub impl @js.Cast for Event
 pub impl IsEvent for Event
+pub impl @js.Cast for Event
 
 type EventTarget
-pub impl @js.Cast for EventTarget
 pub impl IsEventTarget for EventTarget
+pub impl @js.Cast for EventTarget
 
 type FocusEvent
 pub fn FocusEvent::related_target(Self) -> EventTarget
-pub impl @js.Cast for FocusEvent
 pub impl IsEvent for FocusEvent
 pub impl IsUIEvent for FocusEvent
+pub impl @js.Cast for FocusEvent
 
 type GPUCanvasContext
 
@@ -279,11 +279,11 @@ type HTMLCanvasElement
 pub fn HTMLCanvasElement::get_context(Self, String) -> @js.Union5[CanvasRenderingContext2D, ImageBitmapRenderingContext, WebGLRenderingContext, WebGL2RenderingContext, GPUCanvasContext]
 pub fn HTMLCanvasElement::get_height(Self) -> Int
 pub fn HTMLCanvasElement::get_width(Self) -> Int
-pub impl @js.Cast for HTMLCanvasElement
 pub impl IsElement for HTMLCanvasElement
 pub impl IsEventTarget for HTMLCanvasElement
 pub impl IsHtmlElement for HTMLCanvasElement
 pub impl IsNode for HTMLCanvasElement
+pub impl @js.Cast for HTMLCanvasElement
 
 type HTMLCollection
 pub fn HTMLCollection::get_length(Self) -> Double
@@ -297,18 +297,18 @@ pub fn HTMLDialogElement::request_close(Self, return_value? : @js.Optional[Strin
 pub fn HTMLDialogElement::return_value(Self) -> String
 pub fn HTMLDialogElement::show(Self) -> Unit
 pub fn HTMLDialogElement::show_modal(Self) -> Unit
-pub impl @js.Cast for HTMLDialogElement
 pub impl IsElement for HTMLDialogElement
 pub impl IsEventTarget for HTMLDialogElement
 pub impl IsHtmlElement for HTMLDialogElement
 pub impl IsNode for HTMLDialogElement
+pub impl @js.Cast for HTMLDialogElement
 
 type HTMLElement
-pub impl @js.Cast for HTMLElement
 pub impl IsElement for HTMLElement
 pub impl IsEventTarget for HTMLElement
 pub impl IsHtmlElement for HTMLElement
 pub impl IsNode for HTMLElement
+pub impl @js.Cast for HTMLElement
 
 type HTMLImageElement
 pub fn HTMLImageElement::get_alt(Self) -> String
@@ -345,38 +345,38 @@ pub fn HTMLImageElement::set_src(Self, String) -> Unit
 pub fn HTMLImageElement::set_srcset(Self, String) -> Unit
 pub fn HTMLImageElement::set_use_map(Self, String) -> Unit
 pub fn HTMLImageElement::set_width(Self, Double) -> Unit
-pub impl @js.Cast for HTMLImageElement
 pub impl IsElement for HTMLImageElement
 pub impl IsEventTarget for HTMLImageElement
 pub impl IsHtmlElement for HTMLImageElement
 pub impl IsNode for HTMLImageElement
+pub impl @js.Cast for HTMLImageElement
 
 type HTMLInputElement
 pub fn HTMLInputElement::value(Self) -> String
-pub impl @js.Cast for HTMLInputElement
 pub impl IsElement for HTMLInputElement
 pub impl IsEventTarget for HTMLInputElement
 pub impl IsHtmlElement for HTMLInputElement
 pub impl IsNode for HTMLInputElement
+pub impl @js.Cast for HTMLInputElement
 
 type HTMLMediaElement
-pub impl @js.Cast for HTMLMediaElement
 pub impl IsElement for HTMLMediaElement
 pub impl IsEventTarget for HTMLMediaElement
 pub impl IsHTMLMediaElement for HTMLMediaElement
 pub impl IsHtmlElement for HTMLMediaElement
 pub impl IsNode for HTMLMediaElement
+pub impl @js.Cast for HTMLMediaElement
 
 type HTMLSelectElement
 pub fn HTMLSelectElement::value(Self) -> String
 
 type HTMLVideoElement
-pub impl @js.Cast for HTMLVideoElement
 pub impl IsElement for HTMLVideoElement
 pub impl IsEventTarget for HTMLVideoElement
 pub impl IsHTMLMediaElement for HTMLVideoElement
 pub impl IsHtmlElement for HTMLVideoElement
 pub impl IsNode for HTMLVideoElement
+pub impl @js.Cast for HTMLVideoElement
 
 type ImageBitmap
 pub impl @js.Cast for ImageBitmap
@@ -398,9 +398,9 @@ type InputEvent
 pub fn InputEvent::data(Self) -> String
 pub fn InputEvent::input_type(Self) -> String
 pub fn InputEvent::is_composing(Self) -> Bool
-pub impl @js.Cast for InputEvent
 pub impl IsEvent for InputEvent
 pub impl IsUIEvent for InputEvent
+pub impl @js.Cast for InputEvent
 
 type KeyboardEvent
 pub fn KeyboardEvent::alt_key(Self) -> Bool
@@ -412,9 +412,9 @@ pub fn KeyboardEvent::location(Self) -> Int
 pub fn KeyboardEvent::meta_key(Self) -> Bool
 pub fn KeyboardEvent::repeat(Self) -> Bool
 pub fn KeyboardEvent::shift_key(Self) -> Bool
-pub impl @js.Cast for KeyboardEvent
 pub impl IsEvent for KeyboardEvent
 pub impl IsUIEvent for KeyboardEvent
+pub impl @js.Cast for KeyboardEvent
 
 type MediaError
 
@@ -423,19 +423,19 @@ type MediaKeys
 type MediaStream
 
 type MouseEvent
-pub impl @js.Cast for MouseEvent
 pub impl IsEvent for MouseEvent
 pub impl IsMouseEvent for MouseEvent
 pub impl IsUIEvent for MouseEvent
+pub impl @js.Cast for MouseEvent
 
 #external
 pub type Navigator
 pub fn Navigator::clipboard(Self) -> Clipboard
 
 type Node
-pub impl @js.Cast for Node
 pub impl IsEventTarget for Node
 pub impl IsNode for Node
+pub impl @js.Cast for Node
 
 type NodeList
 pub fn NodeList::get_length(Self) -> Double
@@ -452,26 +452,26 @@ type RemotePlayback
 type SVGAnimatedTransformList
 
 type SVGElement
-pub impl @js.Cast for SVGElement
 pub impl IsElement for SVGElement
 pub impl IsEventTarget for SVGElement
 pub impl IsNode for SVGElement
 pub impl IsSVGElement for SVGElement
+pub impl @js.Cast for SVGElement
 
 type SVGGraphicsElement
-pub impl @js.Cast for SVGGraphicsElement
 pub impl IsElement for SVGGraphicsElement
 pub impl IsEventTarget for SVGGraphicsElement
 pub impl IsNode for SVGGraphicsElement
 pub impl IsSVGElement for SVGGraphicsElement
 pub impl IsSVGGraphicsElement for SVGGraphicsElement
+pub impl @js.Cast for SVGGraphicsElement
 
 type SVGImageElement
-pub impl @js.Cast for SVGImageElement
 pub impl IsElement for SVGImageElement
 pub impl IsEventTarget for SVGImageElement
 pub impl IsNode for SVGImageElement
 pub impl IsSVGElement for SVGImageElement
+pub impl @js.Cast for SVGImageElement
 
 type SVGStringList
 
@@ -479,9 +479,9 @@ type StylePropertyMap
 
 type Text
 pub fn Text::to_node(Self) -> Node
-pub impl @js.Cast for Text
 pub impl IsEventTarget for Text
 pub impl IsNode for Text
+pub impl @js.Cast for Text
 
 type TextTrack
 
@@ -490,9 +490,9 @@ type TextTrackList
 type TimeRanges
 
 type UIEvent
-pub impl @js.Cast for UIEvent
 pub impl IsEvent for UIEvent
 pub impl IsUIEvent for UIEvent
+pub impl @js.Cast for UIEvent
 
 type Uint8ClampedArray
 
@@ -509,10 +509,10 @@ pub fn WheelEvent::get_delta_mode(Self) -> Int
 pub fn WheelEvent::get_delta_x(Self) -> Double
 pub fn WheelEvent::get_delta_y(Self) -> Double
 pub fn WheelEvent::get_delta_z(Self) -> Double
-pub impl @js.Cast for WheelEvent
 pub impl IsEvent for WheelEvent
 pub impl IsMouseEvent for WheelEvent
 pub impl IsUIEvent for WheelEvent
+pub impl @js.Cast for WheelEvent
 
 type Window
 pub fn Window::alert(Self, String) -> Unit
@@ -532,8 +532,8 @@ pub fn Window::scroll_to(Self, Int, Int) -> Unit
 pub fn Window::scroll_to_bottom(Self) -> Unit
 pub fn Window::scroll_to_top(Self) -> Unit
 pub fn Window::to_event_target(Self) -> EventTarget
-pub impl @js.Cast for Window
 pub impl IsEventTarget for Window
+pub impl @js.Cast for Window
 
 // Type aliases
 pub type ImageUnion = @js.Union7[HTMLImageElement, SVGImageElement, HTMLVideoElement, HTMLCanvasElement, ImageBitmap, OffscreenCanvas, VideoFrame]

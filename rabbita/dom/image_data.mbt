@@ -41,6 +41,6 @@ pub extern "js" fn ImageData::get_color_space(
 ) -> PredefinedColorSpace = "(self) => self.colorSpace"
 
 ///|
-#cfg(target="js")
 /// Possible values are "srgb" and "display-p3".
+#cfg(target="js")
 pub type PredefinedColorSpace = String

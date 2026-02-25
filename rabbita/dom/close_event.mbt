@@ -1,6 +1,6 @@
 ///|
-#cfg(target="js")
 /// https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
+#cfg(target="js")
 type CloseEvent
 
 ///|

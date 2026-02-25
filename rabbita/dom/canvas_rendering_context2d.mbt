@@ -106,8 +106,8 @@ pub extern "js" fn CanvasRenderingContext2D::get_image_smoothing_quality(
 ) -> String = "(x) => x.imageSmoothingQuality"
 
 ///|
-#cfg(target="js")
 /// Possible values are "low", "medium", and "high".
+#cfg(target="js")
 pub extern "js" fn CanvasRenderingContext2D::set_image_smoothing_quality(
   self : Self,
   value : String,
@@ -320,8 +320,8 @@ pub extern "js" fn CanvasRenderingContext2D::stroke_text(
 ) = "(self,text,x,y,maxWidth) => self.strokeText(text,x,y,maxWidth)"
 
 ///|
-#cfg(target="js")
 /// https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
+#cfg(target="js")
 pub type ImageUnion = @js.Union7[
   HTMLImageElement,
   SVGImageElement,
@@ -333,8 +333,8 @@ pub type ImageUnion = @js.Union7[
 ]
 
 ///|
-#cfg(target="js")
 /// https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
+#cfg(target="js")
 pub extern "js" fn CanvasRenderingContext2D::draw_image(
   self : Self,
   image : ImageUnion,
@@ -343,8 +343,8 @@ pub extern "js" fn CanvasRenderingContext2D::draw_image(
 ) = "(self,image,dx,dy) => self.drawImage(image,dx,dy)"
 
 ///|
-#cfg(target="js")
 /// https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
+#cfg(target="js")
 pub extern "js" fn CanvasRenderingContext2D::draw_image_with_size(
   self : Self,
   image : ImageUnion,
@@ -355,8 +355,8 @@ pub extern "js" fn CanvasRenderingContext2D::draw_image_with_size(
 ) = "(self,image,dx,dy,dw,dh) => self.drawImage(image,dx,dy,dw,dh)"
 
 ///|
-#cfg(target="js")
 /// https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/drawImage
+#cfg(target="js")
 pub extern "js" fn CanvasRenderingContext2D::draw_image_with_src_and_dst_size(
   self : Self,
   image : ImageUnion,
@@ -565,13 +565,13 @@ pub extern "js" fn CanvasRenderingContext2D::ellipse(
 ) = "(self,x,y,radiusX,radiusY,rotation,startAngle,endAngle,anticlockwise) => self.ellipse(x,y,radiusX,radiusY,rotation,startAngle,endAngle,anticlockwise)"
 
 ///|
-#cfg(target="js")
 /// https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font 
+#cfg(target="js")
 pub extern "js" fn CanvasRenderingContext2D::get_font(self : Self) -> String = "(self) => self.font"
 
 ///|
-#cfg(target="js")
 /// https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font
+#cfg(target="js")
 pub extern "js" fn CanvasRenderingContext2D::set_font(
   self : Self,
   value : String,

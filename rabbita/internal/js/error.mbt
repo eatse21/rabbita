@@ -1,12 +1,15 @@
 ///|
+#cfg(target="js")
 pub suberror Error_ {
   Error_(Value)
 }
 
 ///|
+#cfg(target="js")
 extern "js" fn Error_::cause_ffi(self : Value) -> Value = "(self) => self.cause"
 
 ///|
+#cfg(target="js")
 pub fn Error_::cause(self : Error_) -> Value? {
   let Error_(inner) = self
   let cause = Error_::cause_ffi(inner)
@@ -15,6 +18,7 @@ pub fn Error_::cause(self : Error_) -> Value? {
 }
 
 ///|
+#cfg(target="js")
 pub impl Show for Error_ with output(self, logger) {
   logger.write_string("@js.Error: ")
   let Error_(inner) = self
@@ -25,6 +29,7 @@ pub impl Show for Error_ with output(self, logger) {
 }
 
 ///|
+#cfg(target="js")
 extern "js" fn Error_::wrap_ffi(
   op : () -> Value,
   on_ok : (Value) -> Unit,
@@ -33,6 +38,7 @@ extern "js" fn Error_::wrap_ffi(
   #| (op, on_ok, on_error) => { try { on_ok(op()); } catch (e) { on_error(e); } }
 
 ///|
+#cfg(target="js")
 pub fn[T] Error_::wrap(
   op : () -> Value,
   map_ok? : (Value) -> T = Value::cast,

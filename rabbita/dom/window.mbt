@@ -74,16 +74,16 @@ pub extern "js" fn Window::replace_url(self : Self, url : String) =
   #| (self,url) => { self.history.replaceState(null, '', url); }
 
 ///|
-#cfg(target="js")
 /// https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame
+#cfg(target="js")
 pub extern "js" fn Window::request_animation_frame(
   self : Self,
   f : (DOMHighResTimeStamp) -> Unit,
 ) -> Double = "(self,f) => self.requestAnimationFrame(f)"
 
 ///|
-#cfg(target="js")
 /// https://developer.mozilla.org/en-US/docs/Web/API/Window/cancelAnimationFrame
+#cfg(target="js")
 pub extern "js" fn Window::cancel_animation_frame(
   self : Self,
   request_id : Double,

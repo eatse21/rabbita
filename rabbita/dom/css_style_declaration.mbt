@@ -1,8 +1,8 @@
 ///|
-#cfg(target="js")
 /// The CSSStyleDeclaration interface represents an object that is a CSS declaration block, and exposes style information and various style-related methods and properties.
 /// 
 /// [mdn](https://developer.mozilla.org/en-US/docs/Web/API/CSSStyleDeclaration)
+#cfg(target="js")
 #external
 type CSSStyleDeclaration
 
@@ -24,15 +24,15 @@ pub impl @js.Cast for CSSStyleDeclaration with from(value) {
 }
 
 ///|
-#cfg(target="js")
 /// Same as `get_property_value`
+#cfg(target="js")
 pub fn CSSStyleDeclaration::op_get(self : Self, property : String) -> String {
   self.get_property_value(property)
 }
 
 ///|
-#cfg(target="js")
 /// Same as `set_property`
+#cfg(target="js")
 pub fn CSSStyleDeclaration::op_set(
   self : Self,
   property : String,
@@ -42,78 +42,78 @@ pub fn CSSStyleDeclaration::op_set(
 }
 
 ///|
-#cfg(target="js")
 /// Textual representation of the declaration block, if and only if it is exposed via HTMLElement.style.
+#cfg(target="js")
 pub extern "js" fn CSSStyleDeclaration::get_css_text(self : Self) -> String = "(self) => self.cssText"
 
 ///|
-#cfg(target="js")
 /// Textual representation of the declaration block, if and only if it is exposed via HTMLElement.style.
+#cfg(target="js")
 pub extern "js" fn CSSStyleDeclaration::set_css_text(
   self : Self,
   value : String,
 ) = "(self, value) => self.cssText = value"
 
 ///|
-#cfg(target="js")
 /// The number of properties.
+#cfg(target="js")
 pub extern "js" fn CSSStyleDeclaration::get_length(self : Self) -> Int = "(self) => self.length"
 
 ///|
-#cfg(target="js")
 /// The containing CSSRule.
+#cfg(target="js")
 pub fn CSSStyleDeclaration::get_parent_rule(self : Self) -> CSSRule? {
   ffi_css_style_declaration_get_parent_rule(self).to_option()
 }
 
 ///|
-#cfg(target="js")
 /// Special alias for the float CSS property.
+#cfg(target="js")
 pub extern "js" fn CSSStyleDeclaration::get_css_float(self : Self) -> String = "(self) => self.cssFloat"
 
 ///|
-#cfg(target="js")
 /// Special alias for the float CSS property.
+#cfg(target="js")
 pub extern "js" fn CSSStyleDeclaration::set_css_float(
   self : Self,
   value : String,
 ) = "(self, value) => self.cssFloat = value"
 
 ///|
-#cfg(target="js")
 /// Returns the optional priority, "important".
+#cfg(target="js")
 pub extern "js" fn CSSStyleDeclaration::get_property_priority(
   self : Self,
   property : String,
 ) -> String = "(self, property) => self.getPropertyPriority(property)"
 
 ///|
-#cfg(target="js")
 /// Returns the property value given a property name.
+#cfg(target="js")
 pub extern "js" fn CSSStyleDeclaration::get_property_value(
   self : Self,
   property : String,
 ) -> String = "(self, property) => self.getPropertyValue(property)"
 
 ///|
-#cfg(target="js")
 /// Returns a CSS property name by its index, or the empty string if the index is out-of-bounds.
+#cfg(target="js")
 pub extern "js" fn CSSStyleDeclaration::item(
   self : Self,
   index : Int,
 ) -> String = "(self, index) => self.item(index)"
 
 ///|
-#cfg(target="js")
 /// Removes a property from the CSS declaration block.
+#cfg(target="js")
 pub extern "js" fn CSSStyleDeclaration::remove_property(
   self : Self,
   property : String,
 ) -> String = "(self, property) => self.removeProperty(property)"
 
 ///|
-#cfg(target="js")
 /// Modifies an existing CSS property or creates a new CSS property in the declaration block.
+#cfg(target="js")
 pub extern "js" fn CSSStyleDeclaration::set_property(
   self : Self,
   property : String,
@@ -121,8 +121,8 @@ pub extern "js" fn CSSStyleDeclaration::set_property(
 ) -> Unit = "(self, property, value) => self.setProperty(property, value)"
 
 ///|
-#cfg(target="js")
 /// Modifies an existing CSS property or creates a new CSS property in the declaration block with priority.
+#cfg(target="js")
 // FIXME: Can throw DOMException - ignoring error
 pub extern "js" fn CSSStyleDeclaration::set_property_with_priority(
   self : Self,
