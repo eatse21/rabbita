@@ -267,7 +267,7 @@ pub fn[Model, Msg] cell_with_dispatch(
 ///       ])
 ///     },
 ///   )
-///   new(app).mount("main")
+///   ignore(app) // use `new(app).mount("id")` in client
 /// }
 /// ```
 pub fn[Model, Msg] simple_cell(

@@ -59,6 +59,7 @@ pub fn raw_effect(
 /// 
 /// The async function `f` is executed, then its result is converted into a new
 /// command by `msg` and scheduled back into the update loop.
+#cfg(target="js")
 pub fn[A] perform(msg : (A) -> Cmd, f : async () -> A noraise) -> Cmd {
   raw_effect(scheduler => @js.async_run(() => scheduler.add(msg(f()))))
 }
@@ -67,6 +68,7 @@ pub fn[A] perform(msg : (A) -> Cmd, f : async () -> A noraise) -> Cmd {
 /// Create a command that runs an async function and handles errors.
 /// 
 /// Similar to `perform`, but captures errors and passes `Result[A, E]` to `msg`.
+#cfg(target="js")
 pub fn[A, E : Error] attempt(
   msg : (Result[A, E]) -> Cmd,
   f : async () -> A raise E,
@@ -87,9 +89,11 @@ pub fn[A, E : Error] attempt(
 /// Delay execution of a command by `ms` milliseconds.
 ///
 /// The delayed command is added back to the message queue after the timer fires.
+#cfg(target="js")
 pub fn delay(cmd : Cmd, ms : Int) -> Cmd {
   raw_effect(scheduler => set_timeout(() => scheduler.add(cmd), ms))
 }
 
 ///|
+#cfg(target="js")
 extern "js" fn set_timeout(f : () -> Unit, ms : Int) = "(f,ms) => setTimeout(f, ms)"

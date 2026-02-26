@@ -16,6 +16,8 @@ pub fn message(Id, () -> Unit) -> Cmd
 
 pub let none : Cmd
 
+pub fn server_side_render(&IsCell) -> String
+
 // Errors
 
 // Types and methods

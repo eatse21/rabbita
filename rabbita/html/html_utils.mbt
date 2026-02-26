@@ -41,6 +41,7 @@ fn push_mouseup(value : ((Mouse) -> Cmd)?, attrs : Attrs) -> Unit {
 }
 
 ///|
+#cfg(target="js")
 fn push_scroll(value : ((Scroll) -> Cmd)?, attrs : Attrs) -> Unit {
   if value is Some(v) {
     ignore(
@@ -50,6 +51,12 @@ fn push_scroll(value : ((Scroll) -> Cmd)?, attrs : Attrs) -> Unit {
       }),
     )
   }
+}
+
+///|
+#cfg(not(target="js"))
+fn push_scroll(value : ((Scroll) -> Cmd)?, attrs : Attrs) -> Unit {
+  ignore((value, attrs))
 }
 
 ///|
@@ -67,6 +74,7 @@ fn push_keyup(value : ((Keyboard) -> Cmd)?, attrs : Attrs) -> Unit {
 }
 
 ///|
+#cfg(target="js")
 fn push_submit(value : Cmd?, attrs : Attrs) -> Unit {
   if value is Some(v) {
     ignore(
@@ -76,6 +84,12 @@ fn push_submit(value : Cmd?, attrs : Attrs) -> Unit {
       }),
     )
   }
+}
+
+///|
+#cfg(not(target="js"))
+fn push_submit(value : Cmd?, attrs : Attrs) -> Unit {
+  ignore((value, attrs))
 }
 
 ///|
@@ -296,6 +310,7 @@ fn push_size(value : Int?, attrs : Attrs) -> Unit {
 }
 
 ///|
+#cfg(target="js")
 fn push_change(value : ((String) -> Cmd)?, attrs : Attrs) -> Unit {
   if value is Some(v) {
     ignore(
@@ -315,6 +330,13 @@ fn push_change(value : ((String) -> Cmd)?, attrs : Attrs) -> Unit {
 }
 
 ///|
+#cfg(not(target="js"))
+fn push_change(value : ((String) -> Cmd)?, attrs : Attrs) -> Unit {
+  ignore((value, attrs))
+}
+
+///|
+#cfg(target="js")
 fn push_input(value : ((String) -> Cmd)?, attrs : Attrs) -> Unit {
   if value is Some(v) {
     ignore(
@@ -324,6 +346,12 @@ fn push_input(value : ((String) -> Cmd)?, attrs : Attrs) -> Unit {
       }),
     )
   }
+}
+
+///|
+#cfg(not(target="js"))
+fn push_input(value : ((String) -> Cmd)?, attrs : Attrs) -> Unit {
+  ignore((value, attrs))
 }
 
 ///|
@@ -375,6 +403,7 @@ fn push_scope(value : Scope?, attrs : Attrs) -> Unit {
 }
 
 ///|
+#cfg(target="js")
 fn push_close(value : ((String) -> Cmd)?, attrs : Attrs) -> Unit {
   if value is Some(close) {
     ignore(
@@ -387,6 +416,13 @@ fn push_close(value : ((String) -> Cmd)?, attrs : Attrs) -> Unit {
 }
 
 ///|
+#cfg(not(target="js"))
+fn push_close(value : ((String) -> Cmd)?, attrs : Attrs) -> Unit {
+  ignore((value, attrs))
+}
+
+///|
+#cfg(target="js")
 fn push_cancel(value : Cmd?, attrs : Attrs) -> Unit {
   if value is Some(cancel) {
     ignore(
@@ -396,6 +432,12 @@ fn push_cancel(value : Cmd?, attrs : Attrs) -> Unit {
       }),
     )
   }
+}
+
+///|
+#cfg(not(target="js"))
+fn push_cancel(value : Cmd?, attrs : Attrs) -> Unit {
+  ignore((value, attrs))
 }
 
 ///|

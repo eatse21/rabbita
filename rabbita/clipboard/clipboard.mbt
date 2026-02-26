@@ -10,6 +10,7 @@ pub(all) enum Item {
 /// 
 /// - `copied` is triggered if the copy operation is successful.
 /// - `failed` is triggered with the error message if the copy operation fails.
+#cfg(target="js")
 pub fn copy(item : Item, copied? : Cmd, failed? : (String) -> Cmd) -> Cmd {
   @runtime.effect(kind=Immediately, scheduler => {
     @js.async_run(() => {
@@ -37,6 +38,7 @@ pub fn copy(item : Item, copied? : Cmd, failed? : (String) -> Cmd) -> Cmd {
 /// # Message
 /// - `pasted` is triggered with the pasted item if the paste operation is successful.
 /// - `failed` is triggered with the error message if the paste operation fails.
+#cfg(target="js")
 pub fn paste(pasted~ : (Item) -> Cmd, failed? : (String) -> Cmd) -> Cmd {
   @runtime.effect(kind=Immediately, scheduler => {
     @js.async_run(() => {

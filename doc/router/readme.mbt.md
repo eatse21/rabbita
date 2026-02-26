@@ -29,7 +29,7 @@ enum Msg {
 To register the `UrlChanged` and `UrlRequest` messages, use `cell_with_dispatch(...)` to obtain the main cell and the corresponding `dispatch` function. The `dispatch` function allows you to convert messages into the `Cmd` type:
 
 ```moonbit check
-fn init {
+test {
   let (dispatch, root) = @rabbita.cell_with_dispatch(model=home, update~, view~)
   @rabbita.new(root)
   ..with_route(

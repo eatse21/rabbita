@@ -7,12 +7,17 @@ pub enum VNode {
 }
 
 ///|
+#cfg(target="js")
 priv enum INode {
   Elem(String, Props, Children[INode], namespace_uri~ : String?, @dom.Element)
   Text(String, @dom.Element)
   Frag(Array[INode], @dom.Comment, @dom.Comment)
   Slot(Instance, @dom.Comment, @dom.Comment)
 }
+
+///|
+#cfg(not(target="js"))
+type INode = Unit
 
 ///|
 struct Instance {
@@ -37,6 +42,7 @@ fn Instance::new(cell : &IsCell) -> Self {
 }
 
 ///|
+#cfg(target="js")
 fn INode::scan_direct_childs(s : Self) -> Array[Link] {
   let tmp = [s]
   let result = []
@@ -56,6 +62,7 @@ fn INode::scan_direct_childs(s : Self) -> Array[Link] {
 }
 
 ///|
+#cfg(target="js")
 fn INode::start(s : Self) -> @dom.Node {
   match s {
     Elem(_, _, _, e, ..) | Text(_, e) => e.as_node()
@@ -64,6 +71,7 @@ fn INode::start(s : Self) -> @dom.Node {
 }
 
 ///|
+#cfg(target="js")
 fn INode::end(s : Self) -> @dom.Node {
   match s {
     Elem(_, _, _, e, ..) | Text(_, e) => e.as_node()
@@ -72,6 +80,7 @@ fn INode::end(s : Self) -> @dom.Node {
 }
 
 ///|
+#cfg(target="js")
 fn INode::remove(self : Self, sandbox : Sandbox, parent : @dom.Node) -> Unit {
   for link in self.scan_direct_childs() {
     if link.val is Some(inst) {
@@ -97,6 +106,7 @@ fn INode::remove(self : Self, sandbox : Sandbox, parent : @dom.Node) -> Unit {
 }
 
 ///|
+#cfg(target="js")
 fn INode::relocate(
   self : Self,
   parent : @dom.Node,
@@ -126,6 +136,7 @@ fn INode::relocate(
 }
 
 ///|
+#cfg(target="js")
 fn VNode::insert(
   self : Self,
   sandbox : Sandbox,
@@ -285,9 +296,17 @@ pub(all) enum Children[T] {
 }
 
 ///|
+#cfg(target="js")
+type Event = @dom.Event
+
+///|
+#cfg(not(target="js"))
+type Event = Unit
+
+///|
 pub struct Props {
-  mut slots : Map[String, Ref[(@dom.Event, &Scheduler) -> Unit]]
-  handlers : Map[String, (@dom.Event, &Scheduler) -> Unit]
+  mut slots : Map[String, Ref[(Event, &Scheduler) -> Unit]]
+  handlers : Map[String, (Event, &Scheduler) -> Unit]
   attrs : Map[String, String]
   props : Map[String, @variant.Variant]
   styles : Map[String, String]
@@ -298,7 +317,7 @@ pub fn Props::new(
   attrs : Map[String, String],
   props : Map[String, @variant.Variant],
   styles : Map[String, String],
-  handlers : Map[String, (@dom.Event, &Scheduler) -> Unit],
+  handlers : Map[String, (Event, &Scheduler) -> Unit],
 ) -> Props {
   { slots: {}, handlers, attrs, styles, props }
 }
@@ -329,11 +348,13 @@ pub fn Props::copy(self : Props) -> Props {
 }
 
 ///|
+#cfg(target="js")
 fn[T] nullable(x : T) -> @js.Nullable[T] {
   @js.Nullable::from_option(Some(x))
 }
 
 ///|
+#cfg(target="js")
 fn[T] null() -> @js.Nullable[T] {
   @js.Nullable::null()
 }
@@ -341,6 +362,7 @@ fn[T] null() -> @js.Nullable[T] {
 // extern "js" fn log_node(x : @js.Nullable[@dom.Node]) = "(x) => console.log(x)"
 
 ///|
+#cfg(target="js")
 fn diff_node(
   old : INode,
   new : VNode,
@@ -402,6 +424,7 @@ fn diff_node(
 }
 
 ///|
+#cfg(target="js")
 fn diff_props(
   old : Props,
   new : Props,
@@ -477,6 +500,7 @@ fn diff_props(
 }
 
 ///|
+#cfg(target="js")
 fn diff_children(
   old : Children[INode],
   new : Children[VNode],
@@ -567,6 +591,7 @@ fn[A, B] Children::map(c : Children[A], f : (A) -> B) -> Children[B] {
 }
 
 ///|
+#cfg(target="js")
 fn variant_to_js_value(value : @variant.Variant) -> @js.Value {
   match value {
     String(value) => @js.Value::cast_from(value)

@@ -2,6 +2,7 @@
 /// Create a command to show a dialog.
 /// 
 /// The `modal` argument determines whether the dialog is modal or not.
+#cfg(target="js")
 pub fn show(id : String, modal? : Bool = true) -> Cmd {
   @runtime.effect(kind=AfterRender, _ => {
     let dialog = @dom.document()
@@ -23,6 +24,7 @@ pub fn show(id : String, modal? : Bool = true) -> Cmd {
 /// Create a command to close a dialog.
 /// 
 /// The `return_value` argument is the value that will be filled in the `close` message.
+#cfg(target="js")
 pub fn close(id : String, return_value? : String) -> Cmd {
   @runtime.effect(kind=AfterRender, _ => {
     match @dom.document().get_element_by_id(id).to_option() {
@@ -46,6 +48,7 @@ pub fn close(id : String, return_value? : String) -> Cmd {
 /// `cancel` message.
 /// 
 /// The `return_value` argument is the value that will be filled in the `close` message.
+#cfg(target="js")
 pub fn request_close(id : String, return_value? : String) -> Cmd {
   @runtime.effect(kind=AfterRender, _ => {
     let dialog = @dom.document()

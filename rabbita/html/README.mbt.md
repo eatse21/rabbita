@@ -105,6 +105,7 @@ Example:
 
 ```moonbit check
 ///|
+#cfg(target="js")
 fn update2(msg : Msg2, _ : Model2) -> Model2 {
   match msg {
     StartDraw(mouse) => println("start at \{mouse.offset_pos()}")

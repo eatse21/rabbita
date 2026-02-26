@@ -12,6 +12,7 @@ using @queue {type Queue}
 ///
 /// 3. mount(patch)
 ///      apply patches to real DOM
+#cfg(target="js")
 pub(all) struct Sandbox {
   priv live_map : Map[Id, (&IsCell, Map[InstId, Instance])]
   priv msg_queue : Queue[Id]
@@ -27,6 +28,7 @@ pub(all) struct Sandbox {
 }
 
 ///|
+#cfg(target="js")
 pub fn Sandbox::new(root : &IsCell) -> Sandbox {
   let root = Instance::new(root)
   let mut sandbox : Sandbox? = None
@@ -76,6 +78,7 @@ pub fn Sandbox::new(root : &IsCell) -> Sandbox {
 
 ///|
 /// Processing all pending messages FIFO to update all relevant models
+#cfg(target="js")
 pub fn Sandbox::drain(self : Self) -> Unit {
   if !self.drain_scheduled {
     self.drain_scheduled = true
@@ -91,6 +94,7 @@ pub fn Sandbox::drain(self : Self) -> Unit {
 }
 
 ///|
+#cfg(target="js")
 pub fn Sandbox::initialize(self : Self) -> Unit {
   let root = self.root
   let element = @dom.document().get_element_by_id(self.mount).unwrap() // TODO: handle error
@@ -102,6 +106,7 @@ pub fn Sandbox::initialize(self : Self) -> Unit {
 }
 
 ///|
+#cfg(target="js")
 fn Sandbox::drop_live_subtree(self : Self, root : Instance) -> Unit {
   let stack = [root]
   while stack.pop() is Some(inst) {
@@ -133,6 +138,7 @@ fn Sandbox::drop_live_subtree(self : Self, root : Instance) -> Unit {
 
 ///|
 /// Schedules a drawing frame to be rendered on the next animation frame.
+#cfg(target="js")
 pub fn Sandbox::flush(self : Self) -> Unit {
   if !self.paint_scheduled {
     self.paint_scheduled = true
@@ -179,6 +185,7 @@ pub fn Sandbox::flush(self : Self) -> Unit {
 
 ///|
 /// Run an effect immediately or pending a message.
+#cfg(target="js")
 pub impl Scheduler for Sandbox with add(self, cmd) {
   match cmd {
     Empty => ()
@@ -194,6 +201,7 @@ pub impl Scheduler for Sandbox with add(self, cmd) {
 }
 
 ///|
+#cfg(target="js")
 pub impl Scheduler for Sandbox with add_url_changed(self, url) {
   match self.on_url_changed {
     None => ()
@@ -202,6 +210,7 @@ pub impl Scheduler for Sandbox with add_url_changed(self, url) {
 }
 
 ///|
+#cfg(target="js")
 pub impl Scheduler for Sandbox with add_url_request(self, request) {
   match self.on_url_request {
     None => ()

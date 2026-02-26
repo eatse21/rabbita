@@ -1,6 +1,7 @@
 ///|
 /// Create a command to go back in history. 
 /// This will cause the page to reload.
+#cfg(target="js")
 pub fn back() -> @runtime.Cmd {
   @runtime.effect(kind=Immediately, _ => @dom.window().history_go_back())
 }
@@ -8,6 +9,7 @@ pub fn back() -> @runtime.Cmd {
 ///|
 /// Create a command to go forward in history. 
 /// This will cause the page to reload.
+#cfg(target="js")
 pub fn forward() -> @runtime.Cmd {
   @runtime.effect(kind=Immediately, _ => @dom.window().history_go_forward())
 }
@@ -15,12 +17,14 @@ pub fn forward() -> @runtime.Cmd {
 ///|
 /// Create a command to load a new URL. 
 /// This will cause the page to reload.
+#cfg(target="js")
 pub fn load(url : String) -> @runtime.Cmd {
   @runtime.effect(kind=Immediately, _ => @dom.window().load_url(url))
 }
 
 ///|
 /// Create a command to reload the current url.
+#cfg(target="js")
 pub fn reload() -> @runtime.Cmd {
   @runtime.effect(kind=Immediately, _ => @dom.window().reload_url())
 }
@@ -29,6 +33,7 @@ pub fn reload() -> @runtime.Cmd {
 /// Create a command to push a new URL to history but not trigger a page load.
 /// 
 /// This will trigger the `url_changed` message.
+#cfg(target="js")
 pub fn push_url(url : String) -> @runtime.Cmd {
   @runtime.effect(kind=Immediately, scheduler => {
     @dom.window().push_url(url)
@@ -41,6 +46,7 @@ pub fn push_url(url : String) -> @runtime.Cmd {
 /// Create a command to change the URL but not trigger a page load.
 /// 
 /// This will trigger the `url_changed` message.
+#cfg(target="js")
 pub fn replace_url(url : String) -> @runtime.Cmd {
   @runtime.effect(kind=Immediately, scheduler => {
     @dom.window().replace_url(url)

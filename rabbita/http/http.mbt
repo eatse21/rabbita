@@ -2,12 +2,14 @@
 using @runtime {trait Scheduler, type Cmd}
 
 ///|
+#cfg(target="js")
 pub(all) enum Expecting[Msg, Model] {
   Json((Result[Model, String]) -> Msg, (Json) -> Result[Model, String])
   Text((Result[String, String]) -> Msg)
 }
 
 ///|
+#cfg(target="js")
 pub(all) enum Body {
   Json(Json)
   Text(String)
@@ -15,6 +17,7 @@ pub(all) enum Body {
 }
 
 ///|
+#cfg(target="js")
 fn Body::content_type(self : Body) -> String {
   match self {
     Json(_) => "application/json"
@@ -24,6 +27,7 @@ fn Body::content_type(self : Body) -> String {
 }
 
 ///|
+#cfg(target="js")
 fn Body::stringfiy(self : Body) -> String {
   match self {
     Json(json) => json.stringify()
@@ -33,6 +37,7 @@ fn Body::stringfiy(self : Body) -> String {
 }
 
 ///|
+#cfg(target="js")
 extern "js" fn js_request(
   url : String,
   http_method : String,
@@ -54,6 +59,7 @@ extern "js" fn js_request(
   #| }
 
 ///|
+#cfg(target="js")
 fn[Model] request(
   url : String,
   http_method : String,
@@ -100,18 +106,21 @@ fn[Model] request(
 
 ///|
 /// Create a command to send a GET request.
+#cfg(target="js")
 pub fn[Model] get(url : String, expect~ : Expecting[Cmd, Model]) -> Cmd {
   request(url, "GET", expect~, body=Empty)
 }
 
 ///|
 /// Create a command to send a PUT request.
+#cfg(target="js")
 pub fn[Model] delete(url : String, expect~ : Expecting[Cmd, Model]) -> Cmd {
   request(url, "DELETE", expect~, body=Empty)
 }
 
 ///|
 /// Create a command to send a POST request.
+#cfg(target="js")
 pub fn[Model] post(
   url : String,
   body : Body,
@@ -122,6 +131,7 @@ pub fn[Model] post(
 
 ///|
 /// Create a command to send a PATCH request.
+#cfg(target="js")
 pub fn[Model] patch(
   url : String,
   body : Body,

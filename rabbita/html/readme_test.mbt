@@ -26,6 +26,7 @@ enum Msg2 {
 }
 
 ///|
+#cfg(target="js")
 test {
   ignore(view)
   ignore(view2)

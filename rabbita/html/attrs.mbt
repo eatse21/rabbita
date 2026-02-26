@@ -5,7 +5,12 @@ using @runtime {type Props}
 using @variant {type Variant}
 
 ///|
+#cfg(target="js")
 using @dom {type Event}
+
+///|
+#cfg(not(target="js"))
+type Event = Unit
 
 ///|
 struct Attrs(Props)
@@ -59,6 +64,8 @@ pub fn Attrs::style(self : Attrs, key : String, value : String) -> Attrs {
   self.0.styles[key] = value
   self
 }
+
+// ///|
 
 ///|
 /// Set an event handler.

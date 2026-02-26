@@ -35,7 +35,8 @@ Use the [rabbita-template](https://github.com/moonbit-community/rabbita-template
 using @html {div, h1, button}
 
 ///|
-fn init {
+#cfg(target="js")
+test {
   struct Model {
     count : Int
   }
@@ -124,7 +125,8 @@ fn plan(name : String) -> Cell {
 
 ///|
 /// Main app
-fn init {
+#cfg(target="js")
+test {
   struct Model {
     plans : List[Cell]
   }

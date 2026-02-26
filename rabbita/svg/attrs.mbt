@@ -5,7 +5,12 @@ using @runtime {type Props}
 using @variant {type Variant}
 
 ///|
+#cfg(target="js")
 using @dom {type Event}
+
+///|
+#cfg(not(target="js"))
+type Event = Unit
 
 ///|
 struct Attrs(Props)

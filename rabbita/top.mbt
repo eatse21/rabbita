@@ -1,8 +1,15 @@
 ///|
-pub using @cmd {type Cmd, none, batch, perform, attempt, delay}
+#cfg(target="js")
+pub using @cmd {perform, attempt, delay}
 
 ///|
-pub using @html {type Html}
+pub using @cmd {none, batch}
+
+///|
+pub type Cmd = @runtime.Cmd
+
+///|
+pub type Html = @html.Html
 
 ///|
 /// Create an application from a root `Cell`.
@@ -18,9 +25,11 @@ pub using @html {type Html}
 /// ```moonbit check
 /// test "minimal static page" {
 ///   let app = @rabbita.static_cell(div("hello world"))
-///   @rabbita.new(app).mount("main")
+///   ignore(app)
+///   // use `@rabbita.new(app).mount("id")` in client
 /// }
 /// ```
+#cfg(target="js")
 pub fn new(root : Cell) -> App {
   let sandbox = @runtime.Sandbox::new(root.0)
   App::{ sandbox, }
@@ -35,6 +44,7 @@ pub fn new(root : Cell) -> App {
 ///
 /// If the app is already mounted, a `url_changed` command for the current URL
 /// will be enqueued immediately.
+#cfg(target="js")
 pub fn App::with_route(
   self : Self,
   url_changed? : (@url.Url) -> Cmd,
@@ -74,6 +84,7 @@ pub fn App::mount(self : Self, element_id : String) -> Unit {
 }
 
 ///|
+#cfg(target="js")
 fn App::trigger_initial_url_changed(self : Self) -> Unit {
   if self.sandbox.on_url_changed is Some(_) {
     guard (try? @url.parse(@dom.window().current_url())) is Ok(url)
@@ -83,6 +94,42 @@ fn App::trigger_initial_url_changed(self : Self) -> Unit {
 
 ///|
 /// A running Rabbita application.
+#cfg(target="js")
 struct App {
   sandbox : @runtime.Sandbox
+}
+
+///|
+/// Render a `Cell` tree into an HTML string.
+///
+/// This is the server-side rendering entrypoint for Rabbita. It evaluates
+/// view and serializes the resulting virtual DOM into static HTML.
+///
+/// Hydration is currently not supported. If you later call `mount` on the
+/// client, Rabbita will do a fresh client-side render instead of attaching to
+/// the existing server-rendered DOM.
+///
+/// ## Example
+///
+/// ```mbt check
+/// test "render html to string" {
+///   enum Msg {}
+///   struct Model {
+///     todos : Array[String]
+///   }
+///   let page = @rabbita.simple_cell(
+///     model={ todos: ["todo1", "todo2"] },
+///     update=(_ : Msg, model) => model,
+///     view=(_, model) => ul(model.todos.map(x => li(x))),
+///   )
+///   inspect(
+///     @rabbita.render_to_string(page),
+///     content=(
+///       #|<ul><li>todo1</li><li>todo2</li></ul>
+///     ),
+///   )
+/// }
+/// ```
+pub fn render_to_string(root : Cell) -> String {
+  @runtime.server_side_render(root.0)
 }
