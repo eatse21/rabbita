@@ -1,0 +1,17 @@
+{
+  "name": "user/app",
+  "version": "0.2.0",
+  "deps": {
+    "moonbit-community/rabbita": "0.11.5",
+    "Yoorkin/shiki": {
+      "path": "../utils/shiki"
+    },
+    "moonbitlang/async": "0.16.6"
+  },
+  "readme": "README.md",
+  "repository": "",
+  "license": "Apache-2.0",
+  "keywords": [],
+  "description": "",
+  "preferred-target": "js"
+}
