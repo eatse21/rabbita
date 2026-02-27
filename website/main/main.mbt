@@ -609,13 +609,13 @@ fn view_showcase() -> Html {
       div(class="showcase-grid", [
         showcase_card(
           github_url,
-          "/rabbita.jpeg",
+          "rabbita.jpeg",
           "rabbita.dev",
           "The official Rabbita framework site — this page.",
         ),
         showcase_card(
           "https://mooncakes.io",
-          "/mooncakesio.jpeg",
+          "mooncakesio.jpeg",
           "mooncakes.io",
           "The MoonBit package registry and documentation hub.",
         ),
