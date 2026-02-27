@@ -35,16 +35,18 @@ jobs:
           moon update
           moon install
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
       - name: Install dependencies
         working-directory: website
-        run: bun install
+        run: npm install
 
       - name: Build
         working-directory: website
-        run: bun run build
+        run: npm run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
