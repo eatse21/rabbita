@@ -5,6 +5,9 @@
     "moonbit-community/rabbita": {
       "path": "../../rabbita"
     },
+    "Yoorkin/shiki": {
+      "path": "../../utils/shiki"
+    },
     "moonbitlang/async": "0.16.6"
   },
   "readme": "README.md",

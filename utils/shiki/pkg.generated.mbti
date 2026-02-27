@@ -1,0 +1,23 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Yoorkin/shiki"
+
+import {
+  "moonbit-community/rabbita/html",
+  "moonbit-community/rabbita/internal/runtime",
+}
+
+// Values
+pub fn load(Array[String], Array[String], (Result[Highlighter, Error]) -> @runtime.Cmd) -> @runtime.Cmd
+
+// Errors
+
+// Types and methods
+type Highlighter
+pub async fn Highlighter::add_lang(Self, String) -> Unit
+pub async fn Highlighter::add_theme(Self, String) -> Unit
+pub fn Highlighter::code_to_html(Self, String, lang~ : String, theme~ : String) -> @html.Html
+
+// Type aliases
+
+// Traits
+
