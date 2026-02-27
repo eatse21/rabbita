@@ -67,6 +67,9 @@ pub fn App::with_route(
 }
 
 ///|
+/// Registers a one-shot command to be queued when `mount` runs.
+/// This API is still evolving and may change in future releases.
+#internal(unstable, "Experimental API")
 pub fn App::with_init(self : Self, cmd : Cmd) -> Unit {
   self.init_cmd = Some(cmd)
 }
@@ -122,6 +125,7 @@ struct App {
 /// ## Example
 ///
 /// ```mbt check
+/// #warnings("-alert_unstable")
 /// test "render html to string" {
 ///   enum Msg {}
 ///   struct Model {
@@ -140,6 +144,7 @@ struct App {
 ///   )
 /// }
 /// ```
+#internal(unstable, "Experimental API")
 pub fn render_to_string(root : Cell) -> String {
   @runtime.server_side_render(root.0)
 }
