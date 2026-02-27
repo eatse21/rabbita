@@ -279,6 +279,29 @@ pub fn[Model, Msg] simple_cell(
 }
 
 ///|
+pub fn[Model, Msg] simple_cell_with_dispatch(
+  model~ : Model,
+  update~ : (Msg, Model) -> Model,
+  view~ : (Dispatch[Msg], Model) -> Html,
+) -> (Dispatch[Msg], Cell) {
+  let flags = @runtime.Flags::new()
+  let dispatcher = { id: flags.id(), inbox: @queue.new() }
+  let dispatch = m => dispatcher.message(m)
+  let model = @ref.new(model)
+  (
+    dispatch,
+    Cell({
+      view,
+      update: (_, msg, model) => (none, update(msg, model)),
+      dispatcher,
+      dispatch,
+      model,
+      flags,
+    }),
+  )
+}
+
+///|
 /// Create a static cell that always renders the same `Html`.
 ///
 /// Rather than use `static_cell`, it's recommend to wrap a function that return html directly:

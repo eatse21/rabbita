@@ -2,5 +2,5 @@ import {
   "moonbit-community/rabbita/url",
   "moonbit-community/rabbita/dom",
   "moonbit-community/rabbita/internal/runtime",
-  "moonbit-community/rabbita/internal/js",
+  "moonbit-community/rabbita/js",
 }

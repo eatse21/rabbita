@@ -18,6 +18,8 @@ pub fn[Model, Msg] cell_with_dispatch(model~ : Model, update~ : ((Msg) -> @runti
 
 pub fn delay(@runtime.Cmd, Int) -> @runtime.Cmd
 
+pub fn effect(async () -> Unit noraise) -> @runtime.Cmd
+
 pub fn new(Cell) -> App
 
 pub let none : @runtime.Cmd
@@ -28,6 +30,8 @@ pub fn render_to_string(Cell) -> String
 
 pub fn[Model, Msg] simple_cell(model~ : Model, update~ : (Msg, Model) -> Model, view~ : ((Msg) -> @runtime.Cmd, Model) -> @html.Html) -> Cell
 
+pub fn[Model, Msg] simple_cell_with_dispatch(model~ : Model, update~ : (Msg, Model) -> Model, view~ : ((Msg) -> @runtime.Cmd, Model) -> @html.Html) -> ((Msg) -> @runtime.Cmd, Cell)
+
 pub fn static_cell(@html.Html) -> Cell
 
 // Errors
@@ -35,6 +39,7 @@ pub fn static_cell(@html.Html) -> Cell
 // Types and methods
 type App
 pub fn App::mount(Self, String) -> Unit
+pub fn App::with_init(Self, @runtime.Cmd) -> Unit
 pub fn App::with_route(Self, url_changed? : (@url.Url) -> @runtime.Cmd, url_request? : (@url.UrlRequest) -> @runtime.Cmd) -> Unit
 
 type Cell

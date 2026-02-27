@@ -118,8 +118,7 @@ fn vnode_to_string(buf : StringBuilder, vnode : VNode) -> Unit {
       write_styles_attr(buf, attrs, styles)
       write_property_attrs(buf, attrs, props)
       buf.write_char('>')
-
-      if attrs.get("innerHTML") is Some(raw_html) {
+      if props.get("innerHTML") is Some(String(raw_html)) {
         buf.write_string(raw_html)
       }
       if props.get("textContent") is Some(text_content) {

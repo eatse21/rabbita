@@ -2,6 +2,12 @@
 pub using @runtime {trait Scheduler, type EffectKind}
 
 ///|
+pub let immediately : EffectKind = Immediately
+
+///|
+pub let after_render : EffectKind = AfterRender
+
+///|
 /// A deferred command handled by the Rabbita runtime.
 ///
 /// `Cmd` models side effects in the update loop. Commands are returned from
@@ -52,6 +58,13 @@ pub fn raw_effect(
   kind? : EffectKind = Immediately,
 ) -> Cmd {
   @runtime.effect(callback, kind~)
+}
+
+///|
+/// Create a command that runs an effectful async function
+#cfg(target="js")
+pub fn effect(f : async () -> Unit noraise) -> Cmd {
+  raw_effect(_ => @js.async_run(() => f()))
 }
 
 ///|

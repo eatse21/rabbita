@@ -6,7 +6,7 @@ import {
   "moonbit-community/rabbita/cmd",
   "moonbitlang/core/queue",
   "moonbitlang/core/ref",
-  "moonbit-community/rabbita/internal/js",
+  "moonbit-community/rabbita/js",
 }
 
 import {

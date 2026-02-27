@@ -2,7 +2,7 @@
 package "moonbit-community/rabbita/dom"
 
 import {
-  "moonbit-community/rabbita/internal/js",
+  "moonbit-community/rabbita/js",
 }
 
 // Values

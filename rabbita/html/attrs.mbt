@@ -40,7 +40,7 @@ fn Attrs::copy(self : Attrs) -> Attrs {
 /// content since the browser will parse the string into DOM nodes.
 #internal(xss_vulnerable, "This function may cause xss attack.")
 pub fn Attrs::inner_html(self : Attrs, html : String) -> Attrs {
-  self.0.attrs["innerHTML"] = html
+  self.0.props["innerHTML"] = @variant.String(html)
   self.0
 }
 

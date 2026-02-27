@@ -1,6 +1,6 @@
 ///|
 #cfg(target="js")
-pub using @cmd {perform, attempt, delay}
+pub using @cmd {perform, attempt, effect, delay}
 
 ///|
 pub using @cmd {none, batch}
@@ -32,7 +32,7 @@ pub type Html = @html.Html
 #cfg(target="js")
 pub fn new(root : Cell) -> App {
   let sandbox = @runtime.Sandbox::new(root.0)
-  App::{ sandbox, }
+  App::{ sandbox, init_cmd: None }
 }
 
 ///|
@@ -67,6 +67,11 @@ pub fn App::with_route(
 }
 
 ///|
+pub fn App::with_init(self : Self, cmd : Cmd) -> Unit {
+  self.init_cmd = Some(cmd)
+}
+
+///|
 /// Mount the app into the DOM element identified by `element_id`.
 ///
 /// This initializes the runtime and schedules the first render flush.
@@ -79,6 +84,10 @@ pub fn App::mount(self : Self, element_id : String) -> Unit {
   .get_element_by_id(element_id)
   .unwrap()
   .set_inner_html("<div></div>")
+  if self.init_cmd is Some(cmd) {
+    self.sandbox.add(cmd)
+    self.init_cmd = None
+  }
   self.sandbox.initialize()
   self.sandbox.flush()
 }
@@ -97,6 +106,7 @@ fn App::trigger_initial_url_changed(self : Self) -> Unit {
 #cfg(target="js")
 struct App {
   sandbox : @runtime.Sandbox
+  mut init_cmd : Cmd?
 }
 
 ///|

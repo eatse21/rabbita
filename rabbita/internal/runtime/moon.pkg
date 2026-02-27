@@ -5,5 +5,5 @@ import {
   "moonbitlang/core/queue",
   "moonbitlang/core/random",
   "moonbitlang/core/ref",
-  "moonbit-community/rabbita/internal/js",
+  "moonbit-community/rabbita/js",
 }

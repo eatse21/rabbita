@@ -311,19 +311,32 @@ fn push_size(value : Int?, attrs : Attrs) -> Unit {
 
 ///|
 #cfg(target="js")
+fn form_event_value(event : @dom.Event) -> String {
+  let target = match event.current_target().to_option() {
+    Some(target) => target
+    None => event.target()
+  }
+  if target.to_html_input_element() is Some(input) {
+    input.value()
+  } else if target.to_html_select_element() is Some(select) {
+    select.value()
+  } else if target.to_element() is Some(element) {
+    match element.get_property("value").to_option() {
+      Some(value) => value
+      None => panic()
+    }
+  } else {
+    panic()
+  }
+}
+
+///|
+#cfg(target="js")
 fn push_change(value : ((String) -> Cmd)?, attrs : Attrs) -> Unit {
   if value is Some(v) {
     ignore(
       attrs.handler("change", (event, scheduler) => {
-        let target = event.target()
-        let value = if target.to_html_input_element() is Some(x) {
-          x.value()
-        } else if target.to_html_select_element() is Some(x) {
-          x.value()
-        } else {
-          panic() // TODO: check for other HTMLElement types
-        }
-        scheduler.add(v(value))
+        scheduler.add(v(form_event_value(event)))
       }),
     )
   }
@@ -341,8 +354,7 @@ fn push_input(value : ((String) -> Cmd)?, attrs : Attrs) -> Unit {
   if value is Some(v) {
     ignore(
       attrs.handler("input", (event, scheduler) => {
-        let value = event.target().to_html_input_element().unwrap().value()
-        scheduler.add(v(value))
+        scheduler.add(v(form_event_value(event)))
       }),
     )
   }

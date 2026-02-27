@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "moonbit-community/rabbita/internal/js"
+package "moonbit-community/rabbita/js"
 
 import {
   "moonbitlang/core/json",
