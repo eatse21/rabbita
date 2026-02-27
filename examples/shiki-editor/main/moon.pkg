@@ -1,0 +1,14 @@
+import {
+  "moonbit-community/rabbita",
+  "moonbit-community/rabbita/js",
+  "moonbit-community/rabbita/html",
+  "moonbit-community/rabbita/dom",
+  "moonbit-community/rabbita/cmd",
+  "moonbitlang/async",
+  "moonbitlang/core/env",
+  "user/app/shiki",
+}
+
+options(
+  "is-main": true,
+)
