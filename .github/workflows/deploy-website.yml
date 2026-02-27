@@ -29,6 +29,12 @@ jobs:
           curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
           echo "$HOME/.moon/bin" >> $GITHUB_PATH
 
+      - name: Update MoonBit registry and install dependencies
+        working-directory: website
+        run: |
+          moon update
+          moon install
+
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
 
