@@ -8,3 +8,4 @@ package-lock.json
 src/main.js
 src/main.js.map
 src/dist
+main/doc_*.mbt

@@ -1,7 +1,8 @@
 ///|
 using @html {
-  a, button, div, footer, h1, h2, h3, header, img, main_, nav, nothing, p,
-  pre, code, section, span, text,
+  a, blockquote, button, code, del, div, em, footer, fragment, h1, h2, h3,
+  h4, h5, h6, header, hr, img, li, main_, nav, nothing, ol, p, pre, section,
+  span, strong, table, tbody, td, text, th, thead, tr, ul,
 }
 
 ///|
@@ -15,6 +16,25 @@ enum Theme {
 }
 
 ///|
+struct HomeModel {
+  hero_tab    : Int
+  cmp_idx     : Int
+  cmp_anim    : Bool
+  copied_step : Int?
+}
+
+///|
+let init_home : HomeModel = {
+  hero_tab: 0, cmp_idx: 0, cmp_anim: false, copied_step: None,
+}
+
+///|
+enum Page {
+  Home(HomeModel)
+  Tour(TourModel)
+}
+
+///|
 enum Msg {
   ToggleMenu
   CycleTheme
@@ -23,18 +43,22 @@ enum Msg {
   NextCmpIdx
   CopiedStep(Int)
   ClearCopied
+  SelectChapter(Int)
+  TourContent(String)
+  TourFailed
+  MenuLoaded(Array[TourChapter])
   LoadResult(Result[@shiki.Highlighter, Error])
+  UrlChanged(@url.Url)
+  UrlRequest(@url.UrlRequest)
 }
 
 ///|
 struct Model {
-  menu_open : Bool
-  theme : Theme
-  hero_tab : Int
-  cmp_idx : Int
-  cmp_anim : Bool
-  copied_step : Int?
+  menu_open   : Bool
+  theme       : Theme
+  page        : Page
   highlighter : @shiki.Highlighter?
+  chapters    : Array[TourChapter]
 }
 
 ///|
@@ -53,29 +77,118 @@ fn update(dispatch : Dispatch[Msg], msg : Msg, model : Model) -> (Cmd, Model) {
           },
         },
       )
-    SelectTab(t) => (@rabbita.none, { ..model, hero_tab: t })
+    SelectTab(t) =>
+      match model.page {
+        Home(hm) => (@rabbita.none, { ..model, page: Home({ ..hm, hero_tab: t }) })
+        _ => (@rabbita.none, model)
+      }
     SelectCmpIdx(i) =>
-      (
-        @rabbita.none,
-        { ..model, cmp_idx: i, cmp_anim: not(model.cmp_anim) },
-      )
+      match model.page {
+        Home(hm) =>
+          (
+            @rabbita.none,
+            { ..model, page: Home({ ..hm, cmp_idx: i, cmp_anim: not(hm.cmp_anim) }) },
+          )
+        _ => (@rabbita.none, model)
+      }
     NextCmpIdx =>
-      (
-        @rabbita.delay(dispatch(NextCmpIdx), 12000),
-        {
-          ..model,
-          cmp_anim: not(model.cmp_anim),
-          cmp_idx: (model.cmp_idx + 1) % cmp_entries.length(),
-        },
-      )
+      match model.page {
+        Home(hm) =>
+          (
+            @rabbita.delay(dispatch(NextCmpIdx), 12000),
+            {
+              ..model,
+              page: Home({
+                ..hm,
+                cmp_anim: not(hm.cmp_anim),
+                cmp_idx: (hm.cmp_idx + 1) % cmp_entries.length(),
+              }),
+            },
+          )
+        _ => (@rabbita.none, model)
+      }
     CopiedStep(i) =>
-      (
-        @rabbita.delay(dispatch(ClearCopied), 1500),
-        { ..model, copied_step: Some(i) },
-      )
-    ClearCopied => (@rabbita.none, { ..model, copied_step: None })
+      match model.page {
+        Home(hm) =>
+          (
+            @rabbita.delay(dispatch(ClearCopied), 1500),
+            { ..model, page: Home({ ..hm, copied_step: Some(i) }) },
+          )
+        _ => (@rabbita.none, model)
+      }
+    ClearCopied =>
+      match model.page {
+        Home(hm) => (@rabbita.none, { ..model, page: Home({ ..hm, copied_step: None }) })
+        _ => (@rabbita.none, model)
+      }
+    SelectChapter(i) =>
+      match model.page {
+        Tour(_) => {
+          let chs = model.chapters
+          let path = if i < chs.length() {
+            chs[i].path
+          } else if not(chs.is_empty()) {
+            chs[0].path
+          } else {
+            ""
+          }
+          (
+            @nav.push_url(tour_base_url() + path),
+            { ..model, page: Tour({ chapter_idx: i, content: "", failed: false }) },
+          )
+        }
+        _ => (@rabbita.none, model)
+      }
+    TourContent(s) =>
+      match model.page {
+        Tour(tm) => (@rabbita.none, { ..model, page: Tour({ ..tm, content: s, failed: false }) })
+        _ => (@rabbita.none, model)
+      }
+    TourFailed =>
+      match model.page {
+        Tour(tm) => (@rabbita.none, { ..model, page: Tour({ ..tm, content: "", failed: true }) })
+        _ => (@rabbita.none, model)
+      }
+    MenuLoaded(chs) => (@rabbita.none, { ..model, chapters: chs })
     LoadResult(Ok(hl)) => (@rabbita.none, { ..model, highlighter: Some(hl) })
     LoadResult(Err(_)) => (@rabbita.none, model)
+    UrlRequest(req) =>
+      match req {
+        Internal(url) => (@nav.push_url(url.to_string()), model)
+        External(url) => (@nav.load(url), model)
+      }
+    UrlChanged(url) => {
+      if is_tour_url(model.chapters, url.path) {
+        let idx = chapter_idx_from_path(model.chapters, url.path)
+        let scroll_cmd = match url.fragment {
+          Some(frag) => scroll_to_heading(frag)
+          None => @nav.scroll_to_top()
+        }
+        // Only fetch when switching chapters or content not yet loaded
+        let already_loaded = match model.page {
+          Tour(tm) => tm.chapter_idx == idx && not(tm.content.is_empty())
+          _ => false
+        }
+        if already_loaded {
+          (scroll_cmd, model)
+        } else {
+          (
+            batch([fetch_chapter(dispatch, model.chapters, idx), scroll_cmd]),
+            { ..model, page: Tour({ chapter_idx: idx, content: "", failed: false }) },
+          )
+        }
+      } else {
+        let page = match model.page {
+          Home(_) as p => p
+          _ => Home(init_home)
+        }
+        let cmd = match url.fragment {
+          Some(frag) => scroll_to_heading(frag)
+          None => @nav.scroll_to_top()
+        }
+        (cmd, { ..model, page })
+      }
+    }
   }
 }
 
@@ -350,6 +463,21 @@ fn theme_icon(theme : Theme) -> Html {
 
 // ─── Navigation ───────────────────────────────────────────────────────────
 
+///| Diagonal arrow — external link indicator
+fn icon_ext_link() -> Html {
+  @svg.svg(view_box="0 0 12 12", width=10, height=10, class="nav-ext-icon", [
+    @svg.path(
+      d="M 2 10 L 10 2 M 5.5 2 H 10 V 6.5",
+      fill="none",
+      stroke="currentColor",
+      stroke_width=2,
+      attrs=@svg.Attrs::build()
+        .stroke_linecap("round")
+        .stroke_linejoin("round"),
+    ),
+  ])
+}
+
 ///|
 fn hamburger(is_open : Bool) -> Html {
   div(
@@ -364,13 +492,26 @@ fn hamburger(is_open : Bool) -> Html {
 
 ///|
 fn view_nav(dispatch : Dispatch[Msg], model : Model) -> Html {
+  let is_home = match model.page { Home(_) => true; _ => false }
+  let is_tour = match model.page { Tour(_) => true; _ => false }
+  let home_cls = if is_home { "nav-link nav-link--active" } else { "nav-link" }
+  let tour_cls = if is_tour { "nav-link nav-link--active" } else { "nav-link" }
+  let home_m = if is_home { "mobile-link mobile-link--active" } else { "mobile-link" }
+  let tour_m = if is_tour { "mobile-link mobile-link--active" } else { "mobile-link" }
   header(class="site-header", [
     nav(class="navbar", [
       a(class="nav-logo", href=github_url, "Rabbita"),
       div(class="nav-links", [
-        a(href=docs_url, target=Blank, class="nav-link", "Docs"),
-        a(href="#", class="nav-link", "Tutorial"),
-        a(href=github_url, target=Blank, class="nav-link", "GitHub"),
+        a(href=site_base_url(), class=home_cls, "Home"),
+        a(href=tour_base_url(), class=tour_cls, "Tour"),
+        a(href=docs_url, target=Blank, class="nav-link nav-link--ext", [
+          text("Docs"),
+          icon_ext_link(),
+        ]),
+        a(href=github_url, target=Blank, class="nav-link nav-link--ext", [
+          text("GitHub"),
+          icon_ext_link(),
+        ]),
       ]),
       div(class="nav-actions", [
         button(class="theme-toggle", on_click=dispatch(CycleTheme), [
@@ -383,9 +524,16 @@ fn view_nav(dispatch : Dispatch[Msg], model : Model) -> Html {
     ]),
     if model.menu_open {
       div(class="mobile-menu", [
-        a(href=docs_url, target=Blank, class="mobile-link", "Docs"),
-        a(href="#", class="mobile-link", "Tutorial"),
-        a(href=github_url, target=Blank, class="mobile-link", "GitHub"),
+        a(href=".", class=home_m, "Home"),
+        a(href="tour", class=tour_m, "Tour"),
+        a(href=docs_url, target=Blank, class="mobile-link mobile-link--ext", [
+          text("Docs"),
+          icon_ext_link(),
+        ]),
+        a(href=github_url, target=Blank, class="mobile-link mobile-link--ext", [
+          text("GitHub"),
+          icon_ext_link(),
+        ]),
       ])
     } else {
       nothing
@@ -408,8 +556,8 @@ let hero_tabs : Array[HeroTabEntry] = [
 ]
 
 ///|
-fn view_hero(dispatch : Dispatch[Msg], model : Model) -> Html {
-  let src = hero_tabs[model.hero_tab].src
+fn view_hero(dispatch : Dispatch[Msg], model : Model, hm : HomeModel) -> Html {
+  let src = hero_tabs[hm.hero_tab].src
   let code_block = match model.highlighter {
     Some(hl) =>
       div(class="code-dual", [
@@ -442,7 +590,7 @@ fn view_hero(dispatch : Dispatch[Msg], model : Model) -> Html {
         div(
           class="hero-tabs",
           hero_tabs.mapi(fn(i, t) {
-            let cls = if i == model.hero_tab {
+            let cls = if i == hm.hero_tab {
               "hero-tab hero-tab--active"
             } else {
               "hero-tab"
@@ -544,8 +692,8 @@ fn cmp_card(
 }
 
 ///|
-fn view_comparison(dispatch : Dispatch[Msg], model : Model) -> Html {
-  let entry = cmp_entries[model.cmp_idx]
+fn view_comparison(dispatch : Dispatch[Msg], model : Model, hm : HomeModel) -> Html {
+  let entry = cmp_entries[hm.cmp_idx]
   let card = cmp_card(model.highlighter, entry.js_src, entry.mb_src)
   section(class="comparison", [
     div(class="comparison-inner", [
@@ -554,7 +702,7 @@ fn view_comparison(dispatch : Dispatch[Msg], model : Model) -> Html {
         div(
           class="cmp-tabs",
           cmp_entries.mapi(fn(i, e) {
-            let cls = if i == model.cmp_idx {
+            let cls = if i == hm.cmp_idx {
               "cmp-tab cmp-tab--active"
             } else {
               "cmp-tab"
@@ -563,7 +711,7 @@ fn view_comparison(dispatch : Dispatch[Msg], model : Model) -> Html {
           }),
         ),
         div(
-          class=if model.cmp_anim { "cmp-anim-wrap anim-a" } else { "cmp-anim-wrap anim-b" },
+          class=if hm.cmp_anim { "cmp-anim-wrap anim-a" } else { "cmp-anim-wrap anim-b" },
           [card],
         ),
         p(class="cmp-nav-desc", entry.desc),
@@ -695,8 +843,8 @@ fn qs_step(
 }
 
 ///|
-fn view_quickstart(dispatch : Dispatch[Msg], model : Model) -> Html {
-  let copied = model.copied_step
+fn view_quickstart(dispatch : Dispatch[Msg], hm : HomeModel) -> Html {
+  let copied = hm.copied_step
   section(class="quickstart", [
     div(class="quickstart-inner", [
       h2(class="section-title", "Quick Start"),
@@ -749,7 +897,7 @@ fn view_quickstart(dispatch : Dispatch[Msg], model : Model) -> Html {
 fn view_footer() -> Html {
   footer(class="site-footer", [
     div(class="footer-inner", [
-      span(class="footer-copy", "© 2025 moonbit-community · Apache 2.0"),
+      span(class="footer-copy", "© 2026 moonbit-community · Apache 2.0"),
       div(class="footer-links", [
         a(href=github_url, target=Blank, class="footer-link", "GitHub"),
         a(href=docs_url, target=Blank, class="footer-link", "Docs"),
@@ -773,15 +921,23 @@ fn view(dispatch : Dispatch[Msg], model : Model) -> Html {
     Light => "site light"
     Dark => "site dark"
   }
+  let body = match model.page {
+    Home(hm) =>
+      main_(class="site-main", [
+        view_hero(dispatch, model, hm),
+        view_features(),
+        view_comparison(dispatch, model, hm),
+        view_showcase(),
+        view_quickstart(dispatch, hm),
+      ])
+    Tour(tm) => view_tour(dispatch, model, tm)
+  }
   div(class=site_class, [
-    view_nav(dispatch, model),
-    main_(class="site-main", [
-      view_hero(dispatch, model),
-      view_features(),
-      view_comparison(dispatch, model),
-      view_showcase(),
-      view_quickstart(dispatch, model),
+    div(class="wip-banner", [
+      text("🚧  This website is a work in progress. Content may be incomplete or inaccurate."),
     ]),
+    view_nav(dispatch, model),
+    body,
     view_footer(),
   ])
 }
@@ -791,13 +947,24 @@ fn view(dispatch : Dispatch[Msg], model : Model) -> Html {
 /// see README.md to get started.
 async fn main {
   let (dispatch, app) = @rabbita.cell_with_dispatch(
-    model={ menu_open: false, theme: System, hero_tab: 0, cmp_idx: 0, cmp_anim: false, copied_step: None, highlighter: None },
+    model={
+      menu_open: false,
+      theme: System,
+      page: Home(init_home),
+      highlighter: None,
+      chapters: tour_chapters,
+    },
     update~,
     view~,
   )
   @rabbita.new(app)
+  ..with_route(
+    url_changed=url => dispatch(UrlChanged(url)),
+    url_request=req => dispatch(UrlRequest(req)),
+  )
   ..with_init(
     batch([
+      fetch_menu(dispatch),
       @shiki.load(
         ["moonbit", "javascript"],
         ["github-light", "github-dark-default"],

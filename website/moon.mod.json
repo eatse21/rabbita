@@ -6,7 +6,8 @@
     "Yoorkin/shiki": {
       "path": "../utils/shiki"
     },
-    "moonbitlang/async": "0.16.6"
+    "moonbitlang/async": "0.16.6",
+    "moonbit-community/cmark": "0.4.3"
   },
   "readme": "README.md",
   "repository": "",
