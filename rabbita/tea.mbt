@@ -48,7 +48,7 @@ priv struct Dispatcher[Msg] {
 
 ///|
 fn[Msg] Dispatcher::message(self : Self[Msg], msg : Msg) -> Cmd {
-  // carry the drain (which own model and update) in message will cause memeory leak in RC
+  // carry the drain (which own model and update) in message will cause memory leak in RC
   @runtime.message(self.id, () => self.inbox.push(msg))
 }
 
@@ -67,7 +67,7 @@ pub fn Cell::view(self : Self) -> Html {
 ///
 /// Type parameters:
 ///
-/// - `Model`: a custom type you need to defiend, represent the state of this cell.
+/// - `Model`: a custom type you need to defined, represent the state of this cell.
 /// - `Msg`: a custom `enum` you need to defined, represent the events of this cell. 
 ///
 /// Parameters:
@@ -136,7 +136,7 @@ pub fn[Model, Msg] cell(
 /// 
 /// Type parameters:
 ///
-/// - `Model`: a custom type you need to defiend, represent the state of this cell.
+/// - `Model`: a custom type you need to defined, represent the state of this cell.
 /// - `Msg`: a custom `enum` you need to defined, represent the events of this cell. 
 ///
 /// Parameters:
@@ -203,7 +203,7 @@ pub fn[Model, Msg] cell_with_dispatch(
 /// 
 /// Type parameters:
 /// 
-/// - `Model`: a custom type you need to defiend, represent the state of this cell.
+/// - `Model`: a custom type you need to defined, represent the state of this cell.
 /// - `Msg`: a custom `enum` you need to defined, represent the events of this cell. 
 /// 
 /// Parameters:

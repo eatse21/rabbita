@@ -14,7 +14,7 @@ pub type Html = @html.Html
 ///|
 /// Create an application from a root `Cell`.
 ///
-/// Use `simple_cell()`, `static_cell()`, `cell()`, `cell_with_disptach()` to create a cell.
+/// Use `simple_cell()`, `static_cell()`, `cell()`, `cell_with_dispatch()` to create a cell.
 /// Call `mount` to attach it to a DOM element.
 /// Optionally call `with_route` to install routing callbacks.
 /// 
