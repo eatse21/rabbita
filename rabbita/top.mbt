@@ -69,6 +69,7 @@ pub fn App::with_route(
 ///|
 /// Registers a one-shot command to be queued when `mount` runs.
 /// This API is still evolving and may change in future releases.
+#cfg(target="js")
 #internal(unstable, "Experimental API")
 pub fn App::with_init(self : Self, cmd : Cmd) -> Unit {
   self.init_cmd = Some(cmd)
