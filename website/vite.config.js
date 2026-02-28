@@ -4,7 +4,7 @@ import { join } from 'path'
 import { cpSync } from 'fs'
 
 export default defineConfig({
-  base: process.env.VITE_BASE ?? '/',
+  base: (process.env.VITE_BASE ?? '/').replace(/\/?$/, '/'),
   plugins: [
     rabbita(),
     {

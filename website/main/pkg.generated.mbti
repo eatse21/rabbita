@@ -1,0 +1,35 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "user/app/main"
+
+// Values
+pub let init_tour : TourModel
+
+// Errors
+
+// Types and methods
+type CmpEntry
+
+type HeroTabEntry
+
+type HomeModel
+
+type Model
+
+type Msg
+
+type Page
+
+type Theme
+
+type TocEntry
+
+type TourChapter
+
+pub(all) struct TourModel {
+  chapter_idx : Int
+}
+
+// Type aliases
+
+// Traits
+

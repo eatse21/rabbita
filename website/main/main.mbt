@@ -524,8 +524,8 @@ fn view_nav(dispatch : Dispatch[Msg], model : Model) -> Html {
     ]),
     if model.menu_open {
       div(class="mobile-menu", [
-        a(href=".", class=home_m, "Home"),
-        a(href="tour", class=tour_m, "Tour"),
+        a(href=site_base_url(), class=home_m, "Home"),
+        a(href=tour_base_url(), class=tour_m, "Tour"),
         a(href=docs_url, target=Blank, class="mobile-link mobile-link--ext", [
           text("Docs"),
           icon_ext_link(),
