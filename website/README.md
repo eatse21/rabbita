@@ -10,7 +10,7 @@ Template for web app using MoonBit and Rabbita.
    In the project directory:
 
    ```bash
-   moon add moonbit-community/rabbita
+   moon update
    ```
 
 3. Start the dev server.
