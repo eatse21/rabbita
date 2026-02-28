@@ -113,5 +113,7 @@ to `view` again to update the page.
 
 The update flow can be described as:
 
-`new_model = update(Inc, old_model)`  
-`new_view  = view(new_model)`
+```
+new_model = update(Inc, old_model)
+new_view  = view(new_model)
+```

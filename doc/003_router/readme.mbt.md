@@ -29,13 +29,13 @@ enum Msg {
 To register the `UrlChanged` and `UrlRequest` messages, use `cell_with_dispatch(...)` to obtain the main cell and the corresponding `dispatch` function. The `dispatch` function allows you to convert messages into the `Cmd` type:
 
 ```moonbit check
+///|
 test {
   let (dispatch, root) = @rabbita.cell_with_dispatch(model=home, update~, view~)
   @rabbita.new(root)
-  ..with_route(
-    url_changed=url => dispatch(UrlChanged(url)), 
-    url_request=req => dispatch(UrlRequest(req)),
-  )
+  ..with_route(url_changed=url => dispatch(UrlChanged(url)), url_request=req => {
+    dispatch(UrlRequest(req))
+  })
   .mount("app")
 }
 ```
@@ -53,7 +53,10 @@ Here we sketch a site with three pages:
 We can use an `enum` to represent this:
 
 ```moonbit check
+///|
 type Id = String
+
+///|
 enum Model {
   Home(Map[Id, String])
   Article(String, String)
@@ -64,8 +67,11 @@ enum Model {
 We skipped the networking part in this tutorial, so let's hardcode the data as globals:
 
 ```moonbit check
+///|
 let home : Model = Home({ "1": "Article 1", "2": "Article 2", "3": "Article 3" })
-let articles : Map[String,(String, String)] = {
+
+///|
+let articles : Map[String, (String, String)] = {
   "1": ("Article 1", "content 1"),
   "2": ("Article 2", "content 2"),
   "3": ("Article 3", "content 3"),
@@ -104,6 +110,7 @@ When a user clicks a link or the URL changes, the function updates the model bas
 For internal links, it uses `@nav.push_url` to change the URL without reloading the page. For external links, it uses `@nav.load` to navigate away. When the URL changes, the function matches the path and updates the model to display the correct page or a 404 page if the route is not found.
 
 ```moonbit check
+///|
 fn update(_ : Dispatch[Msg], msg : Msg, model : Model) -> (Cmd, Model) {
   match msg {
     // handle clicks on @html.a(...) link
@@ -135,6 +142,7 @@ Notice that `view` is a pure function: it does not perform navigation or modify 
 Instead, navigation is triggered by links (`a(href=...)`), which produce a `url_request` message.
 
 ```moonbit check
+///|
 fn view(_ : Dispatch[Msg], model : Model) -> Html {
   match model {
     Home(items) =>
