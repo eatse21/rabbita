@@ -6,6 +6,19 @@
     <title>rabbita — Web UI Framework for MoonBit</title>
     <meta name="description" content="A declarative, functional web UI framework for MoonBit. Built on The Elm Architecture. Type-safe, modular, ~15 KB.">
     <link rel="stylesheet" type="text/css" href="/styles.css" />
+    <script>
+      // Restore path encoded by 404.html redirect
+      (function (l) {
+        if (l.search[1] === '/') {
+          var decoded = l.search.slice(1).split('&').map(function (s) {
+            return s.replace(/~and~/g, '&');
+          }).join('?');
+          window.history.replaceState(null, null,
+            l.pathname.slice(0, -1) + decoded + (l.hash || '')
+          );
+        }
+      }(window.location));
+    </script>
     <script src="/main.js" type="module"></script>
 </head>
 <body>

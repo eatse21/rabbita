@@ -48,13 +48,35 @@ fn chapter_base_url(ch : TourChapter) -> String {
   site_base_url() + "doc/" + ch.path + "/"
 }
 
+// Strips the site base prefix from a url.path (which has no leading slash).
+// e.g. site_base_url()="/rabbita/" → strips "rabbita/" prefix
+// e.g. site_base_url()="/"        → returns path unchanged
+fn strip_base(path : String) -> String {
+  let base = site_base_url() // e.g. "/rabbita/" or "/"
+  // strip_len = length of prefix to remove (base minus its leading "/")
+  let strip_len = base.length() - 1
+  if strip_len <= 0 || not(("/" + path).has_prefix(base)) {
+    return path
+  }
+  let buf = StringBuilder::new()
+  let mut i = 0
+  for c in path.iter() {
+    if i >= strip_len {
+      buf.write_char(c)
+    }
+    i = i + 1
+  }
+  buf.to_string()
+}
+
 // Returns true for any path that maps to the tour section
 fn is_tour_url(chapters : Array[TourChapter], path : String) -> Bool {
-  if path == "tour" || path.has_prefix("tour/") || path.has_suffix("/tour") {
+  let p = strip_base(path)
+  if p == "tour" || p == "tour/" || p.has_prefix("tour/") {
     return true
   }
   for ch in chapters {
-    if path.has_suffix("/tour/" + ch.path) {
+    if p.has_suffix("/tour/" + ch.path) {
       return true
     }
   }
@@ -63,9 +85,10 @@ fn is_tour_url(chapters : Array[TourChapter], path : String) -> Bool {
 
 // Finds the chapter index matching a URL path; defaults to 0
 fn chapter_idx_from_path(chapters : Array[TourChapter], path : String) -> Int {
+  let p = strip_base(path)
   for i = 0; i < chapters.length(); i = i + 1 {
-    let p = chapters[i].path
-    if path == "tour/" + p || path.has_suffix("/tour/" + p) {
+    let cp = chapters[i].path
+    if p == "tour/" + cp || p.has_suffix("/tour/" + cp) {
       return i
     }
   }
